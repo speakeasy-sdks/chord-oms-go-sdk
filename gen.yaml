@@ -1,3 +1,7 @@
+management:
+    openapi-checksum: 0041d523cba029d3d1db9903b4b48351
+    openapi-version: "1.0"
+    speakeasy-version: 0.21.0
 go:
-    version: 1.0.0
+    version: 1.1.0
     packagename: github.com/speakeasy-sdks/chord-oms-go-sdk
