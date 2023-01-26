@@ -1,5 +1,3 @@
-python:
+go:
     version: 1.0.0
-    packagename: chordomsapi
-    author: chordomsapi
-sdkclassname: chordomsapi
+    packagename: github.com/speakeasy-sdks/chord-oms-go-sdk
