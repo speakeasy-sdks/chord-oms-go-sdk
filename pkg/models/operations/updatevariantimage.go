@@ -14,7 +14,7 @@ type UpdateVariantImageSecurity struct {
 }
 
 type UpdateVariantImage401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type UpdateVariantImage404ApplicationJSON struct {

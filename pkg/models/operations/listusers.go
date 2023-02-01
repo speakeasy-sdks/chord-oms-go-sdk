@@ -23,7 +23,7 @@ type ListUsersPaginationData struct {
 }
 
 type ListUsers401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type ListUsersRequest struct {

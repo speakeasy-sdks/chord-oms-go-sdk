@@ -14,7 +14,7 @@ type VoidOrderPaymentSecurity struct {
 }
 
 type VoidOrderPayment401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type VoidOrderPayment404ApplicationJSON struct {

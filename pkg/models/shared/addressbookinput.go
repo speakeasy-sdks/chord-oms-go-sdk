@@ -23,7 +23,6 @@ type AddressBookInput struct {
 	CountryIso       *string                  `json:"country_iso,omitempty"`
 	Default          *bool                    `json:"default,omitempty"`
 	Firstname        *string                  `json:"firstname,omitempty"`
-	ID               *int64                   `json:"id,omitempty"`
 	Lastname         *string                  `json:"lastname,omitempty"`
 	Name             *string                  `json:"name,omitempty"`
 	Phone            *string                  `json:"phone,omitempty"`

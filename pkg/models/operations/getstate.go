@@ -9,7 +9,7 @@ type GetStatePathParams struct {
 }
 
 type GetState401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type GetState404ApplicationJSON struct {

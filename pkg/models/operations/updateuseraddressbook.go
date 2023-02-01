@@ -13,7 +13,7 @@ type UpdateUserAddressBookSecurity struct {
 }
 
 type UpdateUserAddressBook401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type UpdateUserAddressBook404ApplicationJSON struct {

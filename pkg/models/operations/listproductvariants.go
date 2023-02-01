@@ -27,7 +27,7 @@ type ListProductVariantsPaginationData struct {
 }
 
 type ListProductVariants401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type ListProductVariants404ApplicationJSON struct {

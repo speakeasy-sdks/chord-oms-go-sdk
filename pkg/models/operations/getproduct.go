@@ -13,7 +13,7 @@ type GetProductSecurity struct {
 }
 
 type GetProduct401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type GetProduct404ApplicationJSON struct {

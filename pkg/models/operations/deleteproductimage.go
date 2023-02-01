@@ -14,7 +14,7 @@ type DeleteProductImageSecurity struct {
 }
 
 type DeleteProductImage401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type DeleteProductImage404ApplicationJSON struct {

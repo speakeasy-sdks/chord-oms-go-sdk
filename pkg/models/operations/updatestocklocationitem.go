@@ -14,7 +14,7 @@ type UpdateStockLocationItemSecurity struct {
 }
 
 type UpdateStockLocationItem401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type UpdateStockLocationItem404ApplicationJSON struct {

@@ -13,7 +13,7 @@ type ReadyShipmentSecurity struct {
 }
 
 type ReadyShipment401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type ReadyShipment404ApplicationJSON struct {

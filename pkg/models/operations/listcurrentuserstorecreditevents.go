@@ -23,7 +23,7 @@ type ListCurrentUserStoreCreditEventsPaginationData struct {
 }
 
 type ListCurrentUserStoreCreditEvents401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type ListCurrentUserStoreCreditEventsRequest struct {

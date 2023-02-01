@@ -13,7 +13,7 @@ type UpdatePropertySecurity struct {
 }
 
 type UpdateProperty401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type UpdateProperty404ApplicationJSON struct {

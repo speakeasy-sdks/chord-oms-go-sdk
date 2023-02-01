@@ -9,7 +9,7 @@ type ListStates200ApplicationJSON struct {
 }
 
 type ListStates401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type ListStatesResponse struct {

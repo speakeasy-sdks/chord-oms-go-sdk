@@ -27,7 +27,7 @@ type ListProductPropertiesPaginationData struct {
 }
 
 type ListProductProperties401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type ListProductProperties404ApplicationJSON struct {

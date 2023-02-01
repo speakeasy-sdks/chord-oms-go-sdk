@@ -13,7 +13,7 @@ type CreateOrderReturnAuthorizationSecurity struct {
 }
 
 type CreateOrderReturnAuthorization401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type CreateOrderReturnAuthorization404ApplicationJSON struct {

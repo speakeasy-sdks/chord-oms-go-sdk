@@ -23,7 +23,7 @@ type ListTaxonsPaginationData struct {
 }
 
 type ListTaxons401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type ListTaxonsRequest struct {

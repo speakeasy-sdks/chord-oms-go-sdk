@@ -24,7 +24,7 @@ type ListShipmentsPaginationData struct {
 }
 
 type ListShipments401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type ListShipmentsRequest struct {

@@ -18,7 +18,7 @@ type ListStores200ApplicationJSON struct {
 }
 
 type ListStores401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type ListStoresRequest struct {

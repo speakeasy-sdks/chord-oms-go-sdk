@@ -18,7 +18,7 @@ type RemoveShipmentIDSecurity struct {
 }
 
 type RemoveShipmentID401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type RemoveShipmentID404ApplicationJSON struct {

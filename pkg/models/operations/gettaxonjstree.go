@@ -14,7 +14,7 @@ type GetTaxonJstreeSecurity struct {
 }
 
 type GetTaxonJstree401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type GetTaxonJstree404ApplicationJSON struct {

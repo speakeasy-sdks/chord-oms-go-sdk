@@ -23,7 +23,7 @@ type UpdateCheckoutLineItemSecurity struct {
 }
 
 type UpdateCheckoutLineItem401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type UpdateCheckoutLineItem404ApplicationJSON struct {

@@ -14,7 +14,7 @@ type GetProductPropertySecurity struct {
 }
 
 type GetProductProperty401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type GetProductProperty404ApplicationJSON struct {

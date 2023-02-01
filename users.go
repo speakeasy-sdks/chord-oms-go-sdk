@@ -31,7 +31,18 @@ func NewUsers(defaultClient, securityClient HTTPClient, serverURL, language, sdk
 }
 
 // CreateUser - Create user
-// Creates a user.
+// This route allows you to create a user. By default, this user will be
+// created without roles, which will put them in the role of a customer.
+//
+// When spinning up your Chord store, it is not strictly necessary required
+// to import all of your existing customers, as they will be created upon
+// interactions with your storefront, such as purchases. Chord's admin
+// provides the ability to upload a CSV of users.
+//
+// For legacy Chord purposes, customers must be created with passwords,
+// even if you are using an OAuth or passwordless login service for your
+// storefront. To get around this, generate a random string for the user's
+// `password` and `password_confirmation`.
 func (s *Users) CreateUser(ctx context.Context, request operations.CreateUserRequest) (*operations.CreateUserResponse, error) {
 	baseURL := s._serverURL
 	url := strings.TrimSuffix(baseURL, "/") + "/users"
@@ -66,7 +77,7 @@ func (s *Users) CreateUser(ctx context.Context, request operations.CreateUserReq
 		ContentType: contentType,
 	}
 	switch {
-	case httpRes.StatusCode == 200:
+	case httpRes.StatusCode == 201:
 		switch {
 		case utils.MatchContentType(contentType, `application/json`):
 			var out *shared.User
@@ -95,6 +106,16 @@ func (s *Users) CreateUser(ctx context.Context, request operations.CreateUserReq
 			}
 
 			res.CreateUser422ApplicationJSONObject = out
+		}
+	case httpRes.StatusCode == 500:
+		switch {
+		case utils.MatchContentType(contentType, `application/json`):
+			var out *operations.CreateUser500ApplicationJSON
+			if err := utils.UnmarshalJsonFromResponseBody(httpRes.Body, &out); err != nil {
+				return nil, err
+			}
+
+			res.CreateUser500ApplicationJSONObject = out
 		}
 	}
 
@@ -339,7 +360,14 @@ func (s *Users) ListUsers(ctx context.Context, request operations.ListUsersReque
 }
 
 // UpdateUser - Update user
-// Updates a user.
+// This route allows you to update a user record. Chord's OMS keeps admins
+// and customers in the same user system, differentiating them with `roles`.
+//
+// ## Does updating a user update external systems?
+//
+// Yes, it does. Upon a successful user record update, Chord's API will fire
+// a "User Updated" event to Segment. From there, you are able to wire up
+// pushing this update to external providers, like Iterable or Klayvio.
 func (s *Users) UpdateUser(ctx context.Context, request operations.UpdateUserRequest) (*operations.UpdateUserResponse, error) {
 	baseURL := s._serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/users/{id}", request.PathParams)
@@ -413,6 +441,16 @@ func (s *Users) UpdateUser(ctx context.Context, request operations.UpdateUserReq
 			}
 
 			res.UpdateUser422ApplicationJSONObject = out
+		}
+	case httpRes.StatusCode == 500:
+		switch {
+		case utils.MatchContentType(contentType, `application/json`):
+			var out *operations.UpdateUser500ApplicationJSON
+			if err := utils.UnmarshalJsonFromResponseBody(httpRes.Body, &out); err != nil {
+				return nil, err
+			}
+
+			res.UpdateUser500ApplicationJSONObject = out
 		}
 	}
 

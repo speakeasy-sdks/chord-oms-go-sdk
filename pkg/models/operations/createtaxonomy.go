@@ -9,7 +9,7 @@ type CreateTaxonomySecurity struct {
 }
 
 type CreateTaxonomy401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type CreateTaxonomy422ApplicationJSON struct {

@@ -9,7 +9,7 @@ type CreateUserSecurity struct {
 }
 
 type CreateUser401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type CreateUser422ApplicationJSON struct {
@@ -17,8 +17,13 @@ type CreateUser422ApplicationJSON struct {
 	Errors map[string]interface{} `json:"errors,omitempty"`
 }
 
+type CreateUser500ApplicationJSON struct {
+	Error  *string  `json:"error,omitempty"`
+	Status *float64 `json:"status,omitempty"`
+}
+
 type CreateUserRequest struct {
-	Request  shared.UserInput `request:"mediaType=application/json"`
+	Request  shared.CreateUserInput `request:"mediaType=application/json"`
 	Security CreateUserSecurity
 }
 
@@ -27,5 +32,6 @@ type CreateUserResponse struct {
 	StatusCode                         int64
 	CreateUser401ApplicationJSONObject *CreateUser401ApplicationJSON
 	CreateUser422ApplicationJSONObject *CreateUser422ApplicationJSON
+	CreateUser500ApplicationJSONObject *CreateUser500ApplicationJSON
 	User                               *shared.User
 }

@@ -15,7 +15,7 @@ type DeleteCheckoutLineItemSecurity struct {
 }
 
 type DeleteCheckoutLineItem401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type DeleteCheckoutLineItem404ApplicationJSON struct {

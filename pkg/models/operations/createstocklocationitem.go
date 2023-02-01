@@ -13,7 +13,7 @@ type CreateStockLocationItemSecurity struct {
 }
 
 type CreateStockLocationItem401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type CreateStockLocationItem404ApplicationJSON struct {

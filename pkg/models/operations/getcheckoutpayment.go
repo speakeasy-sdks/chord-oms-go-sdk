@@ -15,7 +15,7 @@ type GetCheckoutPaymentSecurity struct {
 }
 
 type GetCheckoutPayment401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type GetCheckoutPayment404ApplicationJSON struct {

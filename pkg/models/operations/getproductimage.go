@@ -14,7 +14,7 @@ type GetProductImageSecurity struct {
 }
 
 type GetProductImage401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type GetProductImage404ApplicationJSON struct {

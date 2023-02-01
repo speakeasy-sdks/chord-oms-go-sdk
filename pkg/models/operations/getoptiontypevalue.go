@@ -14,7 +14,7 @@ type GetOptionTypeValueSecurity struct {
 }
 
 type GetOptionTypeValue401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type GetOptionTypeValue404ApplicationJSON struct {

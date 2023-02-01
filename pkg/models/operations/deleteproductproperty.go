@@ -14,7 +14,7 @@ type DeleteProductPropertySecurity struct {
 }
 
 type DeleteProductProperty401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type DeleteProductProperty404ApplicationJSON struct {

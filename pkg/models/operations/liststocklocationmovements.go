@@ -27,7 +27,7 @@ type ListStockLocationMovementsPaginationData struct {
 }
 
 type ListStockLocationMovements401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type ListStockLocationMovements404ApplicationJSON struct {

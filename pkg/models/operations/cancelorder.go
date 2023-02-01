@@ -14,7 +14,7 @@ type CancelOrderSecurity struct {
 }
 
 type CancelOrder401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type CancelOrder404ApplicationJSON struct {

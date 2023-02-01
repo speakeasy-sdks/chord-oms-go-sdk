@@ -24,7 +24,7 @@ type ListReturnAuthorizationPaginationData struct {
 }
 
 type ListReturnAuthorization401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type ListReturnAuthorization404ApplicationJSON struct {

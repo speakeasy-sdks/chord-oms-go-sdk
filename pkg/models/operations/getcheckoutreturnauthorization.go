@@ -14,7 +14,7 @@ type GetCheckoutReturnAuthorizationSecurity struct {
 }
 
 type GetCheckoutReturnAuthorization401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type GetCheckoutReturnAuthorization404ApplicationJSON struct {

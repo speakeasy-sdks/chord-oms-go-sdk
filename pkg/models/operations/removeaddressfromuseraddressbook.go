@@ -17,7 +17,7 @@ type RemoveAddressFromUserAddressBookSecurity struct {
 }
 
 type RemoveAddressFromUserAddressBook401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type RemoveAddressFromUserAddressBook404ApplicationJSON struct {

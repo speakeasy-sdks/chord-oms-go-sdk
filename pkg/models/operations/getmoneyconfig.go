@@ -13,7 +13,7 @@ type GetMoneyConfig200ApplicationJSON struct {
 }
 
 type GetMoneyConfig401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type GetMoneyConfigRequest struct {

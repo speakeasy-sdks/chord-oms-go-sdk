@@ -15,7 +15,7 @@ type UpdateClassificationSecurity struct {
 }
 
 type UpdateClassification401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type UpdateClassification422ApplicationJSON struct {

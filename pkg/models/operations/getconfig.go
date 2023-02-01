@@ -14,7 +14,7 @@ type GetConfig200ApplicationJSON struct {
 }
 
 type GetConfig401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type GetConfigRequest struct {

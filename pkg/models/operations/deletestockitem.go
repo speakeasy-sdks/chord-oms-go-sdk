@@ -13,7 +13,7 @@ type DeleteStockItemSecurity struct {
 }
 
 type DeleteStockItem401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type DeleteStockItem404ApplicationJSON struct {

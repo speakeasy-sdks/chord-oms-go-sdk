@@ -14,7 +14,7 @@ type ApplyOrderCouponCodeSecurity struct {
 }
 
 type ApplyOrderCouponCode401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type ApplyOrderCouponCode404ApplicationJSON struct {

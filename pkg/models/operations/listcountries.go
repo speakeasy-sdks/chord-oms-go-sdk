@@ -19,7 +19,7 @@ type ListCountriesPaginationData struct {
 }
 
 type ListCountries401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type ListCountriesRequest struct {

@@ -19,7 +19,7 @@ type FinalizeCheckoutSecurity struct {
 }
 
 type FinalizeCheckout401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type FinalizeCheckout404ApplicationJSON struct {

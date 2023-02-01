@@ -13,7 +13,7 @@ type CreateProductVariantSecurity struct {
 }
 
 type CreateProductVariant401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type CreateProductVariant404ApplicationJSON struct {

@@ -13,7 +13,7 @@ type GetPromotionSecurity struct {
 }
 
 type GetPromotion401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type GetPromotion404ApplicationJSON struct {

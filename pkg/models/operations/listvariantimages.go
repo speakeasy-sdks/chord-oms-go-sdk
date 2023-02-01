@@ -17,7 +17,7 @@ type ListVariantImages200ApplicationJSON struct {
 }
 
 type ListVariantImages401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type ListVariantImages404ApplicationJSON struct {

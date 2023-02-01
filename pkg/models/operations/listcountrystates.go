@@ -14,7 +14,7 @@ type ListCountryStates200ApplicationJSON struct {
 }
 
 type ListCountryStates401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type ListCountryStates404ApplicationJSON struct {

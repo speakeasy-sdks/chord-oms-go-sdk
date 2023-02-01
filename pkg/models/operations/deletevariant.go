@@ -17,7 +17,7 @@ type DeleteVariant204ApplicationJSON struct {
 }
 
 type DeleteVariant401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type DeleteVariant404ApplicationJSON struct {

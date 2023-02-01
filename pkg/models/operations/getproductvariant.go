@@ -14,7 +14,7 @@ type GetProductVariantSecurity struct {
 }
 
 type GetProductVariant401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type GetProductVariant404ApplicationJSON struct {

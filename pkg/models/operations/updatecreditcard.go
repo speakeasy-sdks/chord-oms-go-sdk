@@ -13,7 +13,7 @@ type UpdateCreditCardSecurity struct {
 }
 
 type UpdateCreditCard401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type UpdateCreditCard404ApplicationJSON struct {

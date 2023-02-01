@@ -22,7 +22,7 @@ type CreateStoreSecurity struct {
 }
 
 type CreateStore401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type CreateStore422ApplicationJSON struct {

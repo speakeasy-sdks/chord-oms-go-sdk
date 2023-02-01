@@ -14,7 +14,7 @@ type EmptyOrderSecurity struct {
 }
 
 type EmptyOrder401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type EmptyOrder404ApplicationJSON struct {

@@ -13,7 +13,7 @@ type GetTaxonomyJstreeSecurity struct {
 }
 
 type GetTaxonomyJstree401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type GetTaxonomyJstree404ApplicationJSON struct {

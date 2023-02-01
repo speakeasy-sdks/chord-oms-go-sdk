@@ -15,7 +15,7 @@ type QuickCheckout201ApplicationJSON struct {
 }
 
 type QuickCheckout401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type QuickCheckoutRequest struct {

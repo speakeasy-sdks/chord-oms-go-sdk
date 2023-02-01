@@ -15,7 +15,7 @@ type CreateShipmentSecurity struct {
 }
 
 type CreateShipment401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type CreateShipment422ApplicationJSON struct {

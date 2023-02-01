@@ -13,7 +13,7 @@ type DeleteOptionValueSecurity struct {
 }
 
 type DeleteOptionValue401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type DeleteOptionValue404ApplicationJSON struct {

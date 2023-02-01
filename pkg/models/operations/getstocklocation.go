@@ -13,7 +13,7 @@ type GetStockLocationSecurity struct {
 }
 
 type GetStockLocation401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type GetStockLocation404ApplicationJSON struct {

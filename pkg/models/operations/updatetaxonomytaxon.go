@@ -14,7 +14,7 @@ type UpdateTaxonomyTaxonSecurity struct {
 }
 
 type UpdateTaxonomyTaxon401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type UpdateTaxonomyTaxon404ApplicationJSON struct {

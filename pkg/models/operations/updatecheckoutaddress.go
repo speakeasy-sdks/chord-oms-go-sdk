@@ -15,7 +15,7 @@ type UpdateCheckoutAddressSecurity struct {
 }
 
 type UpdateCheckoutAddress401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type UpdateCheckoutAddress404ApplicationJSON struct {

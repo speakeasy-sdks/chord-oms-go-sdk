@@ -9,7 +9,7 @@ type CreateOptionValueSecurity struct {
 }
 
 type CreateOptionValue401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type CreateOptionValue422ApplicationJSON struct {

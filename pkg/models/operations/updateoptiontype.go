@@ -13,7 +13,7 @@ type UpdateOptionTypeSecurity struct {
 }
 
 type UpdateOptionType401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type UpdateOptionType404ApplicationJSON struct {

@@ -14,7 +14,7 @@ type GetStockLocationMovementSecurity struct {
 }
 
 type GetStockLocationMovement401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type GetStockLocationMovement404ApplicationJSON struct {

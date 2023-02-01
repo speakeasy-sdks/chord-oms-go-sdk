@@ -23,7 +23,7 @@ type ListZonesPaginationData struct {
 }
 
 type ListZones401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type ListZonesRequest struct {

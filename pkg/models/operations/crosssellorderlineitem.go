@@ -14,7 +14,7 @@ type CrossSellOrderLineItemSecurity struct {
 }
 
 type CrossSellOrderLineItem401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type CrossSellOrderLineItem404ApplicationJSON struct {

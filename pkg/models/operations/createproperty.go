@@ -9,7 +9,7 @@ type CreatePropertySecurity struct {
 }
 
 type CreateProperty401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type CreateProperty422ApplicationJSON struct {

@@ -14,7 +14,7 @@ type DeleteProductVariantSecurity struct {
 }
 
 type DeleteProductVariant401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type DeleteProductVariant404ApplicationJSON struct {

@@ -22,7 +22,7 @@ type TransferShipmentItemToShipment200ApplicationJSON struct {
 }
 
 type TransferShipmentItemToShipment401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type TransferShipmentItemToShipment422ApplicationJSON struct {

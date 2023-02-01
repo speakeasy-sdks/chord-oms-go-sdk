@@ -14,7 +14,7 @@ type CreateOrderLineItemSecurity struct {
 }
 
 type CreateOrderLineItem401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type CreateOrderLineItem404ApplicationJSON struct {

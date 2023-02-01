@@ -9,7 +9,7 @@ type CreateZoneSecurity struct {
 }
 
 type CreateZone401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type CreateZone422ApplicationJSON struct {

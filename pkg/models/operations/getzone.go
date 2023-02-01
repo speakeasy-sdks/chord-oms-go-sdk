@@ -13,7 +13,7 @@ type GetZoneSecurity struct {
 }
 
 type GetZone401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type GetZone404ApplicationJSON struct {

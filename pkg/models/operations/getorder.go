@@ -14,7 +14,7 @@ type GetOrderSecurity struct {
 }
 
 type GetOrder401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type GetOrder404ApplicationJSON struct {

@@ -15,7 +15,7 @@ type DeleteOrderCouponCodeSecurity struct {
 }
 
 type DeleteOrderCouponCode401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type DeleteOrderCouponCode404ApplicationJSON struct {

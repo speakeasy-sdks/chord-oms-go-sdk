@@ -22,7 +22,6 @@ type AddressInput struct {
 	CountryID        *int64               `json:"country_id,omitempty"`
 	CountryIso       *string              `json:"country_iso,omitempty"`
 	Firstname        *string              `json:"firstname,omitempty"`
-	ID               *int64               `json:"id,omitempty"`
 	Lastname         *string              `json:"lastname,omitempty"`
 	Name             *string              `json:"name,omitempty"`
 	Phone            *string              `json:"phone,omitempty"`

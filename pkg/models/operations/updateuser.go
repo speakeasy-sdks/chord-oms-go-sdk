@@ -13,7 +13,7 @@ type UpdateUserSecurity struct {
 }
 
 type UpdateUser401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
+	Error *string `json:"error,omitempty"`
 }
 
 type UpdateUser404ApplicationJSON struct {
@@ -25,9 +25,14 @@ type UpdateUser422ApplicationJSON struct {
 	Errors map[string]interface{} `json:"errors,omitempty"`
 }
 
+type UpdateUser500ApplicationJSON struct {
+	Error  *string  `json:"error,omitempty"`
+	Status *float64 `json:"status,omitempty"`
+}
+
 type UpdateUserRequest struct {
 	PathParams UpdateUserPathParams
-	Request    shared.UserInput `request:"mediaType=application/json"`
+	Request    shared.UpdateUserInput `request:"mediaType=application/json"`
 	Security   UpdateUserSecurity
 }
 
@@ -37,5 +42,6 @@ type UpdateUserResponse struct {
 	UpdateUser401ApplicationJSONObject *UpdateUser401ApplicationJSON
 	UpdateUser404ApplicationJSONObject *UpdateUser404ApplicationJSON
 	UpdateUser422ApplicationJSONObject *UpdateUser422ApplicationJSON
+	UpdateUser500ApplicationJSONObject *UpdateUser500ApplicationJSON
 	User                               *shared.User
 }
