@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type UpdateClassificationRequestBody struct {
@@ -11,16 +11,7 @@ type UpdateClassificationRequestBody struct {
 }
 
 type UpdateClassificationSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type UpdateClassification401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type UpdateClassification422ApplicationJSON struct {
-	Error  *string                `json:"error,omitempty"`
-	Errors map[string]interface{} `json:"errors,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type UpdateClassificationRequest struct {
@@ -28,9 +19,18 @@ type UpdateClassificationRequest struct {
 	Security UpdateClassificationSecurity
 }
 
+type UpdateClassification422ApplicationJSON struct {
+	Error  *string                `json:"error,omitempty"`
+	Errors map[string]interface{} `json:"errors,omitempty"`
+}
+
+type UpdateClassification401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type UpdateClassificationResponse struct {
 	ContentType                                  string
-	StatusCode                                   int64
+	StatusCode                                   int
 	UpdateClassification200ApplicationJSONObject map[string]interface{}
 	UpdateClassification401ApplicationJSONObject *UpdateClassification401ApplicationJSON
 	UpdateClassification422ApplicationJSONObject *UpdateClassification422ApplicationJSON

@@ -3,36 +3,36 @@ package sdk
 import (
 	"context"
 	"fmt"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/operations"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/utils"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/operations"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/utils"
 	"net/http"
 )
 
-type Payments struct {
-	_defaultClient  HTTPClient
-	_securityClient HTTPClient
-	_serverURL      string
-	_language       string
-	_sdkVersion     string
-	_genVersion     string
+type payments struct {
+	defaultClient  HTTPClient
+	securityClient HTTPClient
+	serverURL      string
+	language       string
+	sdkVersion     string
+	genVersion     string
 }
 
-func NewPayments(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *Payments {
-	return &Payments{
-		_defaultClient:  defaultClient,
-		_securityClient: securityClient,
-		_serverURL:      serverURL,
-		_language:       language,
-		_sdkVersion:     sdkVersion,
-		_genVersion:     genVersion,
+func newPayments(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *payments {
+	return &payments{
+		defaultClient:  defaultClient,
+		securityClient: securityClient,
+		serverURL:      serverURL,
+		language:       language,
+		sdkVersion:     sdkVersion,
+		genVersion:     genVersion,
 	}
 }
 
 // AuthorizeCheckoutPayment - Authorize checkout payment
 // Authorizes a checkout's payment.
-func (s *Payments) AuthorizeCheckoutPayment(ctx context.Context, request operations.AuthorizeCheckoutPaymentRequest) (*operations.AuthorizeCheckoutPaymentResponse, error) {
-	baseURL := s._serverURL
+func (s *payments) AuthorizeCheckoutPayment(ctx context.Context, request operations.AuthorizeCheckoutPaymentRequest) (*operations.AuthorizeCheckoutPaymentResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/checkouts/{checkout_id}/payments/{payment_id}/authorize", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "PUT", url, nil)
@@ -40,18 +40,21 @@ func (s *Payments) AuthorizeCheckoutPayment(ctx context.Context, request operati
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.AuthorizeCheckoutPaymentResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -102,8 +105,8 @@ func (s *Payments) AuthorizeCheckoutPayment(ctx context.Context, request operati
 
 // AuthorizeOrderPayment - Authorize order payment
 // Authorizes an order's payment.
-func (s *Payments) AuthorizeOrderPayment(ctx context.Context, request operations.AuthorizeOrderPaymentRequest) (*operations.AuthorizeOrderPaymentResponse, error) {
-	baseURL := s._serverURL
+func (s *payments) AuthorizeOrderPayment(ctx context.Context, request operations.AuthorizeOrderPaymentRequest) (*operations.AuthorizeOrderPaymentResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/orders/{order_number}/payments/{payment_id}/authorize", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "PUT", url, nil)
@@ -111,18 +114,21 @@ func (s *Payments) AuthorizeOrderPayment(ctx context.Context, request operations
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.AuthorizeOrderPaymentResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -173,8 +179,8 @@ func (s *Payments) AuthorizeOrderPayment(ctx context.Context, request operations
 
 // CaptureCheckoutPayment - Capture checkout payment
 // Captures a checkout's payment.
-func (s *Payments) CaptureCheckoutPayment(ctx context.Context, request operations.CaptureCheckoutPaymentRequest) (*operations.CaptureCheckoutPaymentResponse, error) {
-	baseURL := s._serverURL
+func (s *payments) CaptureCheckoutPayment(ctx context.Context, request operations.CaptureCheckoutPaymentRequest) (*operations.CaptureCheckoutPaymentResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/checkouts/{checkout_id}/payments/{payment_id}/capture", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "PUT", url, nil)
@@ -182,18 +188,21 @@ func (s *Payments) CaptureCheckoutPayment(ctx context.Context, request operation
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.CaptureCheckoutPaymentResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -244,8 +253,8 @@ func (s *Payments) CaptureCheckoutPayment(ctx context.Context, request operation
 
 // CaptureOrderPayment - Capture order payment
 // Captures an order's payment.
-func (s *Payments) CaptureOrderPayment(ctx context.Context, request operations.CaptureOrderPaymentRequest) (*operations.CaptureOrderPaymentResponse, error) {
-	baseURL := s._serverURL
+func (s *payments) CaptureOrderPayment(ctx context.Context, request operations.CaptureOrderPaymentRequest) (*operations.CaptureOrderPaymentResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/orders/{order_number}/payments/{payment_id}/capture", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "PUT", url, nil)
@@ -253,18 +262,21 @@ func (s *Payments) CaptureOrderPayment(ctx context.Context, request operations.C
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.CaptureOrderPaymentResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -315,8 +327,8 @@ func (s *Payments) CaptureOrderPayment(ctx context.Context, request operations.C
 
 // CreateCheckoutPayment - Create checkout payment
 // Creates a new payment for a checkout.
-func (s *Payments) CreateCheckoutPayment(ctx context.Context, request operations.CreateCheckoutPaymentRequest) (*operations.CreateCheckoutPaymentResponse, error) {
-	baseURL := s._serverURL
+func (s *payments) CreateCheckoutPayment(ctx context.Context, request operations.CreateCheckoutPaymentRequest) (*operations.CreateCheckoutPaymentResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/checkouts/{checkout_id}/payments", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -331,18 +343,21 @@ func (s *Payments) CreateCheckoutPayment(ctx context.Context, request operations
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.CreateCheckoutPaymentResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -393,8 +408,8 @@ func (s *Payments) CreateCheckoutPayment(ctx context.Context, request operations
 
 // CreateOrderPayment - Create order payment
 // Creates a payment for an order.
-func (s *Payments) CreateOrderPayment(ctx context.Context, request operations.CreateOrderPaymentRequest) (*operations.CreateOrderPaymentResponse, error) {
-	baseURL := s._serverURL
+func (s *payments) CreateOrderPayment(ctx context.Context, request operations.CreateOrderPaymentRequest) (*operations.CreateOrderPaymentResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/orders/{order_number}/payments", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -412,18 +427,21 @@ func (s *Payments) CreateOrderPayment(ctx context.Context, request operations.Cr
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.CreateOrderPaymentResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -474,8 +492,8 @@ func (s *Payments) CreateOrderPayment(ctx context.Context, request operations.Cr
 
 // CreditCheckoutPayment - Credit checkout payment
 // Credits a checkout's payment.
-func (s *Payments) CreditCheckoutPayment(ctx context.Context, request operations.CreditCheckoutPaymentRequest) (*operations.CreditCheckoutPaymentResponse, error) {
-	baseURL := s._serverURL
+func (s *payments) CreditCheckoutPayment(ctx context.Context, request operations.CreditCheckoutPaymentRequest) (*operations.CreditCheckoutPaymentResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/checkouts/{checkout_id}/payments/{payment_id}/credit", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "PUT", url, nil)
@@ -483,18 +501,21 @@ func (s *Payments) CreditCheckoutPayment(ctx context.Context, request operations
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.CreditCheckoutPaymentResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -545,8 +566,8 @@ func (s *Payments) CreditCheckoutPayment(ctx context.Context, request operations
 
 // CreditOrderPayment - Credit order payment
 // Credits an order's payment.
-func (s *Payments) CreditOrderPayment(ctx context.Context, request operations.CreditOrderPaymentRequest) (*operations.CreditOrderPaymentResponse, error) {
-	baseURL := s._serverURL
+func (s *payments) CreditOrderPayment(ctx context.Context, request operations.CreditOrderPaymentRequest) (*operations.CreditOrderPaymentResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/orders/{order_number}/payments/{payment_id}/credit", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "PUT", url, nil)
@@ -554,18 +575,21 @@ func (s *Payments) CreditOrderPayment(ctx context.Context, request operations.Cr
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.CreditOrderPaymentResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -616,8 +640,8 @@ func (s *Payments) CreditOrderPayment(ctx context.Context, request operations.Cr
 
 // GetCheckoutPayment - Get checkout payment
 // Gets a checkout's payment.
-func (s *Payments) GetCheckoutPayment(ctx context.Context, request operations.GetCheckoutPaymentRequest) (*operations.GetCheckoutPaymentResponse, error) {
-	baseURL := s._serverURL
+func (s *payments) GetCheckoutPayment(ctx context.Context, request operations.GetCheckoutPaymentRequest) (*operations.GetCheckoutPaymentResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/checkouts/{checkout_id}/payments/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -625,18 +649,21 @@ func (s *Payments) GetCheckoutPayment(ctx context.Context, request operations.Ge
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.GetCheckoutPaymentResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -677,8 +704,8 @@ func (s *Payments) GetCheckoutPayment(ctx context.Context, request operations.Ge
 
 // GetOrderPayment - Get order payment
 // Retrieves an order's payment.
-func (s *Payments) GetOrderPayment(ctx context.Context, request operations.GetOrderPaymentRequest) (*operations.GetOrderPaymentResponse, error) {
-	baseURL := s._serverURL
+func (s *payments) GetOrderPayment(ctx context.Context, request operations.GetOrderPaymentRequest) (*operations.GetOrderPaymentResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/orders/{order_number}/payments/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -686,18 +713,21 @@ func (s *Payments) GetOrderPayment(ctx context.Context, request operations.GetOr
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.GetOrderPaymentResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -738,8 +768,8 @@ func (s *Payments) GetOrderPayment(ctx context.Context, request operations.GetOr
 
 // ListCheckoutPayments - List checkout payments
 // Lists a checkout's payments.
-func (s *Payments) ListCheckoutPayments(ctx context.Context, request operations.ListCheckoutPaymentsRequest) (*operations.ListCheckoutPaymentsResponse, error) {
-	baseURL := s._serverURL
+func (s *payments) ListCheckoutPayments(ctx context.Context, request operations.ListCheckoutPaymentsRequest) (*operations.ListCheckoutPaymentsResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/checkouts/{checkout_id}/payments", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -747,20 +777,25 @@ func (s *Payments) ListCheckoutPayments(ctx context.Context, request operations.
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	utils.PopulateQueryParams(ctx, req, request.QueryParams)
+	if err := utils.PopulateQueryParams(ctx, req, request.QueryParams); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.ListCheckoutPaymentsResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -801,8 +836,8 @@ func (s *Payments) ListCheckoutPayments(ctx context.Context, request operations.
 
 // ListOrderPayments - List order payments
 // Lists an order's payments.
-func (s *Payments) ListOrderPayments(ctx context.Context, request operations.ListOrderPaymentsRequest) (*operations.ListOrderPaymentsResponse, error) {
-	baseURL := s._serverURL
+func (s *payments) ListOrderPayments(ctx context.Context, request operations.ListOrderPaymentsRequest) (*operations.ListOrderPaymentsResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/orders/{order_number}/payments", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -810,20 +845,25 @@ func (s *Payments) ListOrderPayments(ctx context.Context, request operations.Lis
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	utils.PopulateQueryParams(ctx, req, request.QueryParams)
+	if err := utils.PopulateQueryParams(ctx, req, request.QueryParams); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.ListOrderPaymentsResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -864,8 +904,8 @@ func (s *Payments) ListOrderPayments(ctx context.Context, request operations.Lis
 
 // PurchaseCheckoutPayment - Purchase checkout payment
 // Purchases a checkout's payment.
-func (s *Payments) PurchaseCheckoutPayment(ctx context.Context, request operations.PurchaseCheckoutPaymentRequest) (*operations.PurchaseCheckoutPaymentResponse, error) {
-	baseURL := s._serverURL
+func (s *payments) PurchaseCheckoutPayment(ctx context.Context, request operations.PurchaseCheckoutPaymentRequest) (*operations.PurchaseCheckoutPaymentResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/checkouts/{checkout_id}/payments/{payment_id}/purchase", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "PUT", url, nil)
@@ -873,18 +913,21 @@ func (s *Payments) PurchaseCheckoutPayment(ctx context.Context, request operatio
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.PurchaseCheckoutPaymentResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -935,8 +978,8 @@ func (s *Payments) PurchaseCheckoutPayment(ctx context.Context, request operatio
 
 // PurchaseOrderPayment - Purchase order payment
 // Purchases an order's payment.
-func (s *Payments) PurchaseOrderPayment(ctx context.Context, request operations.PurchaseOrderPaymentRequest) (*operations.PurchaseOrderPaymentResponse, error) {
-	baseURL := s._serverURL
+func (s *payments) PurchaseOrderPayment(ctx context.Context, request operations.PurchaseOrderPaymentRequest) (*operations.PurchaseOrderPaymentResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/orders/{order_number}/payments/{payment_id}/purchase", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "PUT", url, nil)
@@ -944,18 +987,21 @@ func (s *Payments) PurchaseOrderPayment(ctx context.Context, request operations.
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.PurchaseOrderPaymentResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -1006,8 +1052,8 @@ func (s *Payments) PurchaseOrderPayment(ctx context.Context, request operations.
 
 // UpdateCheckoutPayment - Update checkout payment
 // Updates a checkout's payment.
-func (s *Payments) UpdateCheckoutPayment(ctx context.Context, request operations.UpdateCheckoutPaymentRequest) (*operations.UpdateCheckoutPaymentResponse, error) {
-	baseURL := s._serverURL
+func (s *payments) UpdateCheckoutPayment(ctx context.Context, request operations.UpdateCheckoutPaymentRequest) (*operations.UpdateCheckoutPaymentResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/checkouts/{checkout_id}/payments/{id}", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -1025,18 +1071,21 @@ func (s *Payments) UpdateCheckoutPayment(ctx context.Context, request operations
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.UpdateCheckoutPaymentResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -1087,8 +1136,8 @@ func (s *Payments) UpdateCheckoutPayment(ctx context.Context, request operations
 
 // UpdateOrderPayment - Update order payment
 // Updates an order's payment.
-func (s *Payments) UpdateOrderPayment(ctx context.Context, request operations.UpdateOrderPaymentRequest) (*operations.UpdateOrderPaymentResponse, error) {
-	baseURL := s._serverURL
+func (s *payments) UpdateOrderPayment(ctx context.Context, request operations.UpdateOrderPaymentRequest) (*operations.UpdateOrderPaymentResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/orders/{order_number}/payments/{id}", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -1106,18 +1155,21 @@ func (s *Payments) UpdateOrderPayment(ctx context.Context, request operations.Up
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.UpdateOrderPaymentResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -1168,8 +1220,8 @@ func (s *Payments) UpdateOrderPayment(ctx context.Context, request operations.Up
 
 // VoidCheckoutPayment - Void checkout payment
 // Voids a checkout's payment.
-func (s *Payments) VoidCheckoutPayment(ctx context.Context, request operations.VoidCheckoutPaymentRequest) (*operations.VoidCheckoutPaymentResponse, error) {
-	baseURL := s._serverURL
+func (s *payments) VoidCheckoutPayment(ctx context.Context, request operations.VoidCheckoutPaymentRequest) (*operations.VoidCheckoutPaymentResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/checkouts/{checkout_id}/payments/{payment_id}/void", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "PUT", url, nil)
@@ -1177,18 +1229,21 @@ func (s *Payments) VoidCheckoutPayment(ctx context.Context, request operations.V
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.VoidCheckoutPaymentResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -1239,8 +1294,8 @@ func (s *Payments) VoidCheckoutPayment(ctx context.Context, request operations.V
 
 // VoidOrderPayment - Void order payment
 // Voids an order's payment.
-func (s *Payments) VoidOrderPayment(ctx context.Context, request operations.VoidOrderPaymentRequest) (*operations.VoidOrderPaymentResponse, error) {
-	baseURL := s._serverURL
+func (s *payments) VoidOrderPayment(ctx context.Context, request operations.VoidOrderPaymentRequest) (*operations.VoidOrderPaymentResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/orders/{order_number}/payments/{payment_id}/void", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "PUT", url, nil)
@@ -1248,18 +1303,21 @@ func (s *Payments) VoidOrderPayment(ctx context.Context, request operations.Void
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.VoidOrderPaymentResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {

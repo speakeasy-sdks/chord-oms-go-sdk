@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type DeleteCheckoutLineItemPathParams struct {
@@ -10,20 +10,8 @@ type DeleteCheckoutLineItemPathParams struct {
 }
 
 type DeleteCheckoutLineItemSecurity struct {
-	APIKey     *shared.SchemeAPIKey     `security:"scheme,type=apiKey,subtype=header"`
+	APIKey     *shared.SchemeAPIKey     `security:"scheme,type=http,subtype=bearer"`
 	OrderToken *shared.SchemeOrderToken `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type DeleteCheckoutLineItem401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type DeleteCheckoutLineItem404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type DeleteCheckoutLineItem422ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
 }
 
 type DeleteCheckoutLineItemRequest struct {
@@ -31,9 +19,21 @@ type DeleteCheckoutLineItemRequest struct {
 	Security   DeleteCheckoutLineItemSecurity
 }
 
+type DeleteCheckoutLineItem422ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type DeleteCheckoutLineItem404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type DeleteCheckoutLineItem401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type DeleteCheckoutLineItemResponse struct {
 	ContentType                                    string
-	StatusCode                                     int64
+	StatusCode                                     int
 	DeleteCheckoutLineItem401ApplicationJSONObject *DeleteCheckoutLineItem401ApplicationJSON
 	DeleteCheckoutLineItem404ApplicationJSONObject *DeleteCheckoutLineItem404ApplicationJSON
 	DeleteCheckoutLineItem422ApplicationJSONObject *DeleteCheckoutLineItem422ApplicationJSON

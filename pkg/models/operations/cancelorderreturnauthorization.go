@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type CancelOrderReturnAuthorizationPathParams struct {
@@ -10,20 +10,7 @@ type CancelOrderReturnAuthorizationPathParams struct {
 }
 
 type CancelOrderReturnAuthorizationSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type CancelOrderReturnAuthorization401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type CancelOrderReturnAuthorization404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type CancelOrderReturnAuthorization422ApplicationJSON struct {
-	Error  *string                `json:"error,omitempty"`
-	Errors map[string]interface{} `json:"errors,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type CancelOrderReturnAuthorizationRequest struct {
@@ -31,9 +18,22 @@ type CancelOrderReturnAuthorizationRequest struct {
 	Security   CancelOrderReturnAuthorizationSecurity
 }
 
+type CancelOrderReturnAuthorization422ApplicationJSON struct {
+	Error  *string                `json:"error,omitempty"`
+	Errors map[string]interface{} `json:"errors,omitempty"`
+}
+
+type CancelOrderReturnAuthorization404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type CancelOrderReturnAuthorization401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type CancelOrderReturnAuthorizationResponse struct {
 	ContentType                                            string
-	StatusCode                                             int64
+	StatusCode                                             int
 	CancelOrderReturnAuthorization401ApplicationJSONObject *CancelOrderReturnAuthorization401ApplicationJSON
 	CancelOrderReturnAuthorization404ApplicationJSONObject *CancelOrderReturnAuthorization404ApplicationJSON
 	CancelOrderReturnAuthorization422ApplicationJSONObject *CancelOrderReturnAuthorization422ApplicationJSON

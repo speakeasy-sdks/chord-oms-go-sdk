@@ -1,11 +1,20 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type QuickCheckoutSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
+}
+
+type QuickCheckoutRequest struct {
+	Request  map[string]interface{} `request:"mediaType=application/json"`
+	Security QuickCheckoutSecurity
+}
+
+type QuickCheckout401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
 }
 
 type QuickCheckout201ApplicationJSON struct {
@@ -14,18 +23,10 @@ type QuickCheckout201ApplicationJSON struct {
 	URL         *string `json:"url,omitempty"`
 }
 
-type QuickCheckout401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type QuickCheckoutRequest struct {
-	Request  shared.OrderInput `request:"mediaType=application/json"`
-	Security QuickCheckoutSecurity
-}
-
 type QuickCheckoutResponse struct {
 	ContentType                           string
-	StatusCode                            int64
+	Headers                               map[string][]string
+	StatusCode                            int
 	QuickCheckout201ApplicationJSONObject *QuickCheckout201ApplicationJSON
 	QuickCheckout401ApplicationJSONObject *QuickCheckout401ApplicationJSON
 }

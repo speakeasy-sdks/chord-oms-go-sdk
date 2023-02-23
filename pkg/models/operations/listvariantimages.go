@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type ListVariantImagesPathParams struct {
@@ -9,19 +9,7 @@ type ListVariantImagesPathParams struct {
 }
 
 type ListVariantImagesSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type ListVariantImages200ApplicationJSON struct {
-	Images []shared.Image `json:"images,omitempty"`
-}
-
-type ListVariantImages401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type ListVariantImages404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type ListVariantImagesRequest struct {
@@ -29,9 +17,21 @@ type ListVariantImagesRequest struct {
 	Security   ListVariantImagesSecurity
 }
 
+type ListVariantImages404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type ListVariantImages401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type ListVariantImages200ApplicationJSON struct {
+	Images []shared.Image `json:"images,omitempty"`
+}
+
 type ListVariantImagesResponse struct {
 	ContentType                               string
-	StatusCode                                int64
+	StatusCode                                int
 	ListVariantImages200ApplicationJSONObject *ListVariantImages200ApplicationJSON
 	ListVariantImages401ApplicationJSONObject *ListVariantImages401ApplicationJSON
 	ListVariantImages404ApplicationJSONObject *ListVariantImages404ApplicationJSON

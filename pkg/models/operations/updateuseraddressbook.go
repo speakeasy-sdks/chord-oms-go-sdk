@@ -1,28 +1,15 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type UpdateUserAddressBookPathParams struct {
-	UserID string `pathParam:"style=simple,explode=false,name=user_id"`
+	UserID int64 `pathParam:"style=simple,explode=false,name=user_id"`
 }
 
 type UpdateUserAddressBookSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type UpdateUserAddressBook401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type UpdateUserAddressBook404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type UpdateUserAddressBook422ApplicationJSON struct {
-	Error  *string                `json:"error,omitempty"`
-	Errors map[string]interface{} `json:"errors,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type UpdateUserAddressBookRequest struct {
@@ -31,9 +18,22 @@ type UpdateUserAddressBookRequest struct {
 	Security   UpdateUserAddressBookSecurity
 }
 
+type UpdateUserAddressBook422ApplicationJSON struct {
+	Error  *string                `json:"error,omitempty"`
+	Errors map[string]interface{} `json:"errors,omitempty"`
+}
+
+type UpdateUserAddressBook404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type UpdateUserAddressBook401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type UpdateUserAddressBookResponse struct {
 	ContentType                                   string
-	StatusCode                                    int64
+	StatusCode                                    int
 	AddressBook                                   []shared.AddressBook
 	UpdateUserAddressBook401ApplicationJSONObject *UpdateUserAddressBook401ApplicationJSON
 	UpdateUserAddressBook404ApplicationJSONObject *UpdateUserAddressBook404ApplicationJSON

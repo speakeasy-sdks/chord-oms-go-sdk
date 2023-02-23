@@ -3,37 +3,37 @@ package sdk
 import (
 	"context"
 	"fmt"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/operations"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/utils"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/operations"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/utils"
 	"net/http"
 	"strings"
 )
 
-type Zones struct {
-	_defaultClient  HTTPClient
-	_securityClient HTTPClient
-	_serverURL      string
-	_language       string
-	_sdkVersion     string
-	_genVersion     string
+type zones struct {
+	defaultClient  HTTPClient
+	securityClient HTTPClient
+	serverURL      string
+	language       string
+	sdkVersion     string
+	genVersion     string
 }
 
-func NewZones(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *Zones {
-	return &Zones{
-		_defaultClient:  defaultClient,
-		_securityClient: securityClient,
-		_serverURL:      serverURL,
-		_language:       language,
-		_sdkVersion:     sdkVersion,
-		_genVersion:     genVersion,
+func newZones(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *zones {
+	return &zones{
+		defaultClient:  defaultClient,
+		securityClient: securityClient,
+		serverURL:      serverURL,
+		language:       language,
+		sdkVersion:     sdkVersion,
+		genVersion:     genVersion,
 	}
 }
 
 // CreateZone - Create zone
 // Creates a zone.
-func (s *Zones) CreateZone(ctx context.Context, request operations.CreateZoneRequest) (*operations.CreateZoneResponse, error) {
-	baseURL := s._serverURL
+func (s *zones) CreateZone(ctx context.Context, request operations.CreateZoneRequest) (*operations.CreateZoneResponse, error) {
+	baseURL := s.serverURL
 	url := strings.TrimSuffix(baseURL, "/") + "/zones"
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -51,18 +51,21 @@ func (s *Zones) CreateZone(ctx context.Context, request operations.CreateZoneReq
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.CreateZoneResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -103,8 +106,8 @@ func (s *Zones) CreateZone(ctx context.Context, request operations.CreateZoneReq
 
 // DeleteZone - Delete zone
 // Deletes a zone.
-func (s *Zones) DeleteZone(ctx context.Context, request operations.DeleteZoneRequest) (*operations.DeleteZoneResponse, error) {
-	baseURL := s._serverURL
+func (s *zones) DeleteZone(ctx context.Context, request operations.DeleteZoneRequest) (*operations.DeleteZoneResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/zones/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "DELETE", url, nil)
@@ -112,18 +115,21 @@ func (s *Zones) DeleteZone(ctx context.Context, request operations.DeleteZoneReq
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.DeleteZoneResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -165,8 +171,8 @@ func (s *Zones) DeleteZone(ctx context.Context, request operations.DeleteZoneReq
 
 // GetZone - Get zone
 // Retrieves a zone.
-func (s *Zones) GetZone(ctx context.Context, request operations.GetZoneRequest) (*operations.GetZoneResponse, error) {
-	baseURL := s._serverURL
+func (s *zones) GetZone(ctx context.Context, request operations.GetZoneRequest) (*operations.GetZoneResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/zones/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -174,18 +180,21 @@ func (s *Zones) GetZone(ctx context.Context, request operations.GetZoneRequest) 
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.GetZoneResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -226,8 +235,8 @@ func (s *Zones) GetZone(ctx context.Context, request operations.GetZoneRequest) 
 
 // ListZones - List zones
 // Lists all zones.
-func (s *Zones) ListZones(ctx context.Context, request operations.ListZonesRequest) (*operations.ListZonesResponse, error) {
-	baseURL := s._serverURL
+func (s *zones) ListZones(ctx context.Context, request operations.ListZonesRequest) (*operations.ListZonesResponse, error) {
+	baseURL := s.serverURL
 	url := strings.TrimSuffix(baseURL, "/") + "/zones"
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -235,20 +244,25 @@ func (s *Zones) ListZones(ctx context.Context, request operations.ListZonesReque
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	utils.PopulateQueryParams(ctx, req, request.QueryParams)
+	if err := utils.PopulateQueryParams(ctx, req, request.QueryParams); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.ListZonesResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -279,8 +293,8 @@ func (s *Zones) ListZones(ctx context.Context, request operations.ListZonesReque
 
 // UpdateZone - Update zone
 // Updates a zone.
-func (s *Zones) UpdateZone(ctx context.Context, request operations.UpdateZoneRequest) (*operations.UpdateZoneResponse, error) {
-	baseURL := s._serverURL
+func (s *zones) UpdateZone(ctx context.Context, request operations.UpdateZoneRequest) (*operations.UpdateZoneResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/zones/{id}", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -298,18 +312,21 @@ func (s *Zones) UpdateZone(ctx context.Context, request operations.UpdateZoneReq
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.UpdateZoneResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {

@@ -1,12 +1,12 @@
 package shared
 
 import (
-	"time"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/types"
 )
 
 type CreateUserInputUser struct {
 	BillAddressAttributes *AddressInput          `json:"bill_address_attributes,omitempty"`
-	DateOfBirth           *time.Time             `json:"date_of_birth,omitempty"`
+	DateOfBirth           *types.Date            `json:"date_of_birth,omitempty"`
 	Email                 string                 `json:"email"`
 	Metadata              map[string]interface{} `json:"metadata,omitempty"`
 	Name                  *string                `json:"name,omitempty"`

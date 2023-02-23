@@ -3,37 +3,37 @@ package sdk
 import (
 	"context"
 	"fmt"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/operations"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/utils"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/operations"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/utils"
 	"net/http"
 	"strings"
 )
 
-type OptionValues struct {
-	_defaultClient  HTTPClient
-	_securityClient HTTPClient
-	_serverURL      string
-	_language       string
-	_sdkVersion     string
-	_genVersion     string
+type optionValues struct {
+	defaultClient  HTTPClient
+	securityClient HTTPClient
+	serverURL      string
+	language       string
+	sdkVersion     string
+	genVersion     string
 }
 
-func NewOptionValues(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *OptionValues {
-	return &OptionValues{
-		_defaultClient:  defaultClient,
-		_securityClient: securityClient,
-		_serverURL:      serverURL,
-		_language:       language,
-		_sdkVersion:     sdkVersion,
-		_genVersion:     genVersion,
+func newOptionValues(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *optionValues {
+	return &optionValues{
+		defaultClient:  defaultClient,
+		securityClient: securityClient,
+		serverURL:      serverURL,
+		language:       language,
+		sdkVersion:     sdkVersion,
+		genVersion:     genVersion,
 	}
 }
 
 // CreateOptionTypeValue - Create option type value
 // Creates an option value for a type.
-func (s *OptionValues) CreateOptionTypeValue(ctx context.Context, request operations.CreateOptionTypeValueRequest) (*operations.CreateOptionTypeValueResponse, error) {
-	baseURL := s._serverURL
+func (s *optionValues) CreateOptionTypeValue(ctx context.Context, request operations.CreateOptionTypeValueRequest) (*operations.CreateOptionTypeValueResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/option_types/{option_type_id}/option_values", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -51,18 +51,21 @@ func (s *OptionValues) CreateOptionTypeValue(ctx context.Context, request operat
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.CreateOptionTypeValueResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -113,8 +116,8 @@ func (s *OptionValues) CreateOptionTypeValue(ctx context.Context, request operat
 
 // CreateOptionValue - Create option value
 // Creates an option value.
-func (s *OptionValues) CreateOptionValue(ctx context.Context, request operations.CreateOptionValueRequest) (*operations.CreateOptionValueResponse, error) {
-	baseURL := s._serverURL
+func (s *optionValues) CreateOptionValue(ctx context.Context, request operations.CreateOptionValueRequest) (*operations.CreateOptionValueResponse, error) {
+	baseURL := s.serverURL
 	url := strings.TrimSuffix(baseURL, "/") + "/option_values"
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -132,18 +135,21 @@ func (s *OptionValues) CreateOptionValue(ctx context.Context, request operations
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.CreateOptionValueResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -184,8 +190,8 @@ func (s *OptionValues) CreateOptionValue(ctx context.Context, request operations
 
 // DeleteOptionTypeValue - Delete option type value
 // Deletes an option type's value.
-func (s *OptionValues) DeleteOptionTypeValue(ctx context.Context, request operations.DeleteOptionTypeValueRequest) (*operations.DeleteOptionTypeValueResponse, error) {
-	baseURL := s._serverURL
+func (s *optionValues) DeleteOptionTypeValue(ctx context.Context, request operations.DeleteOptionTypeValueRequest) (*operations.DeleteOptionTypeValueResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/option_types/{option_type_id}/option_values/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "DELETE", url, nil)
@@ -193,18 +199,21 @@ func (s *OptionValues) DeleteOptionTypeValue(ctx context.Context, request operat
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.DeleteOptionTypeValueResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -246,8 +255,8 @@ func (s *OptionValues) DeleteOptionTypeValue(ctx context.Context, request operat
 
 // DeleteOptionValue - Delete option value
 // Deletes an option value.
-func (s *OptionValues) DeleteOptionValue(ctx context.Context, request operations.DeleteOptionValueRequest) (*operations.DeleteOptionValueResponse, error) {
-	baseURL := s._serverURL
+func (s *optionValues) DeleteOptionValue(ctx context.Context, request operations.DeleteOptionValueRequest) (*operations.DeleteOptionValueResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/option_values/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "DELETE", url, nil)
@@ -255,18 +264,21 @@ func (s *OptionValues) DeleteOptionValue(ctx context.Context, request operations
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.DeleteOptionValueResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -308,8 +320,8 @@ func (s *OptionValues) DeleteOptionValue(ctx context.Context, request operations
 
 // GetOptionTypeValue - Get option type value
 // Retrieves an option type's value.
-func (s *OptionValues) GetOptionTypeValue(ctx context.Context, request operations.GetOptionTypeValueRequest) (*operations.GetOptionTypeValueResponse, error) {
-	baseURL := s._serverURL
+func (s *optionValues) GetOptionTypeValue(ctx context.Context, request operations.GetOptionTypeValueRequest) (*operations.GetOptionTypeValueResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/option_types/{option_type_id}/option_values/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -317,18 +329,21 @@ func (s *OptionValues) GetOptionTypeValue(ctx context.Context, request operation
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.GetOptionTypeValueResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -369,8 +384,8 @@ func (s *OptionValues) GetOptionTypeValue(ctx context.Context, request operation
 
 // GetOptionValue - Get option value
 // Retrieves an option value.
-func (s *OptionValues) GetOptionValue(ctx context.Context, request operations.GetOptionValueRequest) (*operations.GetOptionValueResponse, error) {
-	baseURL := s._serverURL
+func (s *optionValues) GetOptionValue(ctx context.Context, request operations.GetOptionValueRequest) (*operations.GetOptionValueResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/option_values/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -378,18 +393,21 @@ func (s *OptionValues) GetOptionValue(ctx context.Context, request operations.Ge
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.GetOptionValueResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -430,8 +448,8 @@ func (s *OptionValues) GetOptionValue(ctx context.Context, request operations.Ge
 
 // ListOptionTypeValues - List option type values
 // Retrieves an option type's option values.
-func (s *OptionValues) ListOptionTypeValues(ctx context.Context, request operations.ListOptionTypeValuesRequest) (*operations.ListOptionTypeValuesResponse, error) {
-	baseURL := s._serverURL
+func (s *optionValues) ListOptionTypeValues(ctx context.Context, request operations.ListOptionTypeValuesRequest) (*operations.ListOptionTypeValuesResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/option_types/{option_type_id}/option_values", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -439,18 +457,21 @@ func (s *OptionValues) ListOptionTypeValues(ctx context.Context, request operati
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.ListOptionTypeValuesResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -491,8 +512,8 @@ func (s *OptionValues) ListOptionTypeValues(ctx context.Context, request operati
 
 // ListOptionValues - List option values
 // Lists the system's option values.
-func (s *OptionValues) ListOptionValues(ctx context.Context, request operations.ListOptionValuesRequest) (*operations.ListOptionValuesResponse, error) {
-	baseURL := s._serverURL
+func (s *optionValues) ListOptionValues(ctx context.Context, request operations.ListOptionValuesRequest) (*operations.ListOptionValuesResponse, error) {
+	baseURL := s.serverURL
 	url := strings.TrimSuffix(baseURL, "/") + "/option_values"
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -500,18 +521,21 @@ func (s *OptionValues) ListOptionValues(ctx context.Context, request operations.
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.ListOptionValuesResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -542,8 +566,8 @@ func (s *OptionValues) ListOptionValues(ctx context.Context, request operations.
 
 // UpdateOptionTypeValue - Update option type value
 // Updates an option type's value.
-func (s *OptionValues) UpdateOptionTypeValue(ctx context.Context, request operations.UpdateOptionTypeValueRequest) (*operations.UpdateOptionTypeValueResponse, error) {
-	baseURL := s._serverURL
+func (s *optionValues) UpdateOptionTypeValue(ctx context.Context, request operations.UpdateOptionTypeValueRequest) (*operations.UpdateOptionTypeValueResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/option_types/{option_type_id}/option_values/{id}", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -561,18 +585,21 @@ func (s *OptionValues) UpdateOptionTypeValue(ctx context.Context, request operat
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.UpdateOptionTypeValueResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -623,8 +650,8 @@ func (s *OptionValues) UpdateOptionTypeValue(ctx context.Context, request operat
 
 // UpdateOptionValue - Update option value
 // Updates an option value.
-func (s *OptionValues) UpdateOptionValue(ctx context.Context, request operations.UpdateOptionValueRequest) (*operations.UpdateOptionValueResponse, error) {
-	baseURL := s._serverURL
+func (s *optionValues) UpdateOptionValue(ctx context.Context, request operations.UpdateOptionValueRequest) (*operations.UpdateOptionValueResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/option_values/{id}", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -642,18 +669,21 @@ func (s *OptionValues) UpdateOptionValue(ctx context.Context, request operations
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.UpdateOptionValueResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {

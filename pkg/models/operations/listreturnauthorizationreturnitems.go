@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type ListReturnAuthorizationReturnItemsPathParams struct {
@@ -15,7 +15,21 @@ type ListReturnAuthorizationReturnItemsQueryParams struct {
 }
 
 type ListReturnAuthorizationReturnItemsSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
+}
+
+type ListReturnAuthorizationReturnItemsRequest struct {
+	PathParams  ListReturnAuthorizationReturnItemsPathParams
+	QueryParams ListReturnAuthorizationReturnItemsQueryParams
+	Security    ListReturnAuthorizationReturnItemsSecurity
+}
+
+type ListReturnAuthorizationReturnItems404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type ListReturnAuthorizationReturnItems401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
 }
 
 type ListReturnAuthorizationReturnItemsPaginationData struct {
@@ -27,24 +41,10 @@ type ListReturnAuthorizationReturnItemsPaginationData struct {
 	TotalCount  *int64              `json:"total_count,omitempty"`
 }
 
-type ListReturnAuthorizationReturnItems401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type ListReturnAuthorizationReturnItems404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type ListReturnAuthorizationReturnItemsRequest struct {
-	PathParams  ListReturnAuthorizationReturnItemsPathParams
-	QueryParams ListReturnAuthorizationReturnItemsQueryParams
-	Security    ListReturnAuthorizationReturnItemsSecurity
-}
-
 type ListReturnAuthorizationReturnItemsResponse struct {
 	ContentType                                                string
 	PaginationData                                             *ListReturnAuthorizationReturnItemsPaginationData
-	StatusCode                                                 int64
+	StatusCode                                                 int
 	ListReturnAuthorizationReturnItems401ApplicationJSONObject *ListReturnAuthorizationReturnItems401ApplicationJSON
 	ListReturnAuthorizationReturnItems404ApplicationJSONObject *ListReturnAuthorizationReturnItems404ApplicationJSON
 }

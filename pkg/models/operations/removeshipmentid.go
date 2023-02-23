@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type RemoveShipmentIDPathParams struct {
@@ -14,20 +14,7 @@ type RemoveShipmentIDRequestBody struct {
 }
 
 type RemoveShipmentIDSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type RemoveShipmentID401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type RemoveShipmentID404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type RemoveShipmentID422ApplicationJSON struct {
-	Error  *string                `json:"error,omitempty"`
-	Errors map[string]interface{} `json:"errors,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type RemoveShipmentIDRequest struct {
@@ -36,9 +23,22 @@ type RemoveShipmentIDRequest struct {
 	Security   RemoveShipmentIDSecurity
 }
 
+type RemoveShipmentID422ApplicationJSON struct {
+	Error  *string                `json:"error,omitempty"`
+	Errors map[string]interface{} `json:"errors,omitempty"`
+}
+
+type RemoveShipmentID404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type RemoveShipmentID401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type RemoveShipmentIDResponse struct {
 	ContentType                              string
-	StatusCode                               int64
+	StatusCode                               int
 	RemoveShipmentID401ApplicationJSONObject *RemoveShipmentID401ApplicationJSON
 	RemoveShipmentID404ApplicationJSONObject *RemoveShipmentID404ApplicationJSON
 	RemoveShipmentID422ApplicationJSONObject *RemoveShipmentID422ApplicationJSON

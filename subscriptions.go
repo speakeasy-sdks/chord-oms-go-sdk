@@ -3,36 +3,36 @@ package sdk
 import (
 	"context"
 	"fmt"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/operations"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/utils"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/operations"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/utils"
 	"net/http"
 )
 
-type Subscriptions struct {
-	_defaultClient  HTTPClient
-	_securityClient HTTPClient
-	_serverURL      string
-	_language       string
-	_sdkVersion     string
-	_genVersion     string
+type subscriptions struct {
+	defaultClient  HTTPClient
+	securityClient HTTPClient
+	serverURL      string
+	language       string
+	sdkVersion     string
+	genVersion     string
 }
 
-func NewSubscriptions(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *Subscriptions {
-	return &Subscriptions{
-		_defaultClient:  defaultClient,
-		_securityClient: securityClient,
-		_serverURL:      serverURL,
-		_language:       language,
-		_sdkVersion:     sdkVersion,
-		_genVersion:     genVersion,
+func newSubscriptions(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *subscriptions {
+	return &subscriptions{
+		defaultClient:  defaultClient,
+		securityClient: securityClient,
+		serverURL:      serverURL,
+		language:       language,
+		sdkVersion:     sdkVersion,
+		genVersion:     genVersion,
 	}
 }
 
 // GetUsersUserIDSubscriptions - List user subscriptions
 // List a user's subscriptions
-func (s *Subscriptions) GetUsersUserIDSubscriptions(ctx context.Context, request operations.GetUsersUserIDSubscriptionsRequest) (*operations.GetUsersUserIDSubscriptionsResponse, error) {
-	baseURL := s._serverURL
+func (s *subscriptions) GetUsersUserIDSubscriptions(ctx context.Context, request operations.GetUsersUserIDSubscriptionsRequest) (*operations.GetUsersUserIDSubscriptionsResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/users/{user_id}/subscriptions", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -40,18 +40,21 @@ func (s *Subscriptions) GetUsersUserIDSubscriptions(ctx context.Context, request
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.GetUsersUserIDSubscriptionsResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -92,8 +95,8 @@ func (s *Subscriptions) GetUsersUserIDSubscriptions(ctx context.Context, request
 
 // GetUsersUserIDSubscriptionsID - Get subscription
 // Retrieves a subscription.
-func (s *Subscriptions) GetUsersUserIDSubscriptionsID(ctx context.Context, request operations.GetUsersUserIDSubscriptionsIDRequest) (*operations.GetUsersUserIDSubscriptionsIDResponse, error) {
-	baseURL := s._serverURL
+func (s *subscriptions) GetUsersUserIDSubscriptionsID(ctx context.Context, request operations.GetUsersUserIDSubscriptionsIDRequest) (*operations.GetUsersUserIDSubscriptionsIDResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/users/{user_id}/subscriptions/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -101,18 +104,21 @@ func (s *Subscriptions) GetUsersUserIDSubscriptionsID(ctx context.Context, reque
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.GetUsersUserIDSubscriptionsIDResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -153,8 +159,8 @@ func (s *Subscriptions) GetUsersUserIDSubscriptionsID(ctx context.Context, reque
 
 // PatchUsersUserIDSubscriptionsID - Update subscription
 // Updates a subscription.
-func (s *Subscriptions) PatchUsersUserIDSubscriptionsID(ctx context.Context, request operations.PatchUsersUserIDSubscriptionsIDRequest) (*operations.PatchUsersUserIDSubscriptionsIDResponse, error) {
-	baseURL := s._serverURL
+func (s *subscriptions) PatchUsersUserIDSubscriptionsID(ctx context.Context, request operations.PatchUsersUserIDSubscriptionsIDRequest) (*operations.PatchUsersUserIDSubscriptionsIDResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/users/{user_id}/subscriptions/{id}", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -172,18 +178,21 @@ func (s *Subscriptions) PatchUsersUserIDSubscriptionsID(ctx context.Context, req
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.PatchUsersUserIDSubscriptionsIDResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -224,8 +233,8 @@ func (s *Subscriptions) PatchUsersUserIDSubscriptionsID(ctx context.Context, req
 
 // PostUsersUserIDSubscriptionsIDCancel - Cancel a subscription
 // Makes a subscription inactive. The subscription won't be automatically renewed anymore.
-func (s *Subscriptions) PostUsersUserIDSubscriptionsIDCancel(ctx context.Context, request operations.PostUsersUserIDSubscriptionsIDCancelRequest) (*operations.PostUsersUserIDSubscriptionsIDCancelResponse, error) {
-	baseURL := s._serverURL
+func (s *subscriptions) PostUsersUserIDSubscriptionsIDCancel(ctx context.Context, request operations.PostUsersUserIDSubscriptionsIDCancelRequest) (*operations.PostUsersUserIDSubscriptionsIDCancelResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/users/{user_id}/subscriptions/{id}/cancel", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "POST", url, nil)
@@ -233,18 +242,21 @@ func (s *Subscriptions) PostUsersUserIDSubscriptionsIDCancel(ctx context.Context
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.PostUsersUserIDSubscriptionsIDCancelResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -275,8 +287,8 @@ func (s *Subscriptions) PostUsersUserIDSubscriptionsIDCancel(ctx context.Context
 
 // PostUsersUserIDSubscriptionsIDSkip - Skip a subscription
 // Moves to subsciption's renewable date one period in the future.
-func (s *Subscriptions) PostUsersUserIDSubscriptionsIDSkip(ctx context.Context, request operations.PostUsersUserIDSubscriptionsIDSkipRequest) (*operations.PostUsersUserIDSubscriptionsIDSkipResponse, error) {
-	baseURL := s._serverURL
+func (s *subscriptions) PostUsersUserIDSubscriptionsIDSkip(ctx context.Context, request operations.PostUsersUserIDSubscriptionsIDSkipRequest) (*operations.PostUsersUserIDSubscriptionsIDSkipResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/users/{user_id}/subscriptions/{id}/skip", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "POST", url, nil)
@@ -284,18 +296,21 @@ func (s *Subscriptions) PostUsersUserIDSubscriptionsIDSkip(ctx context.Context, 
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.PostUsersUserIDSubscriptionsIDSkipResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -315,8 +330,8 @@ func (s *Subscriptions) PostUsersUserIDSubscriptionsIDSkip(ctx context.Context, 
 }
 
 // PostUsersUserIDSubscriptions - Create a subscription
-func (s *Subscriptions) PostUsersUserIDSubscriptions(ctx context.Context, request operations.PostUsersUserIDSubscriptionsRequest) (*operations.PostUsersUserIDSubscriptionsResponse, error) {
-	baseURL := s._serverURL
+func (s *subscriptions) PostUsersUserIDSubscriptions(ctx context.Context, request operations.PostUsersUserIDSubscriptionsRequest) (*operations.PostUsersUserIDSubscriptionsResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/users/{user_id}/subscriptions", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -334,18 +349,21 @@ func (s *Subscriptions) PostUsersUserIDSubscriptions(ctx context.Context, reques
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := s._defaultClient
+	client := s.defaultClient
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.PostUsersUserIDSubscriptionsResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {

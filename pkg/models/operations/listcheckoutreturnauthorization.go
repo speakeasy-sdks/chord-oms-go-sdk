@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type ListCheckoutReturnAuthorizationPathParams struct {
@@ -14,7 +14,21 @@ type ListCheckoutReturnAuthorizationQueryParams struct {
 }
 
 type ListCheckoutReturnAuthorizationSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
+}
+
+type ListCheckoutReturnAuthorizationRequest struct {
+	PathParams  ListCheckoutReturnAuthorizationPathParams
+	QueryParams ListCheckoutReturnAuthorizationQueryParams
+	Security    ListCheckoutReturnAuthorizationSecurity
+}
+
+type ListCheckoutReturnAuthorization404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type ListCheckoutReturnAuthorization401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
 }
 
 type ListCheckoutReturnAuthorizationPaginationData struct {
@@ -26,24 +40,10 @@ type ListCheckoutReturnAuthorizationPaginationData struct {
 	TotalCount           *int64                   `json:"total_count,omitempty"`
 }
 
-type ListCheckoutReturnAuthorization401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type ListCheckoutReturnAuthorization404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type ListCheckoutReturnAuthorizationRequest struct {
-	PathParams  ListCheckoutReturnAuthorizationPathParams
-	QueryParams ListCheckoutReturnAuthorizationQueryParams
-	Security    ListCheckoutReturnAuthorizationSecurity
-}
-
 type ListCheckoutReturnAuthorizationResponse struct {
 	ContentType                                             string
 	PaginationData                                          *ListCheckoutReturnAuthorizationPaginationData
-	StatusCode                                              int64
+	StatusCode                                              int
 	ListCheckoutReturnAuthorization401ApplicationJSONObject *ListCheckoutReturnAuthorization401ApplicationJSON
 	ListCheckoutReturnAuthorization404ApplicationJSONObject *ListCheckoutReturnAuthorization404ApplicationJSON
 }

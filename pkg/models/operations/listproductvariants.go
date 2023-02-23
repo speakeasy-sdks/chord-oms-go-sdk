@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type ListProductVariantsPathParams struct {
@@ -14,7 +14,21 @@ type ListProductVariantsQueryParams struct {
 }
 
 type ListProductVariantsSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
+}
+
+type ListProductVariantsRequest struct {
+	PathParams  ListProductVariantsPathParams
+	QueryParams ListProductVariantsQueryParams
+	Security    ListProductVariantsSecurity
+}
+
+type ListProductVariants404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type ListProductVariants401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
 }
 
 type ListProductVariantsPaginationData struct {
@@ -26,24 +40,10 @@ type ListProductVariantsPaginationData struct {
 	Variants    []shared.Variant `json:"variants,omitempty"`
 }
 
-type ListProductVariants401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type ListProductVariants404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type ListProductVariantsRequest struct {
-	PathParams  ListProductVariantsPathParams
-	QueryParams ListProductVariantsQueryParams
-	Security    ListProductVariantsSecurity
-}
-
 type ListProductVariantsResponse struct {
 	ContentType                                 string
 	PaginationData                              *ListProductVariantsPaginationData
-	StatusCode                                  int64
+	StatusCode                                  int
 	ListProductVariants401ApplicationJSONObject *ListProductVariants401ApplicationJSON
 	ListProductVariants404ApplicationJSONObject *ListProductVariants404ApplicationJSON
 }

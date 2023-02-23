@@ -3,37 +3,37 @@ package sdk
 import (
 	"context"
 	"fmt"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/operations"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/utils"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/operations"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/utils"
 	"net/http"
 	"strings"
 )
 
-type OptionTypes struct {
-	_defaultClient  HTTPClient
-	_securityClient HTTPClient
-	_serverURL      string
-	_language       string
-	_sdkVersion     string
-	_genVersion     string
+type optionTypes struct {
+	defaultClient  HTTPClient
+	securityClient HTTPClient
+	serverURL      string
+	language       string
+	sdkVersion     string
+	genVersion     string
 }
 
-func NewOptionTypes(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *OptionTypes {
-	return &OptionTypes{
-		_defaultClient:  defaultClient,
-		_securityClient: securityClient,
-		_serverURL:      serverURL,
-		_language:       language,
-		_sdkVersion:     sdkVersion,
-		_genVersion:     genVersion,
+func newOptionTypes(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *optionTypes {
+	return &optionTypes{
+		defaultClient:  defaultClient,
+		securityClient: securityClient,
+		serverURL:      serverURL,
+		language:       language,
+		sdkVersion:     sdkVersion,
+		genVersion:     genVersion,
 	}
 }
 
 // CreateOptionType - Create option type
 // Creates an option type.
-func (s *OptionTypes) CreateOptionType(ctx context.Context, request operations.CreateOptionTypeRequest) (*operations.CreateOptionTypeResponse, error) {
-	baseURL := s._serverURL
+func (s *optionTypes) CreateOptionType(ctx context.Context, request operations.CreateOptionTypeRequest) (*operations.CreateOptionTypeResponse, error) {
+	baseURL := s.serverURL
 	url := strings.TrimSuffix(baseURL, "/") + "/option_types"
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -51,18 +51,21 @@ func (s *OptionTypes) CreateOptionType(ctx context.Context, request operations.C
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.CreateOptionTypeResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -103,8 +106,8 @@ func (s *OptionTypes) CreateOptionType(ctx context.Context, request operations.C
 
 // DeleteOptionType - Delete option type
 // Deletes an option type.
-func (s *OptionTypes) DeleteOptionType(ctx context.Context, request operations.DeleteOptionTypeRequest) (*operations.DeleteOptionTypeResponse, error) {
-	baseURL := s._serverURL
+func (s *optionTypes) DeleteOptionType(ctx context.Context, request operations.DeleteOptionTypeRequest) (*operations.DeleteOptionTypeResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/option_types/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "POST", url, nil)
@@ -112,18 +115,21 @@ func (s *OptionTypes) DeleteOptionType(ctx context.Context, request operations.D
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.DeleteOptionTypeResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -174,8 +180,8 @@ func (s *OptionTypes) DeleteOptionType(ctx context.Context, request operations.D
 
 // GetOptionType - Get option type
 // Retrieve an option type.
-func (s *OptionTypes) GetOptionType(ctx context.Context, request operations.GetOptionTypeRequest) (*operations.GetOptionTypeResponse, error) {
-	baseURL := s._serverURL
+func (s *optionTypes) GetOptionType(ctx context.Context, request operations.GetOptionTypeRequest) (*operations.GetOptionTypeResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/option_types/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -183,18 +189,21 @@ func (s *OptionTypes) GetOptionType(ctx context.Context, request operations.GetO
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.GetOptionTypeResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -235,8 +244,8 @@ func (s *OptionTypes) GetOptionType(ctx context.Context, request operations.GetO
 
 // ListOptionTypes - List option types
 // Lists the system's option types.
-func (s *OptionTypes) ListOptionTypes(ctx context.Context, request operations.ListOptionTypesRequest) (*operations.ListOptionTypesResponse, error) {
-	baseURL := s._serverURL
+func (s *optionTypes) ListOptionTypes(ctx context.Context, request operations.ListOptionTypesRequest) (*operations.ListOptionTypesResponse, error) {
+	baseURL := s.serverURL
 	url := strings.TrimSuffix(baseURL, "/") + "/option_types"
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -244,18 +253,21 @@ func (s *OptionTypes) ListOptionTypes(ctx context.Context, request operations.Li
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.ListOptionTypesResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -286,8 +298,8 @@ func (s *OptionTypes) ListOptionTypes(ctx context.Context, request operations.Li
 
 // UpdateOptionType - Update option type
 // Updates an option type.
-func (s *OptionTypes) UpdateOptionType(ctx context.Context, request operations.UpdateOptionTypeRequest) (*operations.UpdateOptionTypeResponse, error) {
-	baseURL := s._serverURL
+func (s *optionTypes) UpdateOptionType(ctx context.Context, request operations.UpdateOptionTypeRequest) (*operations.UpdateOptionTypeResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/option_types/{id}", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -305,18 +317,21 @@ func (s *OptionTypes) UpdateOptionType(ctx context.Context, request operations.U
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.UpdateOptionTypeResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {

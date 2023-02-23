@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type ListOrderReturnAuthorizationsPathParams struct {
@@ -14,7 +14,21 @@ type ListOrderReturnAuthorizationsQueryParams struct {
 }
 
 type ListOrderReturnAuthorizationsSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
+}
+
+type ListOrderReturnAuthorizationsRequest struct {
+	PathParams  ListOrderReturnAuthorizationsPathParams
+	QueryParams ListOrderReturnAuthorizationsQueryParams
+	Security    ListOrderReturnAuthorizationsSecurity
+}
+
+type ListOrderReturnAuthorizations404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type ListOrderReturnAuthorizations401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
 }
 
 type ListOrderReturnAuthorizationsPaginationData struct {
@@ -26,24 +40,10 @@ type ListOrderReturnAuthorizationsPaginationData struct {
 	TotalCount           *int64                   `json:"total_count,omitempty"`
 }
 
-type ListOrderReturnAuthorizations401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type ListOrderReturnAuthorizations404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type ListOrderReturnAuthorizationsRequest struct {
-	PathParams  ListOrderReturnAuthorizationsPathParams
-	QueryParams ListOrderReturnAuthorizationsQueryParams
-	Security    ListOrderReturnAuthorizationsSecurity
-}
-
 type ListOrderReturnAuthorizationsResponse struct {
 	ContentType                                           string
 	PaginationData                                        *ListOrderReturnAuthorizationsPaginationData
-	StatusCode                                            int64
+	StatusCode                                            int
 	ListOrderReturnAuthorizations401ApplicationJSONObject *ListOrderReturnAuthorizations401ApplicationJSON
 	ListOrderReturnAuthorizations404ApplicationJSONObject *ListOrderReturnAuthorizations404ApplicationJSON
 }

@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type CreateProductPropertyPathParams struct {
@@ -9,20 +9,7 @@ type CreateProductPropertyPathParams struct {
 }
 
 type CreateProductPropertySecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type CreateProductProperty401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type CreateProductProperty404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type CreateProductProperty422ApplicationJSON struct {
-	Error  *string                `json:"error,omitempty"`
-	Errors map[string]interface{} `json:"errors,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type CreateProductPropertyRequest struct {
@@ -31,9 +18,22 @@ type CreateProductPropertyRequest struct {
 	Security   CreateProductPropertySecurity
 }
 
+type CreateProductProperty422ApplicationJSON struct {
+	Error  *string                `json:"error,omitempty"`
+	Errors map[string]interface{} `json:"errors,omitempty"`
+}
+
+type CreateProductProperty404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type CreateProductProperty401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type CreateProductPropertyResponse struct {
 	ContentType                                   string
-	StatusCode                                    int64
+	StatusCode                                    int
 	CreateProductProperty401ApplicationJSONObject *CreateProductProperty401ApplicationJSON
 	CreateProductProperty404ApplicationJSONObject *CreateProductProperty404ApplicationJSON
 	CreateProductProperty422ApplicationJSONObject *CreateProductProperty422ApplicationJSON

@@ -3,36 +3,36 @@ package sdk
 import (
 	"context"
 	"fmt"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/operations"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/utils"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/operations"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/utils"
 	"net/http"
 )
 
-type AddressBooks struct {
-	_defaultClient  HTTPClient
-	_securityClient HTTPClient
-	_serverURL      string
-	_language       string
-	_sdkVersion     string
-	_genVersion     string
+type addressBooks struct {
+	defaultClient  HTTPClient
+	securityClient HTTPClient
+	serverURL      string
+	language       string
+	sdkVersion     string
+	genVersion     string
 }
 
-func NewAddressBooks(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *AddressBooks {
-	return &AddressBooks{
-		_defaultClient:  defaultClient,
-		_securityClient: securityClient,
-		_serverURL:      serverURL,
-		_language:       language,
-		_sdkVersion:     sdkVersion,
-		_genVersion:     genVersion,
+func newAddressBooks(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *addressBooks {
+	return &addressBooks{
+		defaultClient:  defaultClient,
+		securityClient: securityClient,
+		serverURL:      serverURL,
+		language:       language,
+		sdkVersion:     sdkVersion,
+		genVersion:     genVersion,
 	}
 }
 
 // GetUserAddressBook - Get user address book
 // Retrieves a user's address book.
-func (s *AddressBooks) GetUserAddressBook(ctx context.Context, request operations.GetUserAddressBookRequest) (*operations.GetUserAddressBookResponse, error) {
-	baseURL := s._serverURL
+func (s *addressBooks) GetUserAddressBook(ctx context.Context, request operations.GetUserAddressBookRequest) (*operations.GetUserAddressBookResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/users/{user_id}/address_book", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -40,18 +40,21 @@ func (s *AddressBooks) GetUserAddressBook(ctx context.Context, request operation
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.GetUserAddressBookResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -85,6 +88,16 @@ func (s *AddressBooks) GetUserAddressBook(ctx context.Context, request operation
 
 			res.GetUserAddressBook404ApplicationJSONObject = out
 		}
+	case httpRes.StatusCode == 500:
+		switch {
+		case utils.MatchContentType(contentType, `application/json`):
+			var out *operations.GetUserAddressBook500ApplicationJSON
+			if err := utils.UnmarshalJsonFromResponseBody(httpRes.Body, &out); err != nil {
+				return nil, err
+			}
+
+			res.GetUserAddressBook500ApplicationJSONObject = out
+		}
 	}
 
 	return res, nil
@@ -94,8 +107,8 @@ func (s *AddressBooks) GetUserAddressBook(ctx context.Context, request operation
 // Removes an address from a user's address book.
 //
 // **Note:** Rather than delete a `Spree::UserAddress` record this action set its `archived` attribute to `true`.
-func (s *AddressBooks) RemoveAddressFromUserAddressBook(ctx context.Context, request operations.RemoveAddressFromUserAddressBookRequest) (*operations.RemoveAddressFromUserAddressBookResponse, error) {
-	baseURL := s._serverURL
+func (s *addressBooks) RemoveAddressFromUserAddressBook(ctx context.Context, request operations.RemoveAddressFromUserAddressBookRequest) (*operations.RemoveAddressFromUserAddressBookResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/users/{user_id}/address_book", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "DELETE", url, nil)
@@ -103,20 +116,25 @@ func (s *AddressBooks) RemoveAddressFromUserAddressBook(ctx context.Context, req
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	utils.PopulateQueryParams(ctx, req, request.QueryParams)
+	if err := utils.PopulateQueryParams(ctx, req, request.QueryParams); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.RemoveAddressFromUserAddressBookResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -151,6 +169,16 @@ func (s *AddressBooks) RemoveAddressFromUserAddressBook(ctx context.Context, req
 
 			res.RemoveAddressFromUserAddressBook422ApplicationJSONObject = out
 		}
+	case httpRes.StatusCode == 500:
+		switch {
+		case utils.MatchContentType(contentType, `application/json`):
+			var out *operations.RemoveAddressFromUserAddressBook500ApplicationJSON
+			if err := utils.UnmarshalJsonFromResponseBody(httpRes.Body, &out); err != nil {
+				return nil, err
+			}
+
+			res.RemoveAddressFromUserAddressBook500ApplicationJSONObject = out
+		}
 	}
 
 	return res, nil
@@ -161,8 +189,8 @@ func (s *AddressBooks) RemoveAddressFromUserAddressBook(ctx context.Context, req
 //
 // **Note:** if the passed `id` matches an existing `address` a new `Spree::Address` record will be created and the matched `address` `archived` on `Spree::UserAddress`. For a similar logic, if the passed `id` matches an existing `address` which is in `archived` state, the `Spree::UserAddress#archived` record will be restored to `false`.
 // See `user_address_book.rb` for further information.
-func (s *AddressBooks) UpdateUserAddressBook(ctx context.Context, request operations.UpdateUserAddressBookRequest) (*operations.UpdateUserAddressBookResponse, error) {
-	baseURL := s._serverURL
+func (s *addressBooks) UpdateUserAddressBook(ctx context.Context, request operations.UpdateUserAddressBookRequest) (*operations.UpdateUserAddressBookResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/users/{user_id}/address_book", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -180,18 +208,21 @@ func (s *AddressBooks) UpdateUserAddressBook(ctx context.Context, request operat
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.UpdateUserAddressBookResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {

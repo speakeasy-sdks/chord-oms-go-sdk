@@ -3,36 +3,36 @@ package sdk
 import (
 	"context"
 	"fmt"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/operations"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/utils"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/operations"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/utils"
 	"net/http"
 )
 
-type StockItems struct {
-	_defaultClient  HTTPClient
-	_securityClient HTTPClient
-	_serverURL      string
-	_language       string
-	_sdkVersion     string
-	_genVersion     string
+type stockItems struct {
+	defaultClient  HTTPClient
+	securityClient HTTPClient
+	serverURL      string
+	language       string
+	sdkVersion     string
+	genVersion     string
 }
 
-func NewStockItems(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *StockItems {
-	return &StockItems{
-		_defaultClient:  defaultClient,
-		_securityClient: securityClient,
-		_serverURL:      serverURL,
-		_language:       language,
-		_sdkVersion:     sdkVersion,
-		_genVersion:     genVersion,
+func newStockItems(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *stockItems {
+	return &stockItems{
+		defaultClient:  defaultClient,
+		securityClient: securityClient,
+		serverURL:      serverURL,
+		language:       language,
+		sdkVersion:     sdkVersion,
+		genVersion:     genVersion,
 	}
 }
 
 // CreateStockLocationItem - Create stock location item
 // Creates a stock item for a stock location.
-func (s *StockItems) CreateStockLocationItem(ctx context.Context, request operations.CreateStockLocationItemRequest) (*operations.CreateStockLocationItemResponse, error) {
-	baseURL := s._serverURL
+func (s *stockItems) CreateStockLocationItem(ctx context.Context, request operations.CreateStockLocationItemRequest) (*operations.CreateStockLocationItemResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/stock_locations/{stock_location_id}/stock_items", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -50,18 +50,21 @@ func (s *StockItems) CreateStockLocationItem(ctx context.Context, request operat
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.CreateStockLocationItemResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -112,8 +115,8 @@ func (s *StockItems) CreateStockLocationItem(ctx context.Context, request operat
 
 // DeleteStockItem - Delete stock item
 // Deletes a stock item.
-func (s *StockItems) DeleteStockItem(ctx context.Context, request operations.DeleteStockItemRequest) (*operations.DeleteStockItemResponse, error) {
-	baseURL := s._serverURL
+func (s *stockItems) DeleteStockItem(ctx context.Context, request operations.DeleteStockItemRequest) (*operations.DeleteStockItemResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/stock_items/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "DELETE", url, nil)
@@ -121,18 +124,21 @@ func (s *StockItems) DeleteStockItem(ctx context.Context, request operations.Del
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.DeleteStockItemResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -174,8 +180,8 @@ func (s *StockItems) DeleteStockItem(ctx context.Context, request operations.Del
 
 // DeleteStockLocationItem - Delete stock location item
 // Deletes a stock location's item.
-func (s *StockItems) DeleteStockLocationItem(ctx context.Context, request operations.DeleteStockLocationItemRequest) (*operations.DeleteStockLocationItemResponse, error) {
-	baseURL := s._serverURL
+func (s *stockItems) DeleteStockLocationItem(ctx context.Context, request operations.DeleteStockLocationItemRequest) (*operations.DeleteStockLocationItemResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/stock_locations/{stock_location_id}/stock_items/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "DELETE", url, nil)
@@ -183,18 +189,21 @@ func (s *StockItems) DeleteStockLocationItem(ctx context.Context, request operat
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.DeleteStockLocationItemResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -236,8 +245,8 @@ func (s *StockItems) DeleteStockLocationItem(ctx context.Context, request operat
 
 // GetStockLocationItem - Get stock location item
 // Retrieves a stock location's item.
-func (s *StockItems) GetStockLocationItem(ctx context.Context, request operations.GetStockLocationItemRequest) (*operations.GetStockLocationItemResponse, error) {
-	baseURL := s._serverURL
+func (s *stockItems) GetStockLocationItem(ctx context.Context, request operations.GetStockLocationItemRequest) (*operations.GetStockLocationItemResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/stock_locations/{stock_location_id}/stock_items/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -245,18 +254,21 @@ func (s *StockItems) GetStockLocationItem(ctx context.Context, request operation
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.GetStockLocationItemResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -297,8 +309,8 @@ func (s *StockItems) GetStockLocationItem(ctx context.Context, request operation
 
 // ListStockLocationItems - List stock location items
 // Lists a stock location's items.
-func (s *StockItems) ListStockLocationItems(ctx context.Context, request operations.ListStockLocationItemsRequest) (*operations.ListStockLocationItemsResponse, error) {
-	baseURL := s._serverURL
+func (s *stockItems) ListStockLocationItems(ctx context.Context, request operations.ListStockLocationItemsRequest) (*operations.ListStockLocationItemsResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/stock_locations/{stock_location_id}/stock_items", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -306,20 +318,25 @@ func (s *StockItems) ListStockLocationItems(ctx context.Context, request operati
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	utils.PopulateQueryParams(ctx, req, request.QueryParams)
+	if err := utils.PopulateQueryParams(ctx, req, request.QueryParams); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.ListStockLocationItemsResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -360,8 +377,8 @@ func (s *StockItems) ListStockLocationItems(ctx context.Context, request operati
 
 // UpdateStockItem - Update stock item
 // Updates a stock item.
-func (s *StockItems) UpdateStockItem(ctx context.Context, request operations.UpdateStockItemRequest) (*operations.UpdateStockItemResponse, error) {
-	baseURL := s._serverURL
+func (s *stockItems) UpdateStockItem(ctx context.Context, request operations.UpdateStockItemRequest) (*operations.UpdateStockItemResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/stock_items/{id}", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -379,18 +396,21 @@ func (s *StockItems) UpdateStockItem(ctx context.Context, request operations.Upd
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.UpdateStockItemResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -441,8 +461,8 @@ func (s *StockItems) UpdateStockItem(ctx context.Context, request operations.Upd
 
 // UpdateStockLocationItem - Update stock location item
 // Updates a stock location's item.
-func (s *StockItems) UpdateStockLocationItem(ctx context.Context, request operations.UpdateStockLocationItemRequest) (*operations.UpdateStockLocationItemResponse, error) {
-	baseURL := s._serverURL
+func (s *stockItems) UpdateStockLocationItem(ctx context.Context, request operations.UpdateStockLocationItemRequest) (*operations.UpdateStockLocationItemResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/stock_locations/{stock_location_id}/stock_items/{id}", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -460,18 +480,21 @@ func (s *StockItems) UpdateStockLocationItem(ctx context.Context, request operat
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.UpdateStockLocationItemResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {

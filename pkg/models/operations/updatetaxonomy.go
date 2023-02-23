@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type UpdateTaxonomyPathParams struct {
@@ -9,20 +9,7 @@ type UpdateTaxonomyPathParams struct {
 }
 
 type UpdateTaxonomySecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type UpdateTaxonomy401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type UpdateTaxonomy404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type UpdateTaxonomy422ApplicationJSON struct {
-	Error  *string                `json:"error,omitempty"`
-	Errors map[string]interface{} `json:"errors,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type UpdateTaxonomyRequest struct {
@@ -31,9 +18,22 @@ type UpdateTaxonomyRequest struct {
 	Security   UpdateTaxonomySecurity
 }
 
+type UpdateTaxonomy422ApplicationJSON struct {
+	Error  *string                `json:"error,omitempty"`
+	Errors map[string]interface{} `json:"errors,omitempty"`
+}
+
+type UpdateTaxonomy404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type UpdateTaxonomy401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type UpdateTaxonomyResponse struct {
 	ContentType                            string
-	StatusCode                             int64
+	StatusCode                             int
 	Taxonomy                               *shared.Taxonomy
 	UpdateTaxonomy401ApplicationJSONObject *UpdateTaxonomy401ApplicationJSON
 	UpdateTaxonomy404ApplicationJSONObject *UpdateTaxonomy404ApplicationJSON

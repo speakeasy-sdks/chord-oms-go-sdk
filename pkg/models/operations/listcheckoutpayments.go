@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type ListCheckoutPaymentsPathParams struct {
@@ -14,7 +14,21 @@ type ListCheckoutPaymentsQueryParams struct {
 }
 
 type ListCheckoutPaymentsSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
+}
+
+type ListCheckoutPaymentsRequest struct {
+	PathParams  ListCheckoutPaymentsPathParams
+	QueryParams ListCheckoutPaymentsQueryParams
+	Security    ListCheckoutPaymentsSecurity
+}
+
+type ListCheckoutPayments404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type ListCheckoutPayments401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
 }
 
 type ListCheckoutPaymentsPaginationData struct {
@@ -26,24 +40,10 @@ type ListCheckoutPaymentsPaginationData struct {
 	TotalCount  *int64           `json:"total_count,omitempty"`
 }
 
-type ListCheckoutPayments401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type ListCheckoutPayments404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type ListCheckoutPaymentsRequest struct {
-	PathParams  ListCheckoutPaymentsPathParams
-	QueryParams ListCheckoutPaymentsQueryParams
-	Security    ListCheckoutPaymentsSecurity
-}
-
 type ListCheckoutPaymentsResponse struct {
 	ContentType                                  string
 	PaginationData                               *ListCheckoutPaymentsPaginationData
-	StatusCode                                   int64
+	StatusCode                                   int
 	ListCheckoutPayments401ApplicationJSONObject *ListCheckoutPayments401ApplicationJSON
 	ListCheckoutPayments404ApplicationJSONObject *ListCheckoutPayments404ApplicationJSON
 }

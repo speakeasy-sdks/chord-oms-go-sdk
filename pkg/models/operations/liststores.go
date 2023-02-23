@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type ListStoresQueryParams struct {
@@ -10,15 +10,7 @@ type ListStoresQueryParams struct {
 }
 
 type ListStoresSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type ListStores200ApplicationJSON struct {
-	Stores []shared.Store `json:"stores,omitempty"`
-}
-
-type ListStores401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type ListStoresRequest struct {
@@ -26,9 +18,17 @@ type ListStoresRequest struct {
 	Security    ListStoresSecurity
 }
 
+type ListStores401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type ListStores200ApplicationJSON struct {
+	Stores []shared.Store `json:"stores,omitempty"`
+}
+
 type ListStoresResponse struct {
 	ContentType                        string
-	StatusCode                         int64
+	StatusCode                         int
 	ListStores200ApplicationJSONObject *ListStores200ApplicationJSON
 	ListStores401ApplicationJSONObject *ListStores401ApplicationJSON
 }

@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type ListTaxonomyTaxonsPathParams struct {
@@ -14,7 +14,21 @@ type ListTaxonomyTaxonsQueryParams struct {
 }
 
 type ListTaxonomyTaxonsSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
+}
+
+type ListTaxonomyTaxonsRequest struct {
+	PathParams  ListTaxonomyTaxonsPathParams
+	QueryParams ListTaxonomyTaxonsQueryParams
+	Security    ListTaxonomyTaxonsSecurity
+}
+
+type ListTaxonomyTaxons404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type ListTaxonomyTaxons401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
 }
 
 type ListTaxonomyTaxonsPaginationData struct {
@@ -26,24 +40,10 @@ type ListTaxonomyTaxonsPaginationData struct {
 	TotalCount  *int64         `json:"total_count,omitempty"`
 }
 
-type ListTaxonomyTaxons401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type ListTaxonomyTaxons404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type ListTaxonomyTaxonsRequest struct {
-	PathParams  ListTaxonomyTaxonsPathParams
-	QueryParams ListTaxonomyTaxonsQueryParams
-	Security    ListTaxonomyTaxonsSecurity
-}
-
 type ListTaxonomyTaxonsResponse struct {
 	ContentType                                string
 	PaginationData                             *ListTaxonomyTaxonsPaginationData
-	StatusCode                                 int64
+	StatusCode                                 int
 	ListTaxonomyTaxons401ApplicationJSONObject *ListTaxonomyTaxons401ApplicationJSON
 	ListTaxonomyTaxons404ApplicationJSONObject *ListTaxonomyTaxons404ApplicationJSON
 }

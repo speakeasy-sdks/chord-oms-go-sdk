@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type CreditOrderPaymentPathParams struct {
@@ -10,20 +10,7 @@ type CreditOrderPaymentPathParams struct {
 }
 
 type CreditOrderPaymentSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type CreditOrderPayment401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type CreditOrderPayment404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type CreditOrderPayment422ApplicationJSON struct {
-	Error  *string                `json:"error,omitempty"`
-	Errors map[string]interface{} `json:"errors,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type CreditOrderPaymentRequest struct {
@@ -31,9 +18,22 @@ type CreditOrderPaymentRequest struct {
 	Security   CreditOrderPaymentSecurity
 }
 
+type CreditOrderPayment422ApplicationJSON struct {
+	Error  *string                `json:"error,omitempty"`
+	Errors map[string]interface{} `json:"errors,omitempty"`
+}
+
+type CreditOrderPayment404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type CreditOrderPayment401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type CreditOrderPaymentResponse struct {
 	ContentType                                string
-	StatusCode                                 int64
+	StatusCode                                 int
 	CreditOrderPayment401ApplicationJSONObject *CreditOrderPayment401ApplicationJSON
 	CreditOrderPayment404ApplicationJSONObject *CreditOrderPayment404ApplicationJSON
 	CreditOrderPayment422ApplicationJSONObject *CreditOrderPayment422ApplicationJSON

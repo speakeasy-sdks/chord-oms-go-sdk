@@ -3,36 +3,36 @@ package sdk
 import (
 	"context"
 	"fmt"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/operations"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/utils"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/operations"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/utils"
 	"net/http"
 )
 
-type Addresses struct {
-	_defaultClient  HTTPClient
-	_securityClient HTTPClient
-	_serverURL      string
-	_language       string
-	_sdkVersion     string
-	_genVersion     string
+type addresses struct {
+	defaultClient  HTTPClient
+	securityClient HTTPClient
+	serverURL      string
+	language       string
+	sdkVersion     string
+	genVersion     string
 }
 
-func NewAddresses(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *Addresses {
-	return &Addresses{
-		_defaultClient:  defaultClient,
-		_securityClient: securityClient,
-		_serverURL:      serverURL,
-		_language:       language,
-		_sdkVersion:     sdkVersion,
-		_genVersion:     genVersion,
+func newAddresses(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *addresses {
+	return &addresses{
+		defaultClient:  defaultClient,
+		securityClient: securityClient,
+		serverURL:      serverURL,
+		language:       language,
+		sdkVersion:     sdkVersion,
+		genVersion:     genVersion,
 	}
 }
 
 // GetCheckoutAddress - Get checkout address
 // Retrieves a checkout's address.
-func (s *Addresses) GetCheckoutAddress(ctx context.Context, request operations.GetCheckoutAddressRequest) (*operations.GetCheckoutAddressResponse, error) {
-	baseURL := s._serverURL
+func (s *addresses) GetCheckoutAddress(ctx context.Context, request operations.GetCheckoutAddressRequest) (*operations.GetCheckoutAddressResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/checkouts/{checkout_id}/addresses/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -40,18 +40,21 @@ func (s *Addresses) GetCheckoutAddress(ctx context.Context, request operations.G
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.GetCheckoutAddressResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -92,8 +95,8 @@ func (s *Addresses) GetCheckoutAddress(ctx context.Context, request operations.G
 
 // GetOrderAddress - Get order address
 // Retrieves an order's address.
-func (s *Addresses) GetOrderAddress(ctx context.Context, request operations.GetOrderAddressRequest) (*operations.GetOrderAddressResponse, error) {
-	baseURL := s._serverURL
+func (s *addresses) GetOrderAddress(ctx context.Context, request operations.GetOrderAddressRequest) (*operations.GetOrderAddressResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/orders/{order_number}/addresses/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -101,18 +104,21 @@ func (s *Addresses) GetOrderAddress(ctx context.Context, request operations.GetO
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.GetOrderAddressResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -153,8 +159,8 @@ func (s *Addresses) GetOrderAddress(ctx context.Context, request operations.GetO
 
 // UpdateCheckoutAddress - Update checkout address
 // Updates a checkout's address.
-func (s *Addresses) UpdateCheckoutAddress(ctx context.Context, request operations.UpdateCheckoutAddressRequest) (*operations.UpdateCheckoutAddressResponse, error) {
-	baseURL := s._serverURL
+func (s *addresses) UpdateCheckoutAddress(ctx context.Context, request operations.UpdateCheckoutAddressRequest) (*operations.UpdateCheckoutAddressResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/checkouts/{checkout_id}/addresses/{id}", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -169,18 +175,21 @@ func (s *Addresses) UpdateCheckoutAddress(ctx context.Context, request operation
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.UpdateCheckoutAddressResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -231,8 +240,8 @@ func (s *Addresses) UpdateCheckoutAddress(ctx context.Context, request operation
 
 // UpdateOrderAddress - Update order address
 // Updates an order's address.
-func (s *Addresses) UpdateOrderAddress(ctx context.Context, request operations.UpdateOrderAddressRequest) (*operations.UpdateOrderAddressResponse, error) {
-	baseURL := s._serverURL
+func (s *addresses) UpdateOrderAddress(ctx context.Context, request operations.UpdateOrderAddressRequest) (*operations.UpdateOrderAddressResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/orders/{order_number}/addresses/{id}", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -250,18 +259,21 @@ func (s *Addresses) UpdateOrderAddress(ctx context.Context, request operations.U
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.UpdateOrderAddressResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {

@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type DeleteOptionTypeValuePathParams struct {
@@ -10,19 +10,7 @@ type DeleteOptionTypeValuePathParams struct {
 }
 
 type DeleteOptionTypeValueSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type DeleteOptionTypeValue401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type DeleteOptionTypeValue404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type DeleteOptionTypeValue422ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type DeleteOptionTypeValueRequest struct {
@@ -30,9 +18,21 @@ type DeleteOptionTypeValueRequest struct {
 	Security   DeleteOptionTypeValueSecurity
 }
 
+type DeleteOptionTypeValue422ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type DeleteOptionTypeValue404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type DeleteOptionTypeValue401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type DeleteOptionTypeValueResponse struct {
 	ContentType                                   string
-	StatusCode                                    int64
+	StatusCode                                    int
 	DeleteOptionTypeValue401ApplicationJSONObject *DeleteOptionTypeValue401ApplicationJSON
 	DeleteOptionTypeValue404ApplicationJSONObject *DeleteOptionTypeValue404ApplicationJSON
 	DeleteOptionTypeValue422ApplicationJSONObject *DeleteOptionTypeValue422ApplicationJSON

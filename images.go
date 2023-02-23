@@ -3,36 +3,36 @@ package sdk
 import (
 	"context"
 	"fmt"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/operations"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/utils"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/operations"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/utils"
 	"net/http"
 )
 
-type Images struct {
-	_defaultClient  HTTPClient
-	_securityClient HTTPClient
-	_serverURL      string
-	_language       string
-	_sdkVersion     string
-	_genVersion     string
+type images struct {
+	defaultClient  HTTPClient
+	securityClient HTTPClient
+	serverURL      string
+	language       string
+	sdkVersion     string
+	genVersion     string
 }
 
-func NewImages(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *Images {
-	return &Images{
-		_defaultClient:  defaultClient,
-		_securityClient: securityClient,
-		_serverURL:      serverURL,
-		_language:       language,
-		_sdkVersion:     sdkVersion,
-		_genVersion:     genVersion,
+func newImages(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *images {
+	return &images{
+		defaultClient:  defaultClient,
+		securityClient: securityClient,
+		serverURL:      serverURL,
+		language:       language,
+		sdkVersion:     sdkVersion,
+		genVersion:     genVersion,
 	}
 }
 
 // CreateProductImage - Create product image
 // Creates an image for a product.
-func (s *Images) CreateProductImage(ctx context.Context, request operations.CreateProductImageRequest) (*operations.CreateProductImageResponse, error) {
-	baseURL := s._serverURL
+func (s *images) CreateProductImage(ctx context.Context, request operations.CreateProductImageRequest) (*operations.CreateProductImageResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/products/{product_id}/images", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -50,18 +50,21 @@ func (s *Images) CreateProductImage(ctx context.Context, request operations.Crea
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.CreateProductImageResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -112,8 +115,8 @@ func (s *Images) CreateProductImage(ctx context.Context, request operations.Crea
 
 // CreateVariantImage - Create variant image
 // Creates an image for a variant.
-func (s *Images) CreateVariantImage(ctx context.Context, request operations.CreateVariantImageRequest) (*operations.CreateVariantImageResponse, error) {
-	baseURL := s._serverURL
+func (s *images) CreateVariantImage(ctx context.Context, request operations.CreateVariantImageRequest) (*operations.CreateVariantImageResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/variants/{variant_id}/images", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -131,18 +134,21 @@ func (s *Images) CreateVariantImage(ctx context.Context, request operations.Crea
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.CreateVariantImageResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -193,8 +199,8 @@ func (s *Images) CreateVariantImage(ctx context.Context, request operations.Crea
 
 // DeleteProductImage - Delete product image
 // Deletes a product's image.
-func (s *Images) DeleteProductImage(ctx context.Context, request operations.DeleteProductImageRequest) (*operations.DeleteProductImageResponse, error) {
-	baseURL := s._serverURL
+func (s *images) DeleteProductImage(ctx context.Context, request operations.DeleteProductImageRequest) (*operations.DeleteProductImageResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/products/{product_id}/images/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "DELETE", url, nil)
@@ -202,18 +208,21 @@ func (s *Images) DeleteProductImage(ctx context.Context, request operations.Dele
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.DeleteProductImageResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -255,8 +264,8 @@ func (s *Images) DeleteProductImage(ctx context.Context, request operations.Dele
 
 // DeleteVariantImage - Delete variant image
 // Deletes a variant's image.
-func (s *Images) DeleteVariantImage(ctx context.Context, request operations.DeleteVariantImageRequest) (*operations.DeleteVariantImageResponse, error) {
-	baseURL := s._serverURL
+func (s *images) DeleteVariantImage(ctx context.Context, request operations.DeleteVariantImageRequest) (*operations.DeleteVariantImageResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/variants/{variant_id}/images/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "DELETE", url, nil)
@@ -264,18 +273,21 @@ func (s *Images) DeleteVariantImage(ctx context.Context, request operations.Dele
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.DeleteVariantImageResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -317,8 +329,8 @@ func (s *Images) DeleteVariantImage(ctx context.Context, request operations.Dele
 
 // GetProductImage - Get product image
 // Retrieves a product's image.
-func (s *Images) GetProductImage(ctx context.Context, request operations.GetProductImageRequest) (*operations.GetProductImageResponse, error) {
-	baseURL := s._serverURL
+func (s *images) GetProductImage(ctx context.Context, request operations.GetProductImageRequest) (*operations.GetProductImageResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/products/{product_id}/images/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -326,18 +338,21 @@ func (s *Images) GetProductImage(ctx context.Context, request operations.GetProd
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.GetProductImageResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -378,8 +393,8 @@ func (s *Images) GetProductImage(ctx context.Context, request operations.GetProd
 
 // GetVariantImage - Get variant image
 // Retrieves a variant's image.
-func (s *Images) GetVariantImage(ctx context.Context, request operations.GetVariantImageRequest) (*operations.GetVariantImageResponse, error) {
-	baseURL := s._serverURL
+func (s *images) GetVariantImage(ctx context.Context, request operations.GetVariantImageRequest) (*operations.GetVariantImageResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/variants/{variant_id}/images/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -387,18 +402,21 @@ func (s *Images) GetVariantImage(ctx context.Context, request operations.GetVari
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.GetVariantImageResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -439,8 +457,8 @@ func (s *Images) GetVariantImage(ctx context.Context, request operations.GetVari
 
 // ListProductImages - List product images
 // Retrieves a product's images.
-func (s *Images) ListProductImages(ctx context.Context, request operations.ListProductImagesRequest) (*operations.ListProductImagesResponse, error) {
-	baseURL := s._serverURL
+func (s *images) ListProductImages(ctx context.Context, request operations.ListProductImagesRequest) (*operations.ListProductImagesResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/products/{product_id}/images", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -448,18 +466,21 @@ func (s *Images) ListProductImages(ctx context.Context, request operations.ListP
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.ListProductImagesResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -500,8 +521,8 @@ func (s *Images) ListProductImages(ctx context.Context, request operations.ListP
 
 // ListVariantImages - List variant images
 // Lists a variant's images.
-func (s *Images) ListVariantImages(ctx context.Context, request operations.ListVariantImagesRequest) (*operations.ListVariantImagesResponse, error) {
-	baseURL := s._serverURL
+func (s *images) ListVariantImages(ctx context.Context, request operations.ListVariantImagesRequest) (*operations.ListVariantImagesResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/variants/{variant_id}/images", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -509,18 +530,21 @@ func (s *Images) ListVariantImages(ctx context.Context, request operations.ListV
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.ListVariantImagesResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -561,8 +585,8 @@ func (s *Images) ListVariantImages(ctx context.Context, request operations.ListV
 
 // UpdateProductImage - Update product image
 // Updates a product's image.
-func (s *Images) UpdateProductImage(ctx context.Context, request operations.UpdateProductImageRequest) (*operations.UpdateProductImageResponse, error) {
-	baseURL := s._serverURL
+func (s *images) UpdateProductImage(ctx context.Context, request operations.UpdateProductImageRequest) (*operations.UpdateProductImageResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/products/{product_id}/images/{id}", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -580,18 +604,21 @@ func (s *Images) UpdateProductImage(ctx context.Context, request operations.Upda
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.UpdateProductImageResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -642,8 +669,8 @@ func (s *Images) UpdateProductImage(ctx context.Context, request operations.Upda
 
 // UpdateVariantImage - Update variant image
 // Updates a variant's image.
-func (s *Images) UpdateVariantImage(ctx context.Context, request operations.UpdateVariantImageRequest) (*operations.UpdateVariantImageResponse, error) {
-	baseURL := s._serverURL
+func (s *images) UpdateVariantImage(ctx context.Context, request operations.UpdateVariantImageRequest) (*operations.UpdateVariantImageResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/variants/{variant_id}/images/{id}", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -661,18 +688,21 @@ func (s *Images) UpdateVariantImage(ctx context.Context, request operations.Upda
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.UpdateVariantImageResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {

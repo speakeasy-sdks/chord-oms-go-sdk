@@ -1,6 +1,7 @@
 package shared
 
 import (
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/types"
 	"time"
 )
 
@@ -8,7 +9,7 @@ type User struct {
 	AvailableGiftCards  []GiftCard             `json:"available_gift_cards,omitempty"`
 	BillAddress         *Address               `json:"bill_address,omitempty"`
 	CreatedAt           *time.Time             `json:"created_at,omitempty"`
-	DateOfBirth         *time.Time             `json:"date_of_birth,omitempty"`
+	DateOfBirth         *types.Date            `json:"date_of_birth,omitempty"`
 	Email               *string                `json:"email,omitempty"`
 	ID                  *int64                 `json:"id,omitempty"`
 	Metadata            map[string]interface{} `json:"metadata,omitempty"`

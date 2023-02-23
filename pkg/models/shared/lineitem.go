@@ -1,7 +1,7 @@
 package shared
 
 type LineItem struct {
-	Adjustments         []Adjustment           `json:"adjustments,omitempty"`
+	Adjustments         []Adjustment           `json:"adjustments"`
 	CrossSold           *int64                 `json:"cross_sold,omitempty"`
 	DisplayAmount       *string                `json:"display_amount,omitempty"`
 	DynamicPromotions   []DynamicPromotion     `json:"dynamic_promotions,omitempty"`

@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type GetVariantPathParams struct {
@@ -9,15 +9,7 @@ type GetVariantPathParams struct {
 }
 
 type GetVariantSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type GetVariant401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type GetVariant404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type GetVariantRequest struct {
@@ -25,9 +17,17 @@ type GetVariantRequest struct {
 	Security   GetVariantSecurity
 }
 
+type GetVariant404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type GetVariant401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type GetVariantResponse struct {
 	ContentType                        string
-	StatusCode                         int64
+	StatusCode                         int
 	GetVariant401ApplicationJSONObject *GetVariant401ApplicationJSON
 	GetVariant404ApplicationJSONObject *GetVariant404ApplicationJSON
 	Variant                            *shared.Variant

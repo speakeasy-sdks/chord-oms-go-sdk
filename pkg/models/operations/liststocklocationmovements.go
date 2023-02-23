@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type ListStockLocationMovementsPathParams struct {
@@ -14,7 +14,21 @@ type ListStockLocationMovementsQueryParams struct {
 }
 
 type ListStockLocationMovementsSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
+}
+
+type ListStockLocationMovementsRequest struct {
+	PathParams  ListStockLocationMovementsPathParams
+	QueryParams ListStockLocationMovementsQueryParams
+	Security    ListStockLocationMovementsSecurity
+}
+
+type ListStockLocationMovements404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type ListStockLocationMovements401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
 }
 
 type ListStockLocationMovementsPaginationData struct {
@@ -26,24 +40,10 @@ type ListStockLocationMovementsPaginationData struct {
 	TotalCount     *int64                `json:"total_count,omitempty"`
 }
 
-type ListStockLocationMovements401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type ListStockLocationMovements404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type ListStockLocationMovementsRequest struct {
-	PathParams  ListStockLocationMovementsPathParams
-	QueryParams ListStockLocationMovementsQueryParams
-	Security    ListStockLocationMovementsSecurity
-}
-
 type ListStockLocationMovementsResponse struct {
 	ContentType                                        string
 	PaginationData                                     *ListStockLocationMovementsPaginationData
-	StatusCode                                         int64
+	StatusCode                                         int
 	ListStockLocationMovements401ApplicationJSONObject *ListStockLocationMovements401ApplicationJSON
 	ListStockLocationMovements404ApplicationJSONObject *ListStockLocationMovements404ApplicationJSON
 }

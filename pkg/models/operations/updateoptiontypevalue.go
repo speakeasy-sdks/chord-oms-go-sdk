@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type UpdateOptionTypeValuePathParams struct {
@@ -10,20 +10,7 @@ type UpdateOptionTypeValuePathParams struct {
 }
 
 type UpdateOptionTypeValueSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type UpdateOptionTypeValue401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type UpdateOptionTypeValue404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type UpdateOptionTypeValue422ApplicationJSON struct {
-	Error  *string                `json:"error,omitempty"`
-	Errors map[string]interface{} `json:"errors,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type UpdateOptionTypeValueRequest struct {
@@ -32,9 +19,22 @@ type UpdateOptionTypeValueRequest struct {
 	Security   UpdateOptionTypeValueSecurity
 }
 
+type UpdateOptionTypeValue422ApplicationJSON struct {
+	Error  *string                `json:"error,omitempty"`
+	Errors map[string]interface{} `json:"errors,omitempty"`
+}
+
+type UpdateOptionTypeValue404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type UpdateOptionTypeValue401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type UpdateOptionTypeValueResponse struct {
 	ContentType                                   string
-	StatusCode                                    int64
+	StatusCode                                    int
 	OptionValue                                   *shared.OptionValue
 	UpdateOptionTypeValue401ApplicationJSONObject *UpdateOptionTypeValue401ApplicationJSON
 	UpdateOptionTypeValue404ApplicationJSONObject *UpdateOptionTypeValue404ApplicationJSON

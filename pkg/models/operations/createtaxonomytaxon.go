@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type CreateTaxonomyTaxonPathParams struct {
@@ -9,20 +9,7 @@ type CreateTaxonomyTaxonPathParams struct {
 }
 
 type CreateTaxonomyTaxonSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type CreateTaxonomyTaxon401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type CreateTaxonomyTaxon404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type CreateTaxonomyTaxon422ApplicationJSON struct {
-	Error  *string                `json:"error,omitempty"`
-	Errors map[string]interface{} `json:"errors,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type CreateTaxonomyTaxonRequest struct {
@@ -31,9 +18,22 @@ type CreateTaxonomyTaxonRequest struct {
 	Security   CreateTaxonomyTaxonSecurity
 }
 
+type CreateTaxonomyTaxon422ApplicationJSON struct {
+	Error  *string                `json:"error,omitempty"`
+	Errors map[string]interface{} `json:"errors,omitempty"`
+}
+
+type CreateTaxonomyTaxon404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type CreateTaxonomyTaxon401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type CreateTaxonomyTaxonResponse struct {
 	ContentType                                 string
-	StatusCode                                  int64
+	StatusCode                                  int
 	CreateTaxonomyTaxon401ApplicationJSONObject *CreateTaxonomyTaxon401ApplicationJSON
 	CreateTaxonomyTaxon404ApplicationJSONObject *CreateTaxonomyTaxon404ApplicationJSON
 	CreateTaxonomyTaxon422ApplicationJSONObject *CreateTaxonomyTaxon422ApplicationJSON

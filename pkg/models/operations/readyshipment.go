@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type ReadyShipmentPathParams struct {
@@ -9,20 +9,7 @@ type ReadyShipmentPathParams struct {
 }
 
 type ReadyShipmentSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type ReadyShipment401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type ReadyShipment404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type ReadyShipment422ApplicationJSON struct {
-	Error  *string                `json:"error,omitempty"`
-	Errors map[string]interface{} `json:"errors,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type ReadyShipmentRequest struct {
@@ -30,9 +17,22 @@ type ReadyShipmentRequest struct {
 	Security   ReadyShipmentSecurity
 }
 
+type ReadyShipment422ApplicationJSON struct {
+	Error  *string                `json:"error,omitempty"`
+	Errors map[string]interface{} `json:"errors,omitempty"`
+}
+
+type ReadyShipment404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type ReadyShipment401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type ReadyShipmentResponse struct {
 	ContentType                           string
-	StatusCode                            int64
+	StatusCode                            int
 	ReadyShipment401ApplicationJSONObject *ReadyShipment401ApplicationJSON
 	ReadyShipment404ApplicationJSONObject *ReadyShipment404ApplicationJSON
 	ReadyShipment422ApplicationJSONObject *ReadyShipment422ApplicationJSON

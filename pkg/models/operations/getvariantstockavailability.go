@@ -9,6 +9,15 @@ type GetVariantStockAvailabilityQueryParams struct {
 	Country *string `queryParam:"style=form,explode=true,name=country"`
 }
 
+type GetVariantStockAvailabilityRequest struct {
+	PathParams  GetVariantStockAvailabilityPathParams
+	QueryParams GetVariantStockAvailabilityQueryParams
+}
+
+type GetVariantStockAvailability404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type GetVariantStockAvailability200ApplicationJSON struct {
 	ID              *int64  `json:"id,omitempty"`
 	InStock         *bool   `json:"in_stock,omitempty"`
@@ -16,18 +25,9 @@ type GetVariantStockAvailability200ApplicationJSON struct {
 	Sku             *string `json:"sku,omitempty"`
 }
 
-type GetVariantStockAvailability404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type GetVariantStockAvailabilityRequest struct {
-	PathParams  GetVariantStockAvailabilityPathParams
-	QueryParams GetVariantStockAvailabilityQueryParams
-}
-
 type GetVariantStockAvailabilityResponse struct {
 	ContentType                                         string
-	StatusCode                                          int64
+	StatusCode                                          int
 	GetVariantStockAvailability200ApplicationJSONObject *GetVariantStockAvailability200ApplicationJSON
 	GetVariantStockAvailability404ApplicationJSONObject *GetVariantStockAvailability404ApplicationJSON
 }

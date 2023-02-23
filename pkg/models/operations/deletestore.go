@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type DeleteStorePathParams struct {
@@ -9,19 +9,7 @@ type DeleteStorePathParams struct {
 }
 
 type DeleteStoreSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type DeleteStore401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type DeleteStore404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type DeleteStore422ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type DeleteStoreRequest struct {
@@ -29,9 +17,21 @@ type DeleteStoreRequest struct {
 	Security   DeleteStoreSecurity
 }
 
+type DeleteStore422ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type DeleteStore404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type DeleteStore401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type DeleteStoreResponse struct {
 	ContentType                         string
-	StatusCode                          int64
+	StatusCode                          int
 	DeleteStore401ApplicationJSONObject *DeleteStore401ApplicationJSON
 	DeleteStore404ApplicationJSONObject *DeleteStore404ApplicationJSON
 	DeleteStore422ApplicationJSONObject *DeleteStore422ApplicationJSON

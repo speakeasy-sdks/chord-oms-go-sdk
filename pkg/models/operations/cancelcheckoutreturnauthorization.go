@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type CancelCheckoutReturnAuthorizationPathParams struct {
@@ -10,20 +10,7 @@ type CancelCheckoutReturnAuthorizationPathParams struct {
 }
 
 type CancelCheckoutReturnAuthorizationSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type CancelCheckoutReturnAuthorization401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type CancelCheckoutReturnAuthorization404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type CancelCheckoutReturnAuthorization422ApplicationJSON struct {
-	Error  *string                `json:"error,omitempty"`
-	Errors map[string]interface{} `json:"errors,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type CancelCheckoutReturnAuthorizationRequest struct {
@@ -31,9 +18,22 @@ type CancelCheckoutReturnAuthorizationRequest struct {
 	Security   CancelCheckoutReturnAuthorizationSecurity
 }
 
+type CancelCheckoutReturnAuthorization422ApplicationJSON struct {
+	Error  *string                `json:"error,omitempty"`
+	Errors map[string]interface{} `json:"errors,omitempty"`
+}
+
+type CancelCheckoutReturnAuthorization404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type CancelCheckoutReturnAuthorization401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type CancelCheckoutReturnAuthorizationResponse struct {
 	ContentType                                               string
-	StatusCode                                                int64
+	StatusCode                                                int
 	CancelCheckoutReturnAuthorization401ApplicationJSONObject *CancelCheckoutReturnAuthorization401ApplicationJSON
 	CancelCheckoutReturnAuthorization404ApplicationJSONObject *CancelCheckoutReturnAuthorization404ApplicationJSON
 	CancelCheckoutReturnAuthorization422ApplicationJSONObject *CancelCheckoutReturnAuthorization422ApplicationJSON

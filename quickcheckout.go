@@ -3,36 +3,36 @@ package sdk
 import (
 	"context"
 	"fmt"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/operations"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/utils"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/operations"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/utils"
 	"net/http"
 	"strings"
 )
 
-type QuickCheckout struct {
-	_defaultClient  HTTPClient
-	_securityClient HTTPClient
-	_serverURL      string
-	_language       string
-	_sdkVersion     string
-	_genVersion     string
+type quickCheckout struct {
+	defaultClient  HTTPClient
+	securityClient HTTPClient
+	serverURL      string
+	language       string
+	sdkVersion     string
+	genVersion     string
 }
 
-func NewQuickCheckout(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *QuickCheckout {
-	return &QuickCheckout{
-		_defaultClient:  defaultClient,
-		_securityClient: securityClient,
-		_serverURL:      serverURL,
-		_language:       language,
-		_sdkVersion:     sdkVersion,
-		_genVersion:     genVersion,
+func newQuickCheckout(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *quickCheckout {
+	return &quickCheckout{
+		defaultClient:  defaultClient,
+		securityClient: securityClient,
+		serverURL:      serverURL,
+		language:       language,
+		sdkVersion:     sdkVersion,
+		genVersion:     genVersion,
 	}
 }
 
 // QuickCheckout - Quick Checkout
 // Create order and checkout
-func (s *QuickCheckout) QuickCheckout(ctx context.Context, request operations.QuickCheckoutRequest) (*operations.QuickCheckoutResponse, error) {
-	baseURL := s._serverURL
+func (s *quickCheckout) QuickCheckout(ctx context.Context, request operations.QuickCheckoutRequest) (*operations.QuickCheckoutResponse, error) {
+	baseURL := s.serverURL
 	url := strings.TrimSuffix(baseURL, "/") + "/quick-checkout"
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -50,22 +50,27 @@ func (s *QuickCheckout) QuickCheckout(ctx context.Context, request operations.Qu
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.QuickCheckoutResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
 	case httpRes.StatusCode == 201:
+		res.Headers = httpRes.Header
+
 		switch {
 		case utils.MatchContentType(contentType, `application/json`):
 			var out *operations.QuickCheckout201ApplicationJSON

@@ -1,16 +1,16 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type PostUsersUserIDSubscriptionsIDSkipPathParams struct {
 	ID     string `pathParam:"style=simple,explode=false,name=id"`
-	UserID string `pathParam:"style=simple,explode=false,name=user_id"`
+	UserID int64  `pathParam:"style=simple,explode=false,name=user_id"`
 }
 
 type PostUsersUserIDSubscriptionsIDSkipSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type PostUsersUserIDSubscriptionsIDSkipRequest struct {
@@ -20,6 +20,6 @@ type PostUsersUserIDSubscriptionsIDSkipRequest struct {
 
 type PostUsersUserIDSubscriptionsIDSkipResponse struct {
 	ContentType  string
-	StatusCode   int64
+	StatusCode   int
 	Subscription *shared.Subscription
 }

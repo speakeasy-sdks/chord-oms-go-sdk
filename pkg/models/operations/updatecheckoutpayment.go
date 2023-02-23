@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type UpdateCheckoutPaymentPathParams struct {
@@ -16,21 +16,8 @@ type UpdateCheckoutPaymentRequestBody struct {
 }
 
 type UpdateCheckoutPaymentSecurity struct {
-	APIKey     *shared.SchemeAPIKey     `security:"scheme,type=apiKey,subtype=header"`
+	APIKey     *shared.SchemeAPIKey     `security:"scheme,type=http,subtype=bearer"`
 	OrderToken *shared.SchemeOrderToken `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type UpdateCheckoutPayment401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type UpdateCheckoutPayment404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type UpdateCheckoutPayment422ApplicationJSON struct {
-	Error  *string                `json:"error,omitempty"`
-	Errors map[string]interface{} `json:"errors,omitempty"`
 }
 
 type UpdateCheckoutPaymentRequest struct {
@@ -39,9 +26,22 @@ type UpdateCheckoutPaymentRequest struct {
 	Security   UpdateCheckoutPaymentSecurity
 }
 
+type UpdateCheckoutPayment422ApplicationJSON struct {
+	Error  *string                `json:"error,omitempty"`
+	Errors map[string]interface{} `json:"errors,omitempty"`
+}
+
+type UpdateCheckoutPayment404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type UpdateCheckoutPayment401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type UpdateCheckoutPaymentResponse struct {
 	ContentType                                   string
-	StatusCode                                    int64
+	StatusCode                                    int
 	Payment                                       *shared.Payment
 	UpdateCheckoutPayment401ApplicationJSONObject *UpdateCheckoutPayment401ApplicationJSON
 	UpdateCheckoutPayment404ApplicationJSONObject *UpdateCheckoutPayment404ApplicationJSON

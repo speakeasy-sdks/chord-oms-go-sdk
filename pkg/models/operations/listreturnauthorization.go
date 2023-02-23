@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type ListReturnAuthorizationQueryParams struct {
@@ -11,7 +11,20 @@ type ListReturnAuthorizationQueryParams struct {
 }
 
 type ListReturnAuthorizationSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
+}
+
+type ListReturnAuthorizationRequest struct {
+	QueryParams ListReturnAuthorizationQueryParams
+	Security    ListReturnAuthorizationSecurity
+}
+
+type ListReturnAuthorization404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type ListReturnAuthorization401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
 }
 
 type ListReturnAuthorizationPaginationData struct {
@@ -23,23 +36,10 @@ type ListReturnAuthorizationPaginationData struct {
 	TotalCount           *int64                   `json:"total_count,omitempty"`
 }
 
-type ListReturnAuthorization401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type ListReturnAuthorization404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type ListReturnAuthorizationRequest struct {
-	QueryParams ListReturnAuthorizationQueryParams
-	Security    ListReturnAuthorizationSecurity
-}
-
 type ListReturnAuthorizationResponse struct {
 	ContentType                                     string
 	PaginationData                                  *ListReturnAuthorizationPaginationData
-	StatusCode                                      int64
+	StatusCode                                      int
 	ListReturnAuthorization401ApplicationJSONObject *ListReturnAuthorization401ApplicationJSON
 	ListReturnAuthorization404ApplicationJSONObject *ListReturnAuthorization404ApplicationJSON
 }

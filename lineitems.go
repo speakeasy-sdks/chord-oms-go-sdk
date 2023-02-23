@@ -3,36 +3,36 @@ package sdk
 import (
 	"context"
 	"fmt"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/operations"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/utils"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/operations"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/utils"
 	"net/http"
 )
 
-type LineItems struct {
-	_defaultClient  HTTPClient
-	_securityClient HTTPClient
-	_serverURL      string
-	_language       string
-	_sdkVersion     string
-	_genVersion     string
+type lineItems struct {
+	defaultClient  HTTPClient
+	securityClient HTTPClient
+	serverURL      string
+	language       string
+	sdkVersion     string
+	genVersion     string
 }
 
-func NewLineItems(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *LineItems {
-	return &LineItems{
-		_defaultClient:  defaultClient,
-		_securityClient: securityClient,
-		_serverURL:      serverURL,
-		_language:       language,
-		_sdkVersion:     sdkVersion,
-		_genVersion:     genVersion,
+func newLineItems(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *lineItems {
+	return &lineItems{
+		defaultClient:  defaultClient,
+		securityClient: securityClient,
+		serverURL:      serverURL,
+		language:       language,
+		sdkVersion:     sdkVersion,
+		genVersion:     genVersion,
 	}
 }
 
 // CreateCheckoutLineItem - Create checkout line item
 // Creates a new line item for a checkout.
-func (s *LineItems) CreateCheckoutLineItem(ctx context.Context, request operations.CreateCheckoutLineItemRequest) (*operations.CreateCheckoutLineItemResponse, error) {
-	baseURL := s._serverURL
+func (s *lineItems) CreateCheckoutLineItem(ctx context.Context, request operations.CreateCheckoutLineItemRequest) (*operations.CreateCheckoutLineItemResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/checkouts/{checkout_id}/line_items", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -50,18 +50,21 @@ func (s *LineItems) CreateCheckoutLineItem(ctx context.Context, request operatio
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.CreateCheckoutLineItemResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -112,8 +115,8 @@ func (s *LineItems) CreateCheckoutLineItem(ctx context.Context, request operatio
 
 // CreateOrderLineItem - Create order line item
 // Creates a line item for an order.
-func (s *LineItems) CreateOrderLineItem(ctx context.Context, request operations.CreateOrderLineItemRequest) (*operations.CreateOrderLineItemResponse, error) {
-	baseURL := s._serverURL
+func (s *lineItems) CreateOrderLineItem(ctx context.Context, request operations.CreateOrderLineItemRequest) (*operations.CreateOrderLineItemResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/orders/{order_number}/line_items", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -131,18 +134,21 @@ func (s *LineItems) CreateOrderLineItem(ctx context.Context, request operations.
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.CreateOrderLineItemResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -193,8 +199,8 @@ func (s *LineItems) CreateOrderLineItem(ctx context.Context, request operations.
 
 // CrossSellOrderLineItem - Cross-sell order line items
 // Cross-sells order line items.
-func (s *LineItems) CrossSellOrderLineItem(ctx context.Context, request operations.CrossSellOrderLineItemRequest) (*operations.CrossSellOrderLineItemResponse, error) {
-	baseURL := s._serverURL
+func (s *lineItems) CrossSellOrderLineItem(ctx context.Context, request operations.CrossSellOrderLineItemRequest) (*operations.CrossSellOrderLineItemResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/orders/{order_number}/cross_sell", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -212,18 +218,21 @@ func (s *LineItems) CrossSellOrderLineItem(ctx context.Context, request operatio
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.CrossSellOrderLineItemResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -284,8 +293,8 @@ func (s *LineItems) CrossSellOrderLineItem(ctx context.Context, request operatio
 
 // DeleteCheckoutLineItem - Delete checkout line item
 // Deletes a checkout's line item.
-func (s *LineItems) DeleteCheckoutLineItem(ctx context.Context, request operations.DeleteCheckoutLineItemRequest) (*operations.DeleteCheckoutLineItemResponse, error) {
-	baseURL := s._serverURL
+func (s *lineItems) DeleteCheckoutLineItem(ctx context.Context, request operations.DeleteCheckoutLineItemRequest) (*operations.DeleteCheckoutLineItemResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/checkouts/{checkout_id}/line_items/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "DELETE", url, nil)
@@ -293,18 +302,21 @@ func (s *LineItems) DeleteCheckoutLineItem(ctx context.Context, request operatio
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.DeleteCheckoutLineItemResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -346,8 +358,8 @@ func (s *LineItems) DeleteCheckoutLineItem(ctx context.Context, request operatio
 
 // DeleteOrderLineItem - Delete order line item
 // Deletes an order's line item.
-func (s *LineItems) DeleteOrderLineItem(ctx context.Context, request operations.DeleteOrderLineItemRequest) (*operations.DeleteOrderLineItemResponse, error) {
-	baseURL := s._serverURL
+func (s *lineItems) DeleteOrderLineItem(ctx context.Context, request operations.DeleteOrderLineItemRequest) (*operations.DeleteOrderLineItemResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/orders/{order_number}/line_items/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "DELETE", url, nil)
@@ -355,18 +367,21 @@ func (s *LineItems) DeleteOrderLineItem(ctx context.Context, request operations.
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.DeleteOrderLineItemResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -408,8 +423,8 @@ func (s *LineItems) DeleteOrderLineItem(ctx context.Context, request operations.
 
 // UpdateCheckoutLineItem - Update checkout line item
 // Updates a checkout's line item.
-func (s *LineItems) UpdateCheckoutLineItem(ctx context.Context, request operations.UpdateCheckoutLineItemRequest) (*operations.UpdateCheckoutLineItemResponse, error) {
-	baseURL := s._serverURL
+func (s *lineItems) UpdateCheckoutLineItem(ctx context.Context, request operations.UpdateCheckoutLineItemRequest) (*operations.UpdateCheckoutLineItemResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/checkouts/{checkout_id}/line_items/{id}", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -427,18 +442,21 @@ func (s *LineItems) UpdateCheckoutLineItem(ctx context.Context, request operatio
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.UpdateCheckoutLineItemResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -489,8 +507,8 @@ func (s *LineItems) UpdateCheckoutLineItem(ctx context.Context, request operatio
 
 // UpdateOrderLineItem - Update order line item
 // Updates an order's line item.
-func (s *LineItems) UpdateOrderLineItem(ctx context.Context, request operations.UpdateOrderLineItemRequest) (*operations.UpdateOrderLineItemResponse, error) {
-	baseURL := s._serverURL
+func (s *lineItems) UpdateOrderLineItem(ctx context.Context, request operations.UpdateOrderLineItemRequest) (*operations.UpdateOrderLineItemResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/orders/{order_number}/line_items/{id}", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -508,18 +526,21 @@ func (s *LineItems) UpdateOrderLineItem(ctx context.Context, request operations.
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.UpdateOrderLineItemResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {

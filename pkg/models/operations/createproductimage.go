@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type CreateProductImagePathParams struct {
@@ -9,20 +9,7 @@ type CreateProductImagePathParams struct {
 }
 
 type CreateProductImageSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type CreateProductImage401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type CreateProductImage404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type CreateProductImage422ApplicationJSON struct {
-	Error  *string                `json:"error,omitempty"`
-	Errors map[string]interface{} `json:"errors,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type CreateProductImageRequest struct {
@@ -31,9 +18,22 @@ type CreateProductImageRequest struct {
 	Security   CreateProductImageSecurity
 }
 
+type CreateProductImage422ApplicationJSON struct {
+	Error  *string                `json:"error,omitempty"`
+	Errors map[string]interface{} `json:"errors,omitempty"`
+}
+
+type CreateProductImage404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type CreateProductImage401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type CreateProductImageResponse struct {
 	ContentType                                string
-	StatusCode                                 int64
+	StatusCode                                 int
 	CreateProductImage401ApplicationJSONObject *CreateProductImage401ApplicationJSON
 	CreateProductImage404ApplicationJSONObject *CreateProductImage404ApplicationJSON
 	CreateProductImage422ApplicationJSONObject *CreateProductImage422ApplicationJSON

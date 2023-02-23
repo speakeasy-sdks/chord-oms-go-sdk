@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type GetStockLocationItemPathParams struct {
@@ -10,15 +10,7 @@ type GetStockLocationItemPathParams struct {
 }
 
 type GetStockLocationItemSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type GetStockLocationItem401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type GetStockLocationItem404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type GetStockLocationItemRequest struct {
@@ -26,9 +18,17 @@ type GetStockLocationItemRequest struct {
 	Security   GetStockLocationItemSecurity
 }
 
+type GetStockLocationItem404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type GetStockLocationItem401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type GetStockLocationItemResponse struct {
 	ContentType                                  string
-	StatusCode                                   int64
+	StatusCode                                   int
 	GetStockLocationItem401ApplicationJSONObject *GetStockLocationItem401ApplicationJSON
 	GetStockLocationItem404ApplicationJSONObject *GetStockLocationItem404ApplicationJSON
 	StockItem                                    *shared.StockItem

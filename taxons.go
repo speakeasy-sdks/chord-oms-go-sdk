@@ -3,37 +3,37 @@ package sdk
 import (
 	"context"
 	"fmt"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/operations"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/utils"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/operations"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/utils"
 	"net/http"
 	"strings"
 )
 
-type Taxons struct {
-	_defaultClient  HTTPClient
-	_securityClient HTTPClient
-	_serverURL      string
-	_language       string
-	_sdkVersion     string
-	_genVersion     string
+type taxons struct {
+	defaultClient  HTTPClient
+	securityClient HTTPClient
+	serverURL      string
+	language       string
+	sdkVersion     string
+	genVersion     string
 }
 
-func NewTaxons(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *Taxons {
-	return &Taxons{
-		_defaultClient:  defaultClient,
-		_securityClient: securityClient,
-		_serverURL:      serverURL,
-		_language:       language,
-		_sdkVersion:     sdkVersion,
-		_genVersion:     genVersion,
+func newTaxons(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *taxons {
+	return &taxons{
+		defaultClient:  defaultClient,
+		securityClient: securityClient,
+		serverURL:      serverURL,
+		language:       language,
+		sdkVersion:     sdkVersion,
+		genVersion:     genVersion,
 	}
 }
 
 // CreateTaxonomyTaxon - Create taxonomy taxon
 // Creates a taxon for a taxonomy.
-func (s *Taxons) CreateTaxonomyTaxon(ctx context.Context, request operations.CreateTaxonomyTaxonRequest) (*operations.CreateTaxonomyTaxonResponse, error) {
-	baseURL := s._serverURL
+func (s *taxons) CreateTaxonomyTaxon(ctx context.Context, request operations.CreateTaxonomyTaxonRequest) (*operations.CreateTaxonomyTaxonResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/taxonomies/{taxonomy_id}/taxons", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -51,18 +51,21 @@ func (s *Taxons) CreateTaxonomyTaxon(ctx context.Context, request operations.Cre
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.CreateTaxonomyTaxonResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -113,8 +116,8 @@ func (s *Taxons) CreateTaxonomyTaxon(ctx context.Context, request operations.Cre
 
 // DeleteTaxonomyTaxon - Delete taxonomy taxon
 // Deletes a taxonomy's taxon.
-func (s *Taxons) DeleteTaxonomyTaxon(ctx context.Context, request operations.DeleteTaxonomyTaxonRequest) (*operations.DeleteTaxonomyTaxonResponse, error) {
-	baseURL := s._serverURL
+func (s *taxons) DeleteTaxonomyTaxon(ctx context.Context, request operations.DeleteTaxonomyTaxonRequest) (*operations.DeleteTaxonomyTaxonResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/taxonomies/{taxonomy_id}/taxons/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "DELETE", url, nil)
@@ -122,18 +125,21 @@ func (s *Taxons) DeleteTaxonomyTaxon(ctx context.Context, request operations.Del
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.DeleteTaxonomyTaxonResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -175,8 +181,8 @@ func (s *Taxons) DeleteTaxonomyTaxon(ctx context.Context, request operations.Del
 
 // GetTaxonJstree - Get taxon jsTree
 // Builds a taxon's jsTree.
-func (s *Taxons) GetTaxonJstree(ctx context.Context, request operations.GetTaxonJstreeRequest) (*operations.GetTaxonJstreeResponse, error) {
-	baseURL := s._serverURL
+func (s *taxons) GetTaxonJstree(ctx context.Context, request operations.GetTaxonJstreeRequest) (*operations.GetTaxonJstreeResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/taxonomies/{taxonomy_id}/taxons/{taxon_id}/jstree", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -184,18 +190,21 @@ func (s *Taxons) GetTaxonJstree(ctx context.Context, request operations.GetTaxon
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.GetTaxonJstreeResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -236,8 +245,8 @@ func (s *Taxons) GetTaxonJstree(ctx context.Context, request operations.GetTaxon
 
 // GetTaxonomyTaxon - Get taxonomy taxon
 // Retrieves a taxonomy's taxon.
-func (s *Taxons) GetTaxonomyTaxon(ctx context.Context, request operations.GetTaxonomyTaxonRequest) (*operations.GetTaxonomyTaxonResponse, error) {
-	baseURL := s._serverURL
+func (s *taxons) GetTaxonomyTaxon(ctx context.Context, request operations.GetTaxonomyTaxonRequest) (*operations.GetTaxonomyTaxonResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/taxonomies/{taxonomy_id}/taxons/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -245,18 +254,21 @@ func (s *Taxons) GetTaxonomyTaxon(ctx context.Context, request operations.GetTax
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.GetTaxonomyTaxonResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -297,8 +309,8 @@ func (s *Taxons) GetTaxonomyTaxon(ctx context.Context, request operations.GetTax
 
 // ListTaxonomyTaxons - List taxonomy taxons
 // Lists a taxonomy's taxons.
-func (s *Taxons) ListTaxonomyTaxons(ctx context.Context, request operations.ListTaxonomyTaxonsRequest) (*operations.ListTaxonomyTaxonsResponse, error) {
-	baseURL := s._serverURL
+func (s *taxons) ListTaxonomyTaxons(ctx context.Context, request operations.ListTaxonomyTaxonsRequest) (*operations.ListTaxonomyTaxonsResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/taxonomies/{taxonomy_id}/taxons", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -306,20 +318,25 @@ func (s *Taxons) ListTaxonomyTaxons(ctx context.Context, request operations.List
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	utils.PopulateQueryParams(ctx, req, request.QueryParams)
+	if err := utils.PopulateQueryParams(ctx, req, request.QueryParams); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.ListTaxonomyTaxonsResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -360,8 +377,8 @@ func (s *Taxons) ListTaxonomyTaxons(ctx context.Context, request operations.List
 
 // ListTaxons - List taxons
 // Lists all taxons.
-func (s *Taxons) ListTaxons(ctx context.Context, request operations.ListTaxonsRequest) (*operations.ListTaxonsResponse, error) {
-	baseURL := s._serverURL
+func (s *taxons) ListTaxons(ctx context.Context, request operations.ListTaxonsRequest) (*operations.ListTaxonsResponse, error) {
+	baseURL := s.serverURL
 	url := strings.TrimSuffix(baseURL, "/") + "/taxons"
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -369,20 +386,25 @@ func (s *Taxons) ListTaxons(ctx context.Context, request operations.ListTaxonsRe
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	utils.PopulateQueryParams(ctx, req, request.QueryParams)
+	if err := utils.PopulateQueryParams(ctx, req, request.QueryParams); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.ListTaxonsResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -413,8 +435,8 @@ func (s *Taxons) ListTaxons(ctx context.Context, request operations.ListTaxonsRe
 
 // UpdateTaxonomyTaxon - Update taxonomy taxon
 // Updates a taxonomy's taxon.
-func (s *Taxons) UpdateTaxonomyTaxon(ctx context.Context, request operations.UpdateTaxonomyTaxonRequest) (*operations.UpdateTaxonomyTaxonResponse, error) {
-	baseURL := s._serverURL
+func (s *taxons) UpdateTaxonomyTaxon(ctx context.Context, request operations.UpdateTaxonomyTaxonRequest) (*operations.UpdateTaxonomyTaxonResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/taxonomies/{taxonomy_id}/taxons/{id}", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -432,18 +454,21 @@ func (s *Taxons) UpdateTaxonomyTaxon(ctx context.Context, request operations.Upd
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.UpdateTaxonomyTaxonResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {

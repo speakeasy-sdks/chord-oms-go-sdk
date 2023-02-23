@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type DeleteOrderCouponCodePathParams struct {
@@ -10,20 +10,8 @@ type DeleteOrderCouponCodePathParams struct {
 }
 
 type DeleteOrderCouponCodeSecurity struct {
-	APIKey     *shared.SchemeAPIKey     `security:"scheme,type=apiKey,subtype=header"`
+	APIKey     *shared.SchemeAPIKey     `security:"scheme,type=http,subtype=bearer"`
 	OrderToken *shared.SchemeOrderToken `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type DeleteOrderCouponCode401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type DeleteOrderCouponCode404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type DeleteOrderCouponCode422ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
 }
 
 type DeleteOrderCouponCodeRequest struct {
@@ -31,9 +19,21 @@ type DeleteOrderCouponCodeRequest struct {
 	Security   DeleteOrderCouponCodeSecurity
 }
 
+type DeleteOrderCouponCode422ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type DeleteOrderCouponCode404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type DeleteOrderCouponCode401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type DeleteOrderCouponCodeResponse struct {
 	ContentType                                   string
-	StatusCode                                    int64
+	StatusCode                                    int
 	DeleteOrderCouponCode401ApplicationJSONObject *DeleteOrderCouponCode401ApplicationJSON
 	DeleteOrderCouponCode404ApplicationJSONObject *DeleteOrderCouponCode404ApplicationJSON
 	DeleteOrderCouponCode422ApplicationJSONObject *DeleteOrderCouponCode422ApplicationJSON

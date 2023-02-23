@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type CreateStoreStoreInput struct {
@@ -18,16 +18,7 @@ type CreateStoreStoreInput struct {
 }
 
 type CreateStoreSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type CreateStore401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type CreateStore422ApplicationJSON struct {
-	Error  *string                `json:"error,omitempty"`
-	Errors map[string]interface{} `json:"errors,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type CreateStoreRequest struct {
@@ -35,9 +26,18 @@ type CreateStoreRequest struct {
 	Security CreateStoreSecurity
 }
 
+type CreateStore422ApplicationJSON struct {
+	Error  *string                `json:"error,omitempty"`
+	Errors map[string]interface{} `json:"errors,omitempty"`
+}
+
+type CreateStore401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type CreateStoreResponse struct {
 	ContentType                         string
-	StatusCode                          int64
+	StatusCode                          int
 	CreateStore401ApplicationJSONObject *CreateStore401ApplicationJSON
 	CreateStore422ApplicationJSONObject *CreateStore422ApplicationJSON
 	Store                               *shared.Store

@@ -3,37 +3,37 @@ package sdk
 import (
 	"context"
 	"fmt"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/operations"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/utils"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/operations"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/utils"
 	"net/http"
 	"strings"
 )
 
-type Countries struct {
-	_defaultClient  HTTPClient
-	_securityClient HTTPClient
-	_serverURL      string
-	_language       string
-	_sdkVersion     string
-	_genVersion     string
+type countries struct {
+	defaultClient  HTTPClient
+	securityClient HTTPClient
+	serverURL      string
+	language       string
+	sdkVersion     string
+	genVersion     string
 }
 
-func NewCountries(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *Countries {
-	return &Countries{
-		_defaultClient:  defaultClient,
-		_securityClient: securityClient,
-		_serverURL:      serverURL,
-		_language:       language,
-		_sdkVersion:     sdkVersion,
-		_genVersion:     genVersion,
+func newCountries(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *countries {
+	return &countries{
+		defaultClient:  defaultClient,
+		securityClient: securityClient,
+		serverURL:      serverURL,
+		language:       language,
+		sdkVersion:     sdkVersion,
+		genVersion:     genVersion,
 	}
 }
 
 // GetCountry - Get country
 // Retrieves a country.
-func (s *Countries) GetCountry(ctx context.Context, request operations.GetCountryRequest) (*operations.GetCountryResponse, error) {
-	baseURL := s._serverURL
+func (s *countries) GetCountry(ctx context.Context, request operations.GetCountryRequest) (*operations.GetCountryResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/countries/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -41,18 +41,21 @@ func (s *Countries) GetCountry(ctx context.Context, request operations.GetCountr
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := s._defaultClient
+	client := s.defaultClient
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.GetCountryResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -93,8 +96,8 @@ func (s *Countries) GetCountry(ctx context.Context, request operations.GetCountr
 
 // ListCountries - List countries
 // Lists all available countries.
-func (s *Countries) ListCountries(ctx context.Context, request operations.ListCountriesRequest) (*operations.ListCountriesResponse, error) {
-	baseURL := s._serverURL
+func (s *countries) ListCountries(ctx context.Context, request operations.ListCountriesRequest) (*operations.ListCountriesResponse, error) {
+	baseURL := s.serverURL
 	url := strings.TrimSuffix(baseURL, "/") + "/countries"
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -102,20 +105,25 @@ func (s *Countries) ListCountries(ctx context.Context, request operations.ListCo
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	utils.PopulateQueryParams(ctx, req, request.QueryParams)
+	if err := utils.PopulateQueryParams(ctx, req, request.QueryParams); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
 
-	client := s._defaultClient
+	client := s.defaultClient
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.ListCountriesResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {

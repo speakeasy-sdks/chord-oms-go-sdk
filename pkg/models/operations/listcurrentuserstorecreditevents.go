@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type ListCurrentUserStoreCreditEventsQueryParams struct {
@@ -10,7 +10,16 @@ type ListCurrentUserStoreCreditEventsQueryParams struct {
 }
 
 type ListCurrentUserStoreCreditEventsSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
+}
+
+type ListCurrentUserStoreCreditEventsRequest struct {
+	QueryParams ListCurrentUserStoreCreditEventsQueryParams
+	Security    ListCurrentUserStoreCreditEventsSecurity
+}
+
+type ListCurrentUserStoreCreditEvents401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
 }
 
 type ListCurrentUserStoreCreditEventsPaginationData struct {
@@ -22,18 +31,9 @@ type ListCurrentUserStoreCreditEventsPaginationData struct {
 	TotalCount        *int64                    `json:"total_count,omitempty"`
 }
 
-type ListCurrentUserStoreCreditEvents401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type ListCurrentUserStoreCreditEventsRequest struct {
-	QueryParams ListCurrentUserStoreCreditEventsQueryParams
-	Security    ListCurrentUserStoreCreditEventsSecurity
-}
-
 type ListCurrentUserStoreCreditEventsResponse struct {
 	ContentType                                              string
 	PaginationData                                           *ListCurrentUserStoreCreditEventsPaginationData
-	StatusCode                                               int64
+	StatusCode                                               int
 	ListCurrentUserStoreCreditEvents401ApplicationJSONObject *ListCurrentUserStoreCreditEvents401ApplicationJSON
 }

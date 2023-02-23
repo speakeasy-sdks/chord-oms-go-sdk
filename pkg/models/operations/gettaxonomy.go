@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type GetTaxonomyPathParams struct {
@@ -9,15 +9,7 @@ type GetTaxonomyPathParams struct {
 }
 
 type GetTaxonomySecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type GetTaxonomy401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type GetTaxonomy404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type GetTaxonomyRequest struct {
@@ -25,9 +17,17 @@ type GetTaxonomyRequest struct {
 	Security   GetTaxonomySecurity
 }
 
+type GetTaxonomy404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type GetTaxonomy401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type GetTaxonomyResponse struct {
 	ContentType                         string
-	StatusCode                          int64
+	StatusCode                          int
 	GetTaxonomy401ApplicationJSONObject *GetTaxonomy401ApplicationJSON
 	GetTaxonomy404ApplicationJSONObject *GetTaxonomy404ApplicationJSON
 	Taxonomy                            *shared.Taxonomy

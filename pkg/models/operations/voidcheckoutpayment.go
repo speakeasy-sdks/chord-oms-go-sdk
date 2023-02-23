@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type VoidCheckoutPaymentPathParams struct {
@@ -10,20 +10,7 @@ type VoidCheckoutPaymentPathParams struct {
 }
 
 type VoidCheckoutPaymentSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type VoidCheckoutPayment401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type VoidCheckoutPayment404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type VoidCheckoutPayment422ApplicationJSON struct {
-	Error  *string                `json:"error,omitempty"`
-	Errors map[string]interface{} `json:"errors,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type VoidCheckoutPaymentRequest struct {
@@ -31,9 +18,22 @@ type VoidCheckoutPaymentRequest struct {
 	Security   VoidCheckoutPaymentSecurity
 }
 
+type VoidCheckoutPayment422ApplicationJSON struct {
+	Error  *string                `json:"error,omitempty"`
+	Errors map[string]interface{} `json:"errors,omitempty"`
+}
+
+type VoidCheckoutPayment404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type VoidCheckoutPayment401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type VoidCheckoutPaymentResponse struct {
 	ContentType                                 string
-	StatusCode                                  int64
+	StatusCode                                  int
 	Payment                                     *shared.Payment
 	VoidCheckoutPayment401ApplicationJSONObject *VoidCheckoutPayment401ApplicationJSON
 	VoidCheckoutPayment404ApplicationJSONObject *VoidCheckoutPayment404ApplicationJSON

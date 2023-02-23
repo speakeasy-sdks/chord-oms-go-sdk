@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type GetCheckoutReturnAuthorizationPathParams struct {
@@ -10,15 +10,7 @@ type GetCheckoutReturnAuthorizationPathParams struct {
 }
 
 type GetCheckoutReturnAuthorizationSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type GetCheckoutReturnAuthorization401ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type GetCheckoutReturnAuthorization404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type GetCheckoutReturnAuthorizationRequest struct {
@@ -26,10 +18,18 @@ type GetCheckoutReturnAuthorizationRequest struct {
 	Security   GetCheckoutReturnAuthorizationSecurity
 }
 
+type GetCheckoutReturnAuthorization404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type GetCheckoutReturnAuthorization401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type GetCheckoutReturnAuthorizationResponse struct {
 	ContentType                                            string
-	StatusCode                                             int64
-	GetCheckoutReturnAuthorization200ApplicationJSONAny    *interface{}
+	StatusCode                                             int
+	GetCheckoutReturnAuthorization200ApplicationJSONObject map[string]interface{}
 	GetCheckoutReturnAuthorization401ApplicationJSONObject *GetCheckoutReturnAuthorization401ApplicationJSON
 	GetCheckoutReturnAuthorization404ApplicationJSONObject *GetCheckoutReturnAuthorization404ApplicationJSON
 }
