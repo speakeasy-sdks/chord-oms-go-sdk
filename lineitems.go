@@ -115,6 +115,29 @@ func (s *lineItems) CreateCheckoutLineItem(ctx context.Context, request operatio
 
 // CreateOrderLineItem - Create order line item
 // Creates a line item for an order.
+//
+// ### Prepaid Subscriptions
+//
+// If you want to offer your customers the ability to gift others subscriptions
+// to item(s) (or simply pre-pay for a subscription for themselves), this is
+// the only endpoint in which you are able to do so. In order to do this, you
+// must do the following.
+//
+//  1. The subscription can be either a single item or a collection of items.
+//     If the subscription is a combination of several items, you should create
+//     an overarching product that encapsulates the parts of the subscription.
+//     (Ex: The product image and name for this product will be the one used
+//     during checkout). **This product must have a price of 0.**
+//  2. Before adding to the cart, you must capture the recipient's address and information
+//     before calling this endpoint.
+//  3. When the user adds this to the cart, you must add the overarching product
+//     to the cart and fill in the `prepaid_subscription` object in `options`
+//     with the captured information along with the product information of the items
+//     in the box. All this is required is `sku` and `quantity`.
+//
+// **You are not able to edit a prepaid subscription once it is in the cart.**
+//
+// Checkout the examples on the right to see how to use this feature.
 func (s *lineItems) CreateOrderLineItem(ctx context.Context, request operations.CreateOrderLineItemRequest) (*operations.CreateOrderLineItemResponse, error) {
 	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/orders/{order_number}/line_items", request.PathParams)

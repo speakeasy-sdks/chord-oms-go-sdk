@@ -9,13 +9,14 @@ type CreateOrderLineItemPathParams struct {
 }
 
 type CreateOrderLineItemSecurity struct {
-	APIKey     *shared.SchemeAPIKey     `security:"scheme,type=http,subtype=bearer"`
-	OrderToken *shared.SchemeOrderToken `security:"scheme,type=apiKey,subtype=header"`
+	APIKey          *shared.SchemeAPIKey          `security:"scheme,type=http,subtype=bearer"`
+	OrderToken      *shared.SchemeOrderToken      `security:"scheme,type=apiKey,subtype=header"`
+	StorefrontLogin *shared.SchemeStorefrontLogin `security:"scheme,type=apiKey,subtype=header"`
 }
 
 type CreateOrderLineItemRequest struct {
 	PathParams CreateOrderLineItemPathParams
-	Request    shared.LineItemInput `request:"mediaType=application/json"`
+	Request    shared.AddLineItemInput `request:"mediaType=application/json"`
 	Security   CreateOrderLineItemSecurity
 }
 

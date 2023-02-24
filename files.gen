@@ -253,6 +253,8 @@ pkg/models/shared/lineitem.go
 pkg/models/shared/variant.go
 pkg/models/shared/optionvalue.go
 pkg/models/shared/image.go
+pkg/models/shared/prepaidsubscriptionresponse.go
+pkg/models/shared/intervalunitenum.go
 pkg/models/shared/part.go
 pkg/models/shared/giftcard.go
 pkg/models/shared/dynamicpromotion.go
@@ -270,6 +272,8 @@ pkg/models/shared/inventoryunit.go
 pkg/models/shared/inventoryunitinput.go
 pkg/models/shared/lineiteminput.go
 pkg/models/shared/subscriptionlineitem.go
+pkg/models/shared/addlineiteminput.go
+pkg/models/shared/prepaidsubscriptioninput.go
 pkg/models/shared/optiontype.go
 pkg/models/shared/optiontypeinput.go
 pkg/models/shared/optionvalueinput.go
