@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type CreateCheckoutReturnAuthorizationPathParams struct {
@@ -9,20 +9,7 @@ type CreateCheckoutReturnAuthorizationPathParams struct {
 }
 
 type CreateCheckoutReturnAuthorizationSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type CreateCheckoutReturnAuthorization401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type CreateCheckoutReturnAuthorization404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type CreateCheckoutReturnAuthorization422ApplicationJSON struct {
-	Error  *string                `json:"error,omitempty"`
-	Errors map[string]interface{} `json:"errors,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type CreateCheckoutReturnAuthorizationRequest struct {
@@ -31,9 +18,22 @@ type CreateCheckoutReturnAuthorizationRequest struct {
 	Security   CreateCheckoutReturnAuthorizationSecurity
 }
 
+type CreateCheckoutReturnAuthorization422ApplicationJSON struct {
+	Error  *string                `json:"error,omitempty"`
+	Errors map[string]interface{} `json:"errors,omitempty"`
+}
+
+type CreateCheckoutReturnAuthorization404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type CreateCheckoutReturnAuthorization401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type CreateCheckoutReturnAuthorizationResponse struct {
 	ContentType                                               string
-	StatusCode                                                int64
+	StatusCode                                                int
 	CreateCheckoutReturnAuthorization401ApplicationJSONObject *CreateCheckoutReturnAuthorization401ApplicationJSON
 	CreateCheckoutReturnAuthorization404ApplicationJSONObject *CreateCheckoutReturnAuthorization404ApplicationJSON
 	CreateCheckoutReturnAuthorization422ApplicationJSONObject *CreateCheckoutReturnAuthorization422ApplicationJSON

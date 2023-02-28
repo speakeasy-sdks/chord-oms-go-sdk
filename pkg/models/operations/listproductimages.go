@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type ListProductImagesPathParams struct {
@@ -9,19 +9,7 @@ type ListProductImagesPathParams struct {
 }
 
 type ListProductImagesSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type ListProductImages200ApplicationJSON struct {
-	Images []shared.Image `json:"images,omitempty"`
-}
-
-type ListProductImages401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type ListProductImages404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type ListProductImagesRequest struct {
@@ -29,9 +17,21 @@ type ListProductImagesRequest struct {
 	Security   ListProductImagesSecurity
 }
 
+type ListProductImages404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type ListProductImages401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type ListProductImages200ApplicationJSON struct {
+	Images []shared.Image `json:"images,omitempty"`
+}
+
 type ListProductImagesResponse struct {
 	ContentType                               string
-	StatusCode                                int64
+	StatusCode                                int
 	ListProductImages200ApplicationJSONObject *ListProductImages200ApplicationJSON
 	ListProductImages401ApplicationJSONObject *ListProductImages401ApplicationJSON
 	ListProductImages404ApplicationJSONObject *ListProductImages404ApplicationJSON

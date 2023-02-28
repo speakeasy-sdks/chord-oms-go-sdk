@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type ListReturnAuthorizationRefundsPathParams struct {
@@ -15,7 +15,21 @@ type ListReturnAuthorizationRefundsQueryParams struct {
 }
 
 type ListReturnAuthorizationRefundsSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
+}
+
+type ListReturnAuthorizationRefundsRequest struct {
+	PathParams  ListReturnAuthorizationRefundsPathParams
+	QueryParams ListReturnAuthorizationRefundsQueryParams
+	Security    ListReturnAuthorizationRefundsSecurity
+}
+
+type ListReturnAuthorizationRefunds404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type ListReturnAuthorizationRefunds401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
 }
 
 type ListReturnAuthorizationRefundsPaginationData struct {
@@ -27,24 +41,10 @@ type ListReturnAuthorizationRefundsPaginationData struct {
 	TotalCount  *int64          `json:"total_count,omitempty"`
 }
 
-type ListReturnAuthorizationRefunds401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type ListReturnAuthorizationRefunds404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type ListReturnAuthorizationRefundsRequest struct {
-	PathParams  ListReturnAuthorizationRefundsPathParams
-	QueryParams ListReturnAuthorizationRefundsQueryParams
-	Security    ListReturnAuthorizationRefundsSecurity
-}
-
 type ListReturnAuthorizationRefundsResponse struct {
 	ContentType                                            string
 	PaginationData                                         *ListReturnAuthorizationRefundsPaginationData
-	StatusCode                                             int64
+	StatusCode                                             int
 	ListReturnAuthorizationRefunds401ApplicationJSONObject *ListReturnAuthorizationRefunds401ApplicationJSON
 	ListReturnAuthorizationRefunds404ApplicationJSONObject *ListReturnAuthorizationRefunds404ApplicationJSON
 }

@@ -1,13 +1,14 @@
 package sdk
 
 import (
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/utils"
 	"net/http"
-
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/utils"
+	"time"
 )
 
 var ServerList = []string{
 	"https://plant-staging.assembly-api.com/api",
+	"http://localhost:3000/api",
 }
 
 type HTTPClient interface {
@@ -15,44 +16,45 @@ type HTTPClient interface {
 }
 
 type SDK struct {
-	AddressBooks         *AddressBooks
-	Addresses            *Addresses
-	Checkouts            *Checkouts
-	Classifications      *Classifications
-	Configuration        *Configuration
-	Countries            *Countries
-	CouponCodes          *CouponCodes
-	CreditCards          *CreditCards
-	GiftCards            *GiftCards
-	Images               *Images
-	InventoryUnits       *InventoryUnits
-	LineItems            *LineItems
-	OptionTypes          *OptionTypes
-	OptionValues         *OptionValues
-	Orders               *Orders
-	Payments             *Payments
-	ProductProperties    *ProductProperties
-	Products             *Products
-	Promotions           *Promotions
-	Properties           *Properties
-	QuickCheckout        *QuickCheckout
-	Refunds              *Refunds
-	ReturnAuthorizations *ReturnAuthorizations
-	ReturnItems          *ReturnItems
-	Shipments            *Shipments
-	States               *States
-	StockItems           *StockItems
-	StockLocations       *StockLocations
-	StockMovements       *StockMovements
-	StoreCreditEvents    *StoreCreditEvents
-	Stores               *Stores
-	Subscriptions        *Subscriptions
-	Taxonomies           *Taxonomies
-	Taxons               *Taxons
-	Users                *Users
-	Variants             *Variants
-	Zones                *Zones
+	AddressBooks         *addressBooks
+	Addresses            *addresses
+	Checkouts            *checkouts
+	Classifications      *classifications
+	Configuration        *configuration
+	Countries            *countries
+	CouponCodes          *couponCodes
+	CreditCards          *creditCards
+	GiftCards            *giftCards
+	Images               *images
+	InventoryUnits       *inventoryUnits
+	LineItems            *lineItems
+	OptionTypes          *optionTypes
+	OptionValues         *optionValues
+	Orders               *orders
+	Payments             *payments
+	ProductProperties    *productProperties
+	Products             *products
+	Promotions           *promotions
+	Properties           *properties
+	QuickCheckout        *quickCheckout
+	Refunds              *refunds
+	ReturnAuthorizations *returnAuthorizations
+	ReturnItems          *returnItems
+	Shipments            *shipments
+	States               *states
+	StockItems           *stockItems
+	StockLocations       *stockLocations
+	StockMovements       *stockMovements
+	StoreCreditEvents    *storeCreditEvents
+	Stores               *stores
+	Subscriptions        *subscriptions
+	Taxonomies           *taxonomies
+	Taxons               *taxons
+	Users                *users
+	Variants             *variants
+	Zones                *zones
 
+	// Non-idiomatic field names below are to namespace fields from the fields names above to avoid name conflicts
 	_defaultClient  HTTPClient
 	_securityClient HTTPClient
 
@@ -83,15 +85,16 @@ func WithClient(client HTTPClient) SDKOption {
 func New(opts ...SDKOption) *SDK {
 	sdk := &SDK{
 		_language:   "go",
-		_sdkVersion: "1.1.0",
-		_genVersion: "0.21.0",
+		_sdkVersion: "2.1.2",
+		_genVersion: "1.5.4",
 	}
 	for _, opt := range opts {
 		opt(sdk)
 	}
 
+	// Use WithClient to override the default client if you would like to customize the timeout
 	if sdk._defaultClient == nil {
-		sdk._defaultClient = http.DefaultClient
+		sdk._defaultClient = &http.Client{Timeout: 60 * time.Second}
 	}
 	if sdk._securityClient == nil {
 
@@ -103,7 +106,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._serverURL = ServerList[0]
 	}
 
-	sdk.AddressBooks = NewAddressBooks(
+	sdk.AddressBooks = newAddressBooks(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -112,7 +115,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.Addresses = NewAddresses(
+	sdk.Addresses = newAddresses(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -121,7 +124,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.Checkouts = NewCheckouts(
+	sdk.Checkouts = newCheckouts(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -130,7 +133,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.Classifications = NewClassifications(
+	sdk.Classifications = newClassifications(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -139,7 +142,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.Configuration = NewConfiguration(
+	sdk.Configuration = newConfiguration(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -148,7 +151,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.Countries = NewCountries(
+	sdk.Countries = newCountries(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -157,7 +160,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.CouponCodes = NewCouponCodes(
+	sdk.CouponCodes = newCouponCodes(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -166,7 +169,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.CreditCards = NewCreditCards(
+	sdk.CreditCards = newCreditCards(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -175,7 +178,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.GiftCards = NewGiftCards(
+	sdk.GiftCards = newGiftCards(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -184,7 +187,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.Images = NewImages(
+	sdk.Images = newImages(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -193,7 +196,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.InventoryUnits = NewInventoryUnits(
+	sdk.InventoryUnits = newInventoryUnits(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -202,7 +205,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.LineItems = NewLineItems(
+	sdk.LineItems = newLineItems(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -211,7 +214,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.OptionTypes = NewOptionTypes(
+	sdk.OptionTypes = newOptionTypes(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -220,7 +223,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.OptionValues = NewOptionValues(
+	sdk.OptionValues = newOptionValues(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -229,7 +232,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.Orders = NewOrders(
+	sdk.Orders = newOrders(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -238,7 +241,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.Payments = NewPayments(
+	sdk.Payments = newPayments(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -247,7 +250,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.ProductProperties = NewProductProperties(
+	sdk.ProductProperties = newProductProperties(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -256,7 +259,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.Products = NewProducts(
+	sdk.Products = newProducts(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -265,7 +268,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.Promotions = NewPromotions(
+	sdk.Promotions = newPromotions(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -274,7 +277,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.Properties = NewProperties(
+	sdk.Properties = newProperties(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -283,7 +286,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.QuickCheckout = NewQuickCheckout(
+	sdk.QuickCheckout = newQuickCheckout(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -292,7 +295,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.Refunds = NewRefunds(
+	sdk.Refunds = newRefunds(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -301,7 +304,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.ReturnAuthorizations = NewReturnAuthorizations(
+	sdk.ReturnAuthorizations = newReturnAuthorizations(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -310,7 +313,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.ReturnItems = NewReturnItems(
+	sdk.ReturnItems = newReturnItems(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -319,7 +322,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.Shipments = NewShipments(
+	sdk.Shipments = newShipments(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -328,7 +331,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.States = NewStates(
+	sdk.States = newStates(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -337,7 +340,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.StockItems = NewStockItems(
+	sdk.StockItems = newStockItems(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -346,7 +349,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.StockLocations = NewStockLocations(
+	sdk.StockLocations = newStockLocations(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -355,7 +358,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.StockMovements = NewStockMovements(
+	sdk.StockMovements = newStockMovements(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -364,7 +367,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.StoreCreditEvents = NewStoreCreditEvents(
+	sdk.StoreCreditEvents = newStoreCreditEvents(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -373,7 +376,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.Stores = NewStores(
+	sdk.Stores = newStores(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -382,7 +385,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.Subscriptions = NewSubscriptions(
+	sdk.Subscriptions = newSubscriptions(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -391,7 +394,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.Taxonomies = NewTaxonomies(
+	sdk.Taxonomies = newTaxonomies(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -400,7 +403,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.Taxons = NewTaxons(
+	sdk.Taxons = newTaxons(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -409,7 +412,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.Users = NewUsers(
+	sdk.Users = newUsers(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -418,7 +421,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.Variants = NewVariants(
+	sdk.Variants = newVariants(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,
@@ -427,7 +430,7 @@ func New(opts ...SDKOption) *SDK {
 		sdk._genVersion,
 	)
 
-	sdk.Zones = NewZones(
+	sdk.Zones = newZones(
 		sdk._defaultClient,
 		sdk._securityClient,
 		sdk._serverURL,

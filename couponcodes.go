@@ -3,29 +3,29 @@ package sdk
 import (
 	"context"
 	"fmt"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/operations"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/utils"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/operations"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/utils"
 	"net/http"
 )
 
-type CouponCodes struct {
-	_defaultClient  HTTPClient
-	_securityClient HTTPClient
-	_serverURL      string
-	_language       string
-	_sdkVersion     string
-	_genVersion     string
+type couponCodes struct {
+	defaultClient  HTTPClient
+	securityClient HTTPClient
+	serverURL      string
+	language       string
+	sdkVersion     string
+	genVersion     string
 }
 
-func NewCouponCodes(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *CouponCodes {
-	return &CouponCodes{
-		_defaultClient:  defaultClient,
-		_securityClient: securityClient,
-		_serverURL:      serverURL,
-		_language:       language,
-		_sdkVersion:     sdkVersion,
-		_genVersion:     genVersion,
+func newCouponCodes(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *couponCodes {
+	return &couponCodes{
+		defaultClient:  defaultClient,
+		securityClient: securityClient,
+		serverURL:      serverURL,
+		language:       language,
+		sdkVersion:     sdkVersion,
+		genVersion:     genVersion,
 	}
 }
 
@@ -33,8 +33,8 @@ func NewCouponCodes(defaultClient, securityClient HTTPClient, serverURL, languag
 // **Deprecated:** This method is deprecated. Please use `Spree::Api::CouponCodesController#create` endpoint instead.
 //
 // Applies a coupon code on the order.
-func (s *CouponCodes) ApplyOrderCouponCode(ctx context.Context, request operations.ApplyOrderCouponCodeRequest) (*operations.ApplyOrderCouponCodeResponse, error) {
-	baseURL := s._serverURL
+func (s *couponCodes) ApplyOrderCouponCode(ctx context.Context, request operations.ApplyOrderCouponCodeRequest) (*operations.ApplyOrderCouponCodeResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/orders/{order_number}/apply_coupon_code", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -52,18 +52,21 @@ func (s *CouponCodes) ApplyOrderCouponCode(ctx context.Context, request operatio
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.ApplyOrderCouponCodeResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -114,8 +117,8 @@ func (s *CouponCodes) ApplyOrderCouponCode(ctx context.Context, request operatio
 
 // CreateOrderCouponCode - Create order coupon code
 // Creates a coupon code for an order.
-func (s *CouponCodes) CreateOrderCouponCode(ctx context.Context, request operations.CreateOrderCouponCodeRequest) (*operations.CreateOrderCouponCodeResponse, error) {
-	baseURL := s._serverURL
+func (s *couponCodes) CreateOrderCouponCode(ctx context.Context, request operations.CreateOrderCouponCodeRequest) (*operations.CreateOrderCouponCodeResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/orders/{order_number}/coupon_codes", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -133,18 +136,21 @@ func (s *CouponCodes) CreateOrderCouponCode(ctx context.Context, request operati
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.CreateOrderCouponCodeResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -195,8 +201,8 @@ func (s *CouponCodes) CreateOrderCouponCode(ctx context.Context, request operati
 
 // DeleteOrderCouponCode - Delete order coupon code
 // Deletes an order's coupon code.
-func (s *CouponCodes) DeleteOrderCouponCode(ctx context.Context, request operations.DeleteOrderCouponCodeRequest) (*operations.DeleteOrderCouponCodeResponse, error) {
-	baseURL := s._serverURL
+func (s *couponCodes) DeleteOrderCouponCode(ctx context.Context, request operations.DeleteOrderCouponCodeRequest) (*operations.DeleteOrderCouponCodeResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/orders/{order_number}/coupon_codes/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "DELETE", url, nil)
@@ -204,18 +210,21 @@ func (s *CouponCodes) DeleteOrderCouponCode(ctx context.Context, request operati
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.DeleteOrderCouponCodeResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {

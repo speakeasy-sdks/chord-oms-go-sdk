@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type DeleteCheckoutReturnAuthorizationPathParams struct {
@@ -10,19 +10,7 @@ type DeleteCheckoutReturnAuthorizationPathParams struct {
 }
 
 type DeleteCheckoutReturnAuthorizationSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type DeleteCheckoutReturnAuthorization401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type DeleteCheckoutReturnAuthorization404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type DeleteCheckoutReturnAuthorization422ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type DeleteCheckoutReturnAuthorizationRequest struct {
@@ -30,9 +18,21 @@ type DeleteCheckoutReturnAuthorizationRequest struct {
 	Security   DeleteCheckoutReturnAuthorizationSecurity
 }
 
+type DeleteCheckoutReturnAuthorization422ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type DeleteCheckoutReturnAuthorization404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type DeleteCheckoutReturnAuthorization401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type DeleteCheckoutReturnAuthorizationResponse struct {
 	ContentType                                               string
-	StatusCode                                                int64
+	StatusCode                                                int
 	DeleteCheckoutReturnAuthorization401ApplicationJSONObject *DeleteCheckoutReturnAuthorization401ApplicationJSON
 	DeleteCheckoutReturnAuthorization404ApplicationJSONObject *DeleteCheckoutReturnAuthorization404ApplicationJSON
 	DeleteCheckoutReturnAuthorization422ApplicationJSONObject *DeleteCheckoutReturnAuthorization422ApplicationJSON

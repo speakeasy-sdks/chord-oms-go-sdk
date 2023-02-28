@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type CreateVariantImagePathParams struct {
@@ -9,20 +9,7 @@ type CreateVariantImagePathParams struct {
 }
 
 type CreateVariantImageSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type CreateVariantImage401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type CreateVariantImage404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type CreateVariantImage422ApplicationJSON struct {
-	Error  *string                `json:"error,omitempty"`
-	Errors map[string]interface{} `json:"errors,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type CreateVariantImageRequest struct {
@@ -31,9 +18,22 @@ type CreateVariantImageRequest struct {
 	Security   CreateVariantImageSecurity
 }
 
+type CreateVariantImage422ApplicationJSON struct {
+	Error  *string                `json:"error,omitempty"`
+	Errors map[string]interface{} `json:"errors,omitempty"`
+}
+
+type CreateVariantImage404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type CreateVariantImage401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type CreateVariantImageResponse struct {
 	ContentType                                string
-	StatusCode                                 int64
+	StatusCode                                 int
 	CreateVariantImage401ApplicationJSONObject *CreateVariantImage401ApplicationJSON
 	CreateVariantImage404ApplicationJSONObject *CreateVariantImage404ApplicationJSON
 	CreateVariantImage422ApplicationJSONObject *CreateVariantImage422ApplicationJSON

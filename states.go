@@ -3,37 +3,37 @@ package sdk
 import (
 	"context"
 	"fmt"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/operations"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/utils"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/operations"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/utils"
 	"net/http"
 	"strings"
 )
 
-type States struct {
-	_defaultClient  HTTPClient
-	_securityClient HTTPClient
-	_serverURL      string
-	_language       string
-	_sdkVersion     string
-	_genVersion     string
+type states struct {
+	defaultClient  HTTPClient
+	securityClient HTTPClient
+	serverURL      string
+	language       string
+	sdkVersion     string
+	genVersion     string
 }
 
-func NewStates(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *States {
-	return &States{
-		_defaultClient:  defaultClient,
-		_securityClient: securityClient,
-		_serverURL:      serverURL,
-		_language:       language,
-		_sdkVersion:     sdkVersion,
-		_genVersion:     genVersion,
+func newStates(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *states {
+	return &states{
+		defaultClient:  defaultClient,
+		securityClient: securityClient,
+		serverURL:      serverURL,
+		language:       language,
+		sdkVersion:     sdkVersion,
+		genVersion:     genVersion,
 	}
 }
 
 // GetCountryState - Get country state
 // Retrieves a country's state.
-func (s *States) GetCountryState(ctx context.Context, request operations.GetCountryStateRequest) (*operations.GetCountryStateResponse, error) {
-	baseURL := s._serverURL
+func (s *states) GetCountryState(ctx context.Context, request operations.GetCountryStateRequest) (*operations.GetCountryStateResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/countries/{country_id}/states/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -41,18 +41,21 @@ func (s *States) GetCountryState(ctx context.Context, request operations.GetCoun
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := s._defaultClient
+	client := s.defaultClient
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.GetCountryStateResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -93,8 +96,8 @@ func (s *States) GetCountryState(ctx context.Context, request operations.GetCoun
 
 // GetState - Get state
 // Retrieves a state.
-func (s *States) GetState(ctx context.Context, request operations.GetStateRequest) (*operations.GetStateResponse, error) {
-	baseURL := s._serverURL
+func (s *states) GetState(ctx context.Context, request operations.GetStateRequest) (*operations.GetStateResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/states/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -102,18 +105,21 @@ func (s *States) GetState(ctx context.Context, request operations.GetStateReques
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := s._defaultClient
+	client := s.defaultClient
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.GetStateResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -154,8 +160,8 @@ func (s *States) GetState(ctx context.Context, request operations.GetStateReques
 
 // ListCountryStates - List country states
 // Retrieves a country's states.
-func (s *States) ListCountryStates(ctx context.Context, request operations.ListCountryStatesRequest) (*operations.ListCountryStatesResponse, error) {
-	baseURL := s._serverURL
+func (s *states) ListCountryStates(ctx context.Context, request operations.ListCountryStatesRequest) (*operations.ListCountryStatesResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/countries/{country_id}/states", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -163,18 +169,21 @@ func (s *States) ListCountryStates(ctx context.Context, request operations.ListC
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := s._defaultClient
+	client := s.defaultClient
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.ListCountryStatesResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -215,8 +224,8 @@ func (s *States) ListCountryStates(ctx context.Context, request operations.ListC
 
 // ListStates - List states
 // Lists all states in the system.
-func (s *States) ListStates(ctx context.Context) (*operations.ListStatesResponse, error) {
-	baseURL := s._serverURL
+func (s *states) ListStates(ctx context.Context) (*operations.ListStatesResponse, error) {
+	baseURL := s.serverURL
 	url := strings.TrimSuffix(baseURL, "/") + "/states"
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -224,18 +233,21 @@ func (s *States) ListStates(ctx context.Context) (*operations.ListStatesResponse
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := s._defaultClient
+	client := s.defaultClient
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.ListStatesResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {

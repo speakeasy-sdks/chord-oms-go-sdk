@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type ListCurrentUserOrdersQueryParams struct {
@@ -11,7 +11,22 @@ type ListCurrentUserOrdersQueryParams struct {
 }
 
 type ListCurrentUserOrdersSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
+	APIKey          *shared.SchemeAPIKey          `security:"scheme,type=http,subtype=bearer"`
+	StorefrontLogin *shared.SchemeStorefrontLogin `security:"scheme,type=apiKey,subtype=header"`
+}
+
+type ListCurrentUserOrdersRequest struct {
+	QueryParams ListCurrentUserOrdersQueryParams
+	Security    ListCurrentUserOrdersSecurity
+}
+
+type ListCurrentUserOrders500ApplicationJSON struct {
+	Error  *string  `json:"error,omitempty"`
+	Status *float64 `json:"status,omitempty"`
+}
+
+type ListCurrentUserOrders401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
 }
 
 type ListCurrentUserOrdersPaginationData struct {
@@ -23,18 +38,10 @@ type ListCurrentUserOrdersPaginationData struct {
 	TotalCount  *int64              `json:"total_count,omitempty"`
 }
 
-type ListCurrentUserOrders401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type ListCurrentUserOrdersRequest struct {
-	QueryParams ListCurrentUserOrdersQueryParams
-	Security    ListCurrentUserOrdersSecurity
-}
-
 type ListCurrentUserOrdersResponse struct {
 	ContentType                                   string
 	PaginationData                                *ListCurrentUserOrdersPaginationData
-	StatusCode                                    int64
+	StatusCode                                    int
 	ListCurrentUserOrders401ApplicationJSONObject *ListCurrentUserOrders401ApplicationJSON
+	ListCurrentUserOrders500ApplicationJSONObject *ListCurrentUserOrders500ApplicationJSON
 }

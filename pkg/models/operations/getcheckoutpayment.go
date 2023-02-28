@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type GetCheckoutPaymentPathParams struct {
@@ -10,16 +10,8 @@ type GetCheckoutPaymentPathParams struct {
 }
 
 type GetCheckoutPaymentSecurity struct {
-	APIKey     *shared.SchemeAPIKey     `security:"scheme,type=apiKey,subtype=header"`
+	APIKey     *shared.SchemeAPIKey     `security:"scheme,type=http,subtype=bearer"`
 	OrderToken *shared.SchemeOrderToken `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type GetCheckoutPayment401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type GetCheckoutPayment404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
 }
 
 type GetCheckoutPaymentRequest struct {
@@ -27,9 +19,17 @@ type GetCheckoutPaymentRequest struct {
 	Security   GetCheckoutPaymentSecurity
 }
 
+type GetCheckoutPayment404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type GetCheckoutPayment401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type GetCheckoutPaymentResponse struct {
 	ContentType                                string
-	StatusCode                                 int64
+	StatusCode                                 int
 	GetCheckoutPayment401ApplicationJSONObject *GetCheckoutPayment401ApplicationJSON
 	GetCheckoutPayment404ApplicationJSONObject *GetCheckoutPayment404ApplicationJSON
 	Payment                                    *shared.Payment

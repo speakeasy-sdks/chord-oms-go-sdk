@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type CreditCheckoutPaymentPathParams struct {
@@ -10,20 +10,7 @@ type CreditCheckoutPaymentPathParams struct {
 }
 
 type CreditCheckoutPaymentSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type CreditCheckoutPayment401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type CreditCheckoutPayment404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type CreditCheckoutPayment422ApplicationJSON struct {
-	Error  *string                `json:"error,omitempty"`
-	Errors map[string]interface{} `json:"errors,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type CreditCheckoutPaymentRequest struct {
@@ -31,9 +18,22 @@ type CreditCheckoutPaymentRequest struct {
 	Security   CreditCheckoutPaymentSecurity
 }
 
+type CreditCheckoutPayment422ApplicationJSON struct {
+	Error  *string                `json:"error,omitempty"`
+	Errors map[string]interface{} `json:"errors,omitempty"`
+}
+
+type CreditCheckoutPayment404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type CreditCheckoutPayment401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type CreditCheckoutPaymentResponse struct {
 	ContentType                                   string
-	StatusCode                                    int64
+	StatusCode                                    int
 	CreditCheckoutPayment401ApplicationJSONObject *CreditCheckoutPayment401ApplicationJSON
 	CreditCheckoutPayment404ApplicationJSONObject *CreditCheckoutPayment404ApplicationJSON
 	CreditCheckoutPayment422ApplicationJSONObject *CreditCheckoutPayment422ApplicationJSON

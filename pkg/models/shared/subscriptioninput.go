@@ -1,5 +1,9 @@
 package shared
 
+import (
+	"time"
+)
+
 type SubscriptionInputPaymentSourceAttributes struct {
 	CcType                  *string `json:"cc_type,omitempty"`
 	GatewayPaymentProfileID *string `json:"gateway_payment_profile_id,omitempty"`
@@ -12,11 +16,11 @@ type SubscriptionInputPaymentSourceAttributes struct {
 }
 
 type SubscriptionInput struct {
-	ActionableDate          *string                                   `json:"actionable_date,omitempty"`
+	ActionableDate          *time.Time                                `json:"actionable_date,omitempty"`
 	BillAddressAttributes   *AddressInput                             `json:"bill_address_attributes,omitempty"`
 	EndDate                 *string                                   `json:"end_date,omitempty"`
 	IntervalLength          *float64                                  `json:"interval_length,omitempty"`
-	IntervalUnits           *string                                   `json:"interval_units,omitempty"`
+	IntervalUnits           *IntervalUnitEnum                         `json:"interval_units,omitempty"`
 	LineItemsAttributes     []SubscriptionLineItem                    `json:"line_items_attributes,omitempty"`
 	PaymentSourceAttributes *SubscriptionInputPaymentSourceAttributes `json:"payment_source_attributes,omitempty"`
 	ShipAddressAttributes   *AddressInput                             `json:"ship_address_attributes,omitempty"`

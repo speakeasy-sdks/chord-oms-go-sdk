@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type ListTaxonomiesQueryParams struct {
@@ -10,7 +10,16 @@ type ListTaxonomiesQueryParams struct {
 }
 
 type ListTaxonomiesSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
+}
+
+type ListTaxonomiesRequest struct {
+	QueryParams ListTaxonomiesQueryParams
+	Security    ListTaxonomiesSecurity
+}
+
+type ListTaxonomies401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
 }
 
 type ListTaxonomiesPaginationData struct {
@@ -22,18 +31,9 @@ type ListTaxonomiesPaginationData struct {
 	TotalCount  *int64            `json:"total_count,omitempty"`
 }
 
-type ListTaxonomies401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type ListTaxonomiesRequest struct {
-	QueryParams ListTaxonomiesQueryParams
-	Security    ListTaxonomiesSecurity
-}
-
 type ListTaxonomiesResponse struct {
 	ContentType                            string
 	PaginationData                         *ListTaxonomiesPaginationData
-	StatusCode                             int64
+	StatusCode                             int
 	ListTaxonomies401ApplicationJSONObject *ListTaxonomies401ApplicationJSON
 }

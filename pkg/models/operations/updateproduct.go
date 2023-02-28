@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type UpdateProductPathParams struct {
@@ -9,20 +9,7 @@ type UpdateProductPathParams struct {
 }
 
 type UpdateProductSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type UpdateProduct401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type UpdateProduct404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type UpdateProduct422ApplicationJSON struct {
-	Error  *string                `json:"error,omitempty"`
-	Errors map[string]interface{} `json:"errors,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type UpdateProductRequest struct {
@@ -31,9 +18,22 @@ type UpdateProductRequest struct {
 	Security   UpdateProductSecurity
 }
 
+type UpdateProduct422ApplicationJSON struct {
+	Error  *string                `json:"error,omitempty"`
+	Errors map[string]interface{} `json:"errors,omitempty"`
+}
+
+type UpdateProduct404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type UpdateProduct401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type UpdateProductResponse struct {
 	ContentType                           string
-	StatusCode                            int64
+	StatusCode                            int
 	Product                               *shared.Product
 	UpdateProduct401ApplicationJSONObject *UpdateProduct401ApplicationJSON
 	UpdateProduct404ApplicationJSONObject *UpdateProduct404ApplicationJSON

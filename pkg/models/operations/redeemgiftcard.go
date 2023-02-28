@@ -1,20 +1,20 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
-
-type RedeemGiftCard404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
 
 type RedeemGiftCardRequest struct {
 	Request shared.RedeemInput `request:"mediaType=application/json"`
 }
 
+type RedeemGiftCard404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type RedeemGiftCardResponse struct {
 	ContentType                            string
-	StatusCode                             int64
+	StatusCode                             int
 	GiftCard                               *shared.GiftCard
 	RedeemGiftCard404ApplicationJSONObject *RedeemGiftCard404ApplicationJSON
 }

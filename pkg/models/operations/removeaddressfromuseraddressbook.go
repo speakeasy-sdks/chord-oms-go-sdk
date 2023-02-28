@@ -1,11 +1,11 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type RemoveAddressFromUserAddressBookPathParams struct {
-	UserID string `pathParam:"style=simple,explode=false,name=user_id"`
+	UserID int64 `pathParam:"style=simple,explode=false,name=user_id"`
 }
 
 type RemoveAddressFromUserAddressBookQueryParams struct {
@@ -13,19 +13,7 @@ type RemoveAddressFromUserAddressBookQueryParams struct {
 }
 
 type RemoveAddressFromUserAddressBookSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type RemoveAddressFromUserAddressBook401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type RemoveAddressFromUserAddressBook404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type RemoveAddressFromUserAddressBook422ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type RemoveAddressFromUserAddressBookRequest struct {
@@ -34,10 +22,28 @@ type RemoveAddressFromUserAddressBookRequest struct {
 	Security    RemoveAddressFromUserAddressBookSecurity
 }
 
+type RemoveAddressFromUserAddressBook500ApplicationJSON struct {
+	Error  *string  `json:"error,omitempty"`
+	Status *float64 `json:"status,omitempty"`
+}
+
+type RemoveAddressFromUserAddressBook422ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type RemoveAddressFromUserAddressBook404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type RemoveAddressFromUserAddressBook401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type RemoveAddressFromUserAddressBookResponse struct {
 	ContentType                                              string
-	StatusCode                                               int64
+	StatusCode                                               int
 	RemoveAddressFromUserAddressBook401ApplicationJSONObject *RemoveAddressFromUserAddressBook401ApplicationJSON
 	RemoveAddressFromUserAddressBook404ApplicationJSONObject *RemoveAddressFromUserAddressBook404ApplicationJSON
 	RemoveAddressFromUserAddressBook422ApplicationJSONObject *RemoveAddressFromUserAddressBook422ApplicationJSON
+	RemoveAddressFromUserAddressBook500ApplicationJSONObject *RemoveAddressFromUserAddressBook500ApplicationJSON
 }

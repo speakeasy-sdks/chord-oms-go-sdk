@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type UpdateShipmentPathParams struct {
@@ -9,20 +9,7 @@ type UpdateShipmentPathParams struct {
 }
 
 type UpdateShipmentSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type UpdateShipment401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type UpdateShipment404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type UpdateShipment422ApplicationJSON struct {
-	Error  *string                `json:"error,omitempty"`
-	Errors map[string]interface{} `json:"errors,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type UpdateShipmentRequest struct {
@@ -31,9 +18,22 @@ type UpdateShipmentRequest struct {
 	Security   UpdateShipmentSecurity
 }
 
+type UpdateShipment422ApplicationJSON struct {
+	Error  *string                `json:"error,omitempty"`
+	Errors map[string]interface{} `json:"errors,omitempty"`
+}
+
+type UpdateShipment404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type UpdateShipment401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type UpdateShipmentResponse struct {
 	ContentType                            string
-	StatusCode                             int64
+	StatusCode                             int
 	Shipment                               *shared.Shipment
 	UpdateShipment401ApplicationJSONObject *UpdateShipment401ApplicationJSON
 	UpdateShipment404ApplicationJSONObject *UpdateShipment404ApplicationJSON

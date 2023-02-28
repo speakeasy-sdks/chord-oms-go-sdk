@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type EmptyOrderPathParams struct {
@@ -9,21 +9,8 @@ type EmptyOrderPathParams struct {
 }
 
 type EmptyOrderSecurity struct {
-	APIKey     *shared.SchemeAPIKey     `security:"scheme,type=apiKey,subtype=header"`
+	APIKey     *shared.SchemeAPIKey     `security:"scheme,type=http,subtype=bearer"`
 	OrderToken *shared.SchemeOrderToken `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type EmptyOrder401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type EmptyOrder404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type EmptyOrder422ApplicationJSON struct {
-	Error  *string                `json:"error,omitempty"`
-	Errors map[string]interface{} `json:"errors,omitempty"`
 }
 
 type EmptyOrderRequest struct {
@@ -31,9 +18,22 @@ type EmptyOrderRequest struct {
 	Security   EmptyOrderSecurity
 }
 
+type EmptyOrder422ApplicationJSON struct {
+	Error  *string                `json:"error,omitempty"`
+	Errors map[string]interface{} `json:"errors,omitempty"`
+}
+
+type EmptyOrder404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type EmptyOrder401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type EmptyOrderResponse struct {
 	ContentType                        string
-	StatusCode                         int64
+	StatusCode                         int
 	EmptyOrder401ApplicationJSONObject *EmptyOrder401ApplicationJSON
 	EmptyOrder404ApplicationJSONObject *EmptyOrder404ApplicationJSON
 	EmptyOrder422ApplicationJSONObject *EmptyOrder422ApplicationJSON

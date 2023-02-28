@@ -3,37 +3,37 @@ package sdk
 import (
 	"context"
 	"fmt"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/operations"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/utils"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/operations"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/utils"
 	"net/http"
 	"strings"
 )
 
-type Properties struct {
-	_defaultClient  HTTPClient
-	_securityClient HTTPClient
-	_serverURL      string
-	_language       string
-	_sdkVersion     string
-	_genVersion     string
+type properties struct {
+	defaultClient  HTTPClient
+	securityClient HTTPClient
+	serverURL      string
+	language       string
+	sdkVersion     string
+	genVersion     string
 }
 
-func NewProperties(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *Properties {
-	return &Properties{
-		_defaultClient:  defaultClient,
-		_securityClient: securityClient,
-		_serverURL:      serverURL,
-		_language:       language,
-		_sdkVersion:     sdkVersion,
-		_genVersion:     genVersion,
+func newProperties(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *properties {
+	return &properties{
+		defaultClient:  defaultClient,
+		securityClient: securityClient,
+		serverURL:      serverURL,
+		language:       language,
+		sdkVersion:     sdkVersion,
+		genVersion:     genVersion,
 	}
 }
 
 // CreateProperty - Create property
 // Creates a property.
-func (s *Properties) CreateProperty(ctx context.Context, request operations.CreatePropertyRequest) (*operations.CreatePropertyResponse, error) {
-	baseURL := s._serverURL
+func (s *properties) CreateProperty(ctx context.Context, request operations.CreatePropertyRequest) (*operations.CreatePropertyResponse, error) {
+	baseURL := s.serverURL
 	url := strings.TrimSuffix(baseURL, "/") + "/properties"
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -51,18 +51,21 @@ func (s *Properties) CreateProperty(ctx context.Context, request operations.Crea
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.CreatePropertyResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -103,8 +106,8 @@ func (s *Properties) CreateProperty(ctx context.Context, request operations.Crea
 
 // DeleteProperty - Delete property
 // Deletes a property.
-func (s *Properties) DeleteProperty(ctx context.Context, request operations.DeletePropertyRequest) (*operations.DeletePropertyResponse, error) {
-	baseURL := s._serverURL
+func (s *properties) DeleteProperty(ctx context.Context, request operations.DeletePropertyRequest) (*operations.DeletePropertyResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/properties/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "DELETE", url, nil)
@@ -112,18 +115,21 @@ func (s *Properties) DeleteProperty(ctx context.Context, request operations.Dele
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.DeletePropertyResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -165,8 +171,8 @@ func (s *Properties) DeleteProperty(ctx context.Context, request operations.Dele
 
 // GetProperty - Get property
 // Retrieves a property.
-func (s *Properties) GetProperty(ctx context.Context, request operations.GetPropertyRequest) (*operations.GetPropertyResponse, error) {
-	baseURL := s._serverURL
+func (s *properties) GetProperty(ctx context.Context, request operations.GetPropertyRequest) (*operations.GetPropertyResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/properties/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -174,18 +180,21 @@ func (s *Properties) GetProperty(ctx context.Context, request operations.GetProp
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.GetPropertyResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -226,8 +235,8 @@ func (s *Properties) GetProperty(ctx context.Context, request operations.GetProp
 
 // ListProperties - List properties
 // Lists the defined properties.
-func (s *Properties) ListProperties(ctx context.Context, request operations.ListPropertiesRequest) (*operations.ListPropertiesResponse, error) {
-	baseURL := s._serverURL
+func (s *properties) ListProperties(ctx context.Context, request operations.ListPropertiesRequest) (*operations.ListPropertiesResponse, error) {
+	baseURL := s.serverURL
 	url := strings.TrimSuffix(baseURL, "/") + "/properties"
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -235,20 +244,25 @@ func (s *Properties) ListProperties(ctx context.Context, request operations.List
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	utils.PopulateQueryParams(ctx, req, request.QueryParams)
+	if err := utils.PopulateQueryParams(ctx, req, request.QueryParams); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.ListPropertiesResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -279,8 +293,8 @@ func (s *Properties) ListProperties(ctx context.Context, request operations.List
 
 // UpdateProperty - Update property
 // Updates a property.
-func (s *Properties) UpdateProperty(ctx context.Context, request operations.UpdatePropertyRequest) (*operations.UpdatePropertyResponse, error) {
-	baseURL := s._serverURL
+func (s *properties) UpdateProperty(ctx context.Context, request operations.UpdatePropertyRequest) (*operations.UpdatePropertyResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/properties/{id}", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -295,18 +309,21 @@ func (s *Properties) UpdateProperty(ctx context.Context, request operations.Upda
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.UpdatePropertyResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {

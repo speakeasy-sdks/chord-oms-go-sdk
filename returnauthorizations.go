@@ -3,36 +3,36 @@ package sdk
 import (
 	"context"
 	"fmt"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/operations"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/utils"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/operations"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/utils"
 	"net/http"
 	"strings"
 )
 
-type ReturnAuthorizations struct {
-	_defaultClient  HTTPClient
-	_securityClient HTTPClient
-	_serverURL      string
-	_language       string
-	_sdkVersion     string
-	_genVersion     string
+type returnAuthorizations struct {
+	defaultClient  HTTPClient
+	securityClient HTTPClient
+	serverURL      string
+	language       string
+	sdkVersion     string
+	genVersion     string
 }
 
-func NewReturnAuthorizations(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *ReturnAuthorizations {
-	return &ReturnAuthorizations{
-		_defaultClient:  defaultClient,
-		_securityClient: securityClient,
-		_serverURL:      serverURL,
-		_language:       language,
-		_sdkVersion:     sdkVersion,
-		_genVersion:     genVersion,
+func newReturnAuthorizations(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *returnAuthorizations {
+	return &returnAuthorizations{
+		defaultClient:  defaultClient,
+		securityClient: securityClient,
+		serverURL:      serverURL,
+		language:       language,
+		sdkVersion:     sdkVersion,
+		genVersion:     genVersion,
 	}
 }
 
 // CancelCheckoutReturnAuthorization - Cancel checkout return authorization
 // Cancels a checkout's return authorization.
-func (s *ReturnAuthorizations) CancelCheckoutReturnAuthorization(ctx context.Context, request operations.CancelCheckoutReturnAuthorizationRequest) (*operations.CancelCheckoutReturnAuthorizationResponse, error) {
-	baseURL := s._serverURL
+func (s *returnAuthorizations) CancelCheckoutReturnAuthorization(ctx context.Context, request operations.CancelCheckoutReturnAuthorizationRequest) (*operations.CancelCheckoutReturnAuthorizationResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/checkouts/{checkout_id}/return_authorizations/{return_authorization_id}/cancel", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "PUT", url, nil)
@@ -40,18 +40,21 @@ func (s *ReturnAuthorizations) CancelCheckoutReturnAuthorization(ctx context.Con
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.CancelCheckoutReturnAuthorizationResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -102,8 +105,8 @@ func (s *ReturnAuthorizations) CancelCheckoutReturnAuthorization(ctx context.Con
 
 // CancelOrderReturnAuthorization - Cancel order return authorization
 // Cancels an order's return authorization.
-func (s *ReturnAuthorizations) CancelOrderReturnAuthorization(ctx context.Context, request operations.CancelOrderReturnAuthorizationRequest) (*operations.CancelOrderReturnAuthorizationResponse, error) {
-	baseURL := s._serverURL
+func (s *returnAuthorizations) CancelOrderReturnAuthorization(ctx context.Context, request operations.CancelOrderReturnAuthorizationRequest) (*operations.CancelOrderReturnAuthorizationResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/orders/{order_number}/return_authorizations/{return_authorization_id}/cancel", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "PUT", url, nil)
@@ -111,18 +114,21 @@ func (s *ReturnAuthorizations) CancelOrderReturnAuthorization(ctx context.Contex
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.CancelOrderReturnAuthorizationResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -173,8 +179,8 @@ func (s *ReturnAuthorizations) CancelOrderReturnAuthorization(ctx context.Contex
 
 // CreateCheckoutReturnAuthorization - Create checkout return authorization
 // Creates a return authorization for a checkout.
-func (s *ReturnAuthorizations) CreateCheckoutReturnAuthorization(ctx context.Context, request operations.CreateCheckoutReturnAuthorizationRequest) (*operations.CreateCheckoutReturnAuthorizationResponse, error) {
-	baseURL := s._serverURL
+func (s *returnAuthorizations) CreateCheckoutReturnAuthorization(ctx context.Context, request operations.CreateCheckoutReturnAuthorizationRequest) (*operations.CreateCheckoutReturnAuthorizationResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/checkouts/{checkout_id}/return_authorizations", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -192,18 +198,21 @@ func (s *ReturnAuthorizations) CreateCheckoutReturnAuthorization(ctx context.Con
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.CreateCheckoutReturnAuthorizationResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -254,8 +263,8 @@ func (s *ReturnAuthorizations) CreateCheckoutReturnAuthorization(ctx context.Con
 
 // CreateOrderReturnAuthorization - Create order return authorization
 // Creates a return authorization for an order.
-func (s *ReturnAuthorizations) CreateOrderReturnAuthorization(ctx context.Context, request operations.CreateOrderReturnAuthorizationRequest) (*operations.CreateOrderReturnAuthorizationResponse, error) {
-	baseURL := s._serverURL
+func (s *returnAuthorizations) CreateOrderReturnAuthorization(ctx context.Context, request operations.CreateOrderReturnAuthorizationRequest) (*operations.CreateOrderReturnAuthorizationResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/orders/{order_number}/return_authorizations", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -273,18 +282,21 @@ func (s *ReturnAuthorizations) CreateOrderReturnAuthorization(ctx context.Contex
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.CreateOrderReturnAuthorizationResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -335,8 +347,8 @@ func (s *ReturnAuthorizations) CreateOrderReturnAuthorization(ctx context.Contex
 
 // DeleteCheckoutReturnAuthorization - Delete checkout return authorization
 // Deletes a checkout's return authorization.
-func (s *ReturnAuthorizations) DeleteCheckoutReturnAuthorization(ctx context.Context, request operations.DeleteCheckoutReturnAuthorizationRequest) (*operations.DeleteCheckoutReturnAuthorizationResponse, error) {
-	baseURL := s._serverURL
+func (s *returnAuthorizations) DeleteCheckoutReturnAuthorization(ctx context.Context, request operations.DeleteCheckoutReturnAuthorizationRequest) (*operations.DeleteCheckoutReturnAuthorizationResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/checkouts/{checkout_id}/return_authorizations/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "DELETE", url, nil)
@@ -344,18 +356,21 @@ func (s *ReturnAuthorizations) DeleteCheckoutReturnAuthorization(ctx context.Con
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.DeleteCheckoutReturnAuthorizationResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -397,8 +412,8 @@ func (s *ReturnAuthorizations) DeleteCheckoutReturnAuthorization(ctx context.Con
 
 // DeleteOrderReturnAuthorization - Delete order return authorization
 // Deletes an order's return authorization.
-func (s *ReturnAuthorizations) DeleteOrderReturnAuthorization(ctx context.Context, request operations.DeleteOrderReturnAuthorizationRequest) (*operations.DeleteOrderReturnAuthorizationResponse, error) {
-	baseURL := s._serverURL
+func (s *returnAuthorizations) DeleteOrderReturnAuthorization(ctx context.Context, request operations.DeleteOrderReturnAuthorizationRequest) (*operations.DeleteOrderReturnAuthorizationResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/orders/{order_number}/return_authorizations/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "DELETE", url, nil)
@@ -406,18 +421,21 @@ func (s *ReturnAuthorizations) DeleteOrderReturnAuthorization(ctx context.Contex
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.DeleteOrderReturnAuthorizationResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -468,8 +486,8 @@ func (s *ReturnAuthorizations) DeleteOrderReturnAuthorization(ctx context.Contex
 
 // GetCheckoutReturnAuthorization - Get checkout return authorization
 // Gets a checkout's return authorization.
-func (s *ReturnAuthorizations) GetCheckoutReturnAuthorization(ctx context.Context, request operations.GetCheckoutReturnAuthorizationRequest) (*operations.GetCheckoutReturnAuthorizationResponse, error) {
-	baseURL := s._serverURL
+func (s *returnAuthorizations) GetCheckoutReturnAuthorization(ctx context.Context, request operations.GetCheckoutReturnAuthorizationRequest) (*operations.GetCheckoutReturnAuthorizationResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/checkouts/{checkout_id}/return_authorizations/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -477,30 +495,33 @@ func (s *ReturnAuthorizations) GetCheckoutReturnAuthorization(ctx context.Contex
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.GetCheckoutReturnAuthorizationResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
 	case httpRes.StatusCode == 200:
 		switch {
 		case utils.MatchContentType(contentType, `application/json`):
-			var out *interface{}
+			var out map[string]interface{}
 			if err := utils.UnmarshalJsonFromResponseBody(httpRes.Body, &out); err != nil {
 				return nil, err
 			}
 
-			res.GetCheckoutReturnAuthorization200ApplicationJSONAny = out
+			res.GetCheckoutReturnAuthorization200ApplicationJSONObject = out
 		}
 	case httpRes.StatusCode == 401:
 		switch {
@@ -529,8 +550,8 @@ func (s *ReturnAuthorizations) GetCheckoutReturnAuthorization(ctx context.Contex
 
 // GetOrderReturnAuthorization - Get order return authorization
 // Retrieves an order's return authorization.
-func (s *ReturnAuthorizations) GetOrderReturnAuthorization(ctx context.Context, request operations.GetOrderReturnAuthorizationRequest) (*operations.GetOrderReturnAuthorizationResponse, error) {
-	baseURL := s._serverURL
+func (s *returnAuthorizations) GetOrderReturnAuthorization(ctx context.Context, request operations.GetOrderReturnAuthorizationRequest) (*operations.GetOrderReturnAuthorizationResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/orders/{order_number}/return_authorizations/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -538,18 +559,21 @@ func (s *ReturnAuthorizations) GetOrderReturnAuthorization(ctx context.Context, 
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.GetOrderReturnAuthorizationResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -590,8 +614,8 @@ func (s *ReturnAuthorizations) GetOrderReturnAuthorization(ctx context.Context, 
 
 // ListCheckoutReturnAuthorization - List checkout return authorizations
 // Lists a checkout's return authorizations.
-func (s *ReturnAuthorizations) ListCheckoutReturnAuthorization(ctx context.Context, request operations.ListCheckoutReturnAuthorizationRequest) (*operations.ListCheckoutReturnAuthorizationResponse, error) {
-	baseURL := s._serverURL
+func (s *returnAuthorizations) ListCheckoutReturnAuthorization(ctx context.Context, request operations.ListCheckoutReturnAuthorizationRequest) (*operations.ListCheckoutReturnAuthorizationResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/checkouts/{checkout_id}/return_authorizations", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -599,20 +623,25 @@ func (s *ReturnAuthorizations) ListCheckoutReturnAuthorization(ctx context.Conte
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	utils.PopulateQueryParams(ctx, req, request.QueryParams)
+	if err := utils.PopulateQueryParams(ctx, req, request.QueryParams); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.ListCheckoutReturnAuthorizationResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -653,8 +682,8 @@ func (s *ReturnAuthorizations) ListCheckoutReturnAuthorization(ctx context.Conte
 
 // ListOrderReturnAuthorizations - List order return authorizations
 // Lists an order's return authorizations.
-func (s *ReturnAuthorizations) ListOrderReturnAuthorizations(ctx context.Context, request operations.ListOrderReturnAuthorizationsRequest) (*operations.ListOrderReturnAuthorizationsResponse, error) {
-	baseURL := s._serverURL
+func (s *returnAuthorizations) ListOrderReturnAuthorizations(ctx context.Context, request operations.ListOrderReturnAuthorizationsRequest) (*operations.ListOrderReturnAuthorizationsResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/orders/{order_number}/return_authorizations", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -662,20 +691,25 @@ func (s *ReturnAuthorizations) ListOrderReturnAuthorizations(ctx context.Context
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	utils.PopulateQueryParams(ctx, req, request.QueryParams)
+	if err := utils.PopulateQueryParams(ctx, req, request.QueryParams); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.ListOrderReturnAuthorizationsResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -716,8 +750,8 @@ func (s *ReturnAuthorizations) ListOrderReturnAuthorizations(ctx context.Context
 
 // ListReturnAuthorization - List return authorizations
 // Lists a return authorizations.
-func (s *ReturnAuthorizations) ListReturnAuthorization(ctx context.Context, request operations.ListReturnAuthorizationRequest) (*operations.ListReturnAuthorizationResponse, error) {
-	baseURL := s._serverURL
+func (s *returnAuthorizations) ListReturnAuthorization(ctx context.Context, request operations.ListReturnAuthorizationRequest) (*operations.ListReturnAuthorizationResponse, error) {
+	baseURL := s.serverURL
 	url := strings.TrimSuffix(baseURL, "/") + "/return_authorizations"
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -725,20 +759,25 @@ func (s *ReturnAuthorizations) ListReturnAuthorization(ctx context.Context, requ
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	utils.PopulateQueryParams(ctx, req, request.QueryParams)
+	if err := utils.PopulateQueryParams(ctx, req, request.QueryParams); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.ListReturnAuthorizationResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -779,8 +818,8 @@ func (s *ReturnAuthorizations) ListReturnAuthorization(ctx context.Context, requ
 
 // UpdateCheckoutReturnAuthorization - Update checkout return authorization
 // Updates a checkout's return authorization.
-func (s *ReturnAuthorizations) UpdateCheckoutReturnAuthorization(ctx context.Context, request operations.UpdateCheckoutReturnAuthorizationRequest) (*operations.UpdateCheckoutReturnAuthorizationResponse, error) {
-	baseURL := s._serverURL
+func (s *returnAuthorizations) UpdateCheckoutReturnAuthorization(ctx context.Context, request operations.UpdateCheckoutReturnAuthorizationRequest) (*operations.UpdateCheckoutReturnAuthorizationResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/checkouts/{checkout_id}/return_authorizations/{id}", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -798,18 +837,21 @@ func (s *ReturnAuthorizations) UpdateCheckoutReturnAuthorization(ctx context.Con
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.UpdateCheckoutReturnAuthorizationResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -860,8 +902,8 @@ func (s *ReturnAuthorizations) UpdateCheckoutReturnAuthorization(ctx context.Con
 
 // UpdateOrderReturnAuthorization - Update order return authorization
 // Updates an order's return authorization.
-func (s *ReturnAuthorizations) UpdateOrderReturnAuthorization(ctx context.Context, request operations.UpdateOrderReturnAuthorizationRequest) (*operations.UpdateOrderReturnAuthorizationResponse, error) {
-	baseURL := s._serverURL
+func (s *returnAuthorizations) UpdateOrderReturnAuthorization(ctx context.Context, request operations.UpdateOrderReturnAuthorizationRequest) (*operations.UpdateOrderReturnAuthorizationResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/orders/{order_number}/return_authorizations/{id}", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -879,18 +921,21 @@ func (s *ReturnAuthorizations) UpdateOrderReturnAuthorization(ctx context.Contex
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.UpdateOrderReturnAuthorizationResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {

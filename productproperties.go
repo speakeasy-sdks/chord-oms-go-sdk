@@ -3,36 +3,36 @@ package sdk
 import (
 	"context"
 	"fmt"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/operations"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/utils"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/operations"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/utils"
 	"net/http"
 )
 
-type ProductProperties struct {
-	_defaultClient  HTTPClient
-	_securityClient HTTPClient
-	_serverURL      string
-	_language       string
-	_sdkVersion     string
-	_genVersion     string
+type productProperties struct {
+	defaultClient  HTTPClient
+	securityClient HTTPClient
+	serverURL      string
+	language       string
+	sdkVersion     string
+	genVersion     string
 }
 
-func NewProductProperties(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *ProductProperties {
-	return &ProductProperties{
-		_defaultClient:  defaultClient,
-		_securityClient: securityClient,
-		_serverURL:      serverURL,
-		_language:       language,
-		_sdkVersion:     sdkVersion,
-		_genVersion:     genVersion,
+func newProductProperties(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *productProperties {
+	return &productProperties{
+		defaultClient:  defaultClient,
+		securityClient: securityClient,
+		serverURL:      serverURL,
+		language:       language,
+		sdkVersion:     sdkVersion,
+		genVersion:     genVersion,
 	}
 }
 
 // CreateProductProperty - Create product property
 // Creates a product property.
-func (s *ProductProperties) CreateProductProperty(ctx context.Context, request operations.CreateProductPropertyRequest) (*operations.CreateProductPropertyResponse, error) {
-	baseURL := s._serverURL
+func (s *productProperties) CreateProductProperty(ctx context.Context, request operations.CreateProductPropertyRequest) (*operations.CreateProductPropertyResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/products/{product_id}/product_properties", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -50,18 +50,21 @@ func (s *ProductProperties) CreateProductProperty(ctx context.Context, request o
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.CreateProductPropertyResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -112,8 +115,8 @@ func (s *ProductProperties) CreateProductProperty(ctx context.Context, request o
 
 // DeleteProductProperty - Delete product property
 // Deletes a product's property.
-func (s *ProductProperties) DeleteProductProperty(ctx context.Context, request operations.DeleteProductPropertyRequest) (*operations.DeleteProductPropertyResponse, error) {
-	baseURL := s._serverURL
+func (s *productProperties) DeleteProductProperty(ctx context.Context, request operations.DeleteProductPropertyRequest) (*operations.DeleteProductPropertyResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/products/{product_id}/product_properties/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "DELETE", url, nil)
@@ -121,18 +124,21 @@ func (s *ProductProperties) DeleteProductProperty(ctx context.Context, request o
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.DeleteProductPropertyResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -174,8 +180,8 @@ func (s *ProductProperties) DeleteProductProperty(ctx context.Context, request o
 
 // GetProductProperty - Get product property
 // Retrieves a product's property.
-func (s *ProductProperties) GetProductProperty(ctx context.Context, request operations.GetProductPropertyRequest) (*operations.GetProductPropertyResponse, error) {
-	baseURL := s._serverURL
+func (s *productProperties) GetProductProperty(ctx context.Context, request operations.GetProductPropertyRequest) (*operations.GetProductPropertyResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/products/{product_id}/product_properties/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -183,18 +189,21 @@ func (s *ProductProperties) GetProductProperty(ctx context.Context, request oper
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.GetProductPropertyResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -235,8 +244,8 @@ func (s *ProductProperties) GetProductProperty(ctx context.Context, request oper
 
 // ListProductProperties - List product properties
 // Lists a product's properties.
-func (s *ProductProperties) ListProductProperties(ctx context.Context, request operations.ListProductPropertiesRequest) (*operations.ListProductPropertiesResponse, error) {
-	baseURL := s._serverURL
+func (s *productProperties) ListProductProperties(ctx context.Context, request operations.ListProductPropertiesRequest) (*operations.ListProductPropertiesResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/products/{product_id}/product_properties", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -244,20 +253,25 @@ func (s *ProductProperties) ListProductProperties(ctx context.Context, request o
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	utils.PopulateQueryParams(ctx, req, request.QueryParams)
+	if err := utils.PopulateQueryParams(ctx, req, request.QueryParams); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.ListProductPropertiesResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -298,8 +312,8 @@ func (s *ProductProperties) ListProductProperties(ctx context.Context, request o
 
 // UpdateProductProperty - Update product property
 // Updates a product's property.
-func (s *ProductProperties) UpdateProductProperty(ctx context.Context, request operations.UpdateProductPropertyRequest) (*operations.UpdateProductPropertyResponse, error) {
-	baseURL := s._serverURL
+func (s *productProperties) UpdateProductProperty(ctx context.Context, request operations.UpdateProductPropertyRequest) (*operations.UpdateProductPropertyResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/products/{product_id}/product_properties/{id}", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -317,18 +331,21 @@ func (s *ProductProperties) UpdateProductProperty(ctx context.Context, request o
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.UpdateProductPropertyResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {

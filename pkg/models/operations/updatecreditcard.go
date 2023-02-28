@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type UpdateCreditCardPathParams struct {
@@ -9,20 +9,7 @@ type UpdateCreditCardPathParams struct {
 }
 
 type UpdateCreditCardSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type UpdateCreditCard401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type UpdateCreditCard404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type UpdateCreditCard422ApplicationJSON struct {
-	Error  *string                `json:"error,omitempty"`
-	Errors map[string]interface{} `json:"errors,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type UpdateCreditCardRequest struct {
@@ -31,9 +18,22 @@ type UpdateCreditCardRequest struct {
 	Security   UpdateCreditCardSecurity
 }
 
+type UpdateCreditCard422ApplicationJSON struct {
+	Error  *string                `json:"error,omitempty"`
+	Errors map[string]interface{} `json:"errors,omitempty"`
+}
+
+type UpdateCreditCard404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type UpdateCreditCard401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type UpdateCreditCardResponse struct {
 	ContentType                              string
-	StatusCode                               int64
+	StatusCode                               int
 	CreditCard                               *shared.CreditCard
 	UpdateCreditCard401ApplicationJSONObject *UpdateCreditCard401ApplicationJSON
 	UpdateCreditCard404ApplicationJSONObject *UpdateCreditCard404ApplicationJSON

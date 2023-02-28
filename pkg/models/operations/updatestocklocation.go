@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type UpdateStockLocationPathParams struct {
@@ -9,20 +9,7 @@ type UpdateStockLocationPathParams struct {
 }
 
 type UpdateStockLocationSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type UpdateStockLocation401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type UpdateStockLocation404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type UpdateStockLocation422ApplicationJSON struct {
-	Error  *string                `json:"error,omitempty"`
-	Errors map[string]interface{} `json:"errors,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type UpdateStockLocationRequest struct {
@@ -31,9 +18,22 @@ type UpdateStockLocationRequest struct {
 	Security   UpdateStockLocationSecurity
 }
 
+type UpdateStockLocation422ApplicationJSON struct {
+	Error  *string                `json:"error,omitempty"`
+	Errors map[string]interface{} `json:"errors,omitempty"`
+}
+
+type UpdateStockLocation404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type UpdateStockLocation401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type UpdateStockLocationResponse struct {
 	ContentType                                 string
-	StatusCode                                  int64
+	StatusCode                                  int
 	StockLocation                               *shared.StockLocation
 	UpdateStockLocation401ApplicationJSONObject *UpdateStockLocation401ApplicationJSON
 	UpdateStockLocation404ApplicationJSONObject *UpdateStockLocation404ApplicationJSON

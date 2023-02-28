@@ -1,6 +1,10 @@
 package shared
 
 type SchemeAPIKey struct {
+	Authorization string `security:"name=Authorization"`
+}
+
+type SchemeStorefrontLogin struct {
 	APIKey string `security:"name=Authorization"`
 }
 

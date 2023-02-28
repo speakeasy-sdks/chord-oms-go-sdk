@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type UpdateOrderReturnAuthorizationPathParams struct {
@@ -10,20 +10,7 @@ type UpdateOrderReturnAuthorizationPathParams struct {
 }
 
 type UpdateOrderReturnAuthorizationSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type UpdateOrderReturnAuthorization401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type UpdateOrderReturnAuthorization404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type UpdateOrderReturnAuthorization422ApplicationJSON struct {
-	Error  *string                `json:"error,omitempty"`
-	Errors map[string]interface{} `json:"errors,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type UpdateOrderReturnAuthorizationRequest struct {
@@ -32,9 +19,22 @@ type UpdateOrderReturnAuthorizationRequest struct {
 	Security   UpdateOrderReturnAuthorizationSecurity
 }
 
+type UpdateOrderReturnAuthorization422ApplicationJSON struct {
+	Error  *string                `json:"error,omitempty"`
+	Errors map[string]interface{} `json:"errors,omitempty"`
+}
+
+type UpdateOrderReturnAuthorization404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type UpdateOrderReturnAuthorization401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type UpdateOrderReturnAuthorizationResponse struct {
 	ContentType                                            string
-	StatusCode                                             int64
+	StatusCode                                             int
 	ReturnAuthorization                                    map[string]interface{}
 	UpdateOrderReturnAuthorization401ApplicationJSONObject *UpdateOrderReturnAuthorization401ApplicationJSON
 	UpdateOrderReturnAuthorization404ApplicationJSONObject *UpdateOrderReturnAuthorization404ApplicationJSON

@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type ListStockLocationItemsPathParams struct {
@@ -14,7 +14,21 @@ type ListStockLocationItemsQueryParams struct {
 }
 
 type ListStockLocationItemsSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
+}
+
+type ListStockLocationItemsRequest struct {
+	PathParams  ListStockLocationItemsPathParams
+	QueryParams ListStockLocationItemsQueryParams
+	Security    ListStockLocationItemsSecurity
+}
+
+type ListStockLocationItems404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type ListStockLocationItems401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
 }
 
 type ListStockLocationItemsPaginationData struct {
@@ -26,24 +40,10 @@ type ListStockLocationItemsPaginationData struct {
 	TotalCount  *int64             `json:"total_count,omitempty"`
 }
 
-type ListStockLocationItems401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type ListStockLocationItems404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type ListStockLocationItemsRequest struct {
-	PathParams  ListStockLocationItemsPathParams
-	QueryParams ListStockLocationItemsQueryParams
-	Security    ListStockLocationItemsSecurity
-}
-
 type ListStockLocationItemsResponse struct {
 	ContentType                                    string
 	PaginationData                                 *ListStockLocationItemsPaginationData
-	StatusCode                                     int64
+	StatusCode                                     int
 	ListStockLocationItems401ApplicationJSONObject *ListStockLocationItems401ApplicationJSON
 	ListStockLocationItems404ApplicationJSONObject *ListStockLocationItems404ApplicationJSON
 }

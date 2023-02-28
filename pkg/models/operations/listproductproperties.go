@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type ListProductPropertiesPathParams struct {
@@ -14,7 +14,21 @@ type ListProductPropertiesQueryParams struct {
 }
 
 type ListProductPropertiesSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
+}
+
+type ListProductPropertiesRequest struct {
+	PathParams  ListProductPropertiesPathParams
+	QueryParams ListProductPropertiesQueryParams
+	Security    ListProductPropertiesSecurity
+}
+
+type ListProductProperties404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type ListProductProperties401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
 }
 
 type ListProductPropertiesPaginationData struct {
@@ -26,24 +40,10 @@ type ListProductPropertiesPaginationData struct {
 	TotalCount        *int64                   `json:"total_count,omitempty"`
 }
 
-type ListProductProperties401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type ListProductProperties404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type ListProductPropertiesRequest struct {
-	PathParams  ListProductPropertiesPathParams
-	QueryParams ListProductPropertiesQueryParams
-	Security    ListProductPropertiesSecurity
-}
-
 type ListProductPropertiesResponse struct {
 	ContentType                                   string
 	PaginationData                                *ListProductPropertiesPaginationData
-	StatusCode                                    int64
+	StatusCode                                    int
 	ListProductProperties401ApplicationJSONObject *ListProductProperties401ApplicationJSON
 	ListProductProperties404ApplicationJSONObject *ListProductProperties404ApplicationJSON
 }

@@ -3,37 +3,37 @@ package sdk
 import (
 	"context"
 	"fmt"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/operations"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/utils"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/operations"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/utils"
 	"net/http"
 	"strings"
 )
 
-type Orders struct {
-	_defaultClient  HTTPClient
-	_securityClient HTTPClient
-	_serverURL      string
-	_language       string
-	_sdkVersion     string
-	_genVersion     string
+type orders struct {
+	defaultClient  HTTPClient
+	securityClient HTTPClient
+	serverURL      string
+	language       string
+	sdkVersion     string
+	genVersion     string
 }
 
-func NewOrders(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *Orders {
-	return &Orders{
-		_defaultClient:  defaultClient,
-		_securityClient: securityClient,
-		_serverURL:      serverURL,
-		_language:       language,
-		_sdkVersion:     sdkVersion,
-		_genVersion:     genVersion,
+func newOrders(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *orders {
+	return &orders{
+		defaultClient:  defaultClient,
+		securityClient: securityClient,
+		serverURL:      serverURL,
+		language:       language,
+		sdkVersion:     sdkVersion,
+		genVersion:     genVersion,
 	}
 }
 
 // CancelOrder - Cancel order
 // Cancels an order.
-func (s *Orders) CancelOrder(ctx context.Context, request operations.CancelOrderRequest) (*operations.CancelOrderResponse, error) {
-	baseURL := s._serverURL
+func (s *orders) CancelOrder(ctx context.Context, request operations.CancelOrderRequest) (*operations.CancelOrderResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/orders/{order_number}/cancel", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "PUT", url, nil)
@@ -41,18 +41,21 @@ func (s *Orders) CancelOrder(ctx context.Context, request operations.CancelOrder
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.CancelOrderResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -103,8 +106,12 @@ func (s *Orders) CancelOrder(ctx context.Context, request operations.CancelOrder
 
 // CreateOrder - Create order
 // Creates a new order.
-func (s *Orders) CreateOrder(ctx context.Context, request operations.CreateOrderRequest) (*operations.CreateOrderResponse, error) {
-	baseURL := s._serverURL
+//
+// This route does not require authentication, though will work if provided. It will return `token` in it's
+// body that can be used for `X-Spree-Order-Token` based authentication for
+// operations on the newly created order.
+func (s *orders) CreateOrder(ctx context.Context, request operations.CreateOrderRequest) (*operations.CreateOrderResponse, error) {
+	baseURL := s.serverURL
 	url := strings.TrimSuffix(baseURL, "/") + "/orders"
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -122,22 +129,25 @@ func (s *Orders) CreateOrder(ctx context.Context, request operations.CreateOrder
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.CreateOrderResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
-	case httpRes.StatusCode == 200:
+	case httpRes.StatusCode == 201:
 		switch {
 		case utils.MatchContentType(contentType, `application/json`):
 			var out *shared.OrderBig
@@ -167,6 +177,16 @@ func (s *Orders) CreateOrder(ctx context.Context, request operations.CreateOrder
 
 			res.CreateOrder422ApplicationJSONObject = out
 		}
+	case httpRes.StatusCode == 500:
+		switch {
+		case utils.MatchContentType(contentType, `application/json`):
+			var out *operations.CreateOrder500ApplicationJSON
+			if err := utils.UnmarshalJsonFromResponseBody(httpRes.Body, &out); err != nil {
+				return nil, err
+			}
+
+			res.CreateOrder500ApplicationJSONObject = out
+		}
 	}
 
 	return res, nil
@@ -174,8 +194,8 @@ func (s *Orders) CreateOrder(ctx context.Context, request operations.CreateOrder
 
 // EmptyOrder - Empty order
 // Empties an order's cart.
-func (s *Orders) EmptyOrder(ctx context.Context, request operations.EmptyOrderRequest) (*operations.EmptyOrderResponse, error) {
-	baseURL := s._serverURL
+func (s *orders) EmptyOrder(ctx context.Context, request operations.EmptyOrderRequest) (*operations.EmptyOrderResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/orders/{order_number}/empty", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "PUT", url, nil)
@@ -183,18 +203,21 @@ func (s *Orders) EmptyOrder(ctx context.Context, request operations.EmptyOrderRe
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.EmptyOrderResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -236,8 +259,8 @@ func (s *Orders) EmptyOrder(ctx context.Context, request operations.EmptyOrderRe
 
 // GetCurrentOrder - Get current order
 // Retrieves the user's current order.
-func (s *Orders) GetCurrentOrder(ctx context.Context, request operations.GetCurrentOrderRequest) (*operations.GetCurrentOrderResponse, error) {
-	baseURL := s._serverURL
+func (s *orders) GetCurrentOrder(ctx context.Context, request operations.GetCurrentOrderRequest) (*operations.GetCurrentOrderResponse, error) {
+	baseURL := s.serverURL
 	url := strings.TrimSuffix(baseURL, "/") + "/orders/current"
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -245,18 +268,21 @@ func (s *Orders) GetCurrentOrder(ctx context.Context, request operations.GetCurr
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.GetCurrentOrderResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -280,6 +306,16 @@ func (s *Orders) GetCurrentOrder(ctx context.Context, request operations.GetCurr
 
 			res.GetCurrentOrder401ApplicationJSONObject = out
 		}
+	case httpRes.StatusCode == 500:
+		switch {
+		case utils.MatchContentType(contentType, `application/json`):
+			var out *operations.GetCurrentOrder500ApplicationJSON
+			if err := utils.UnmarshalJsonFromResponseBody(httpRes.Body, &out); err != nil {
+				return nil, err
+			}
+
+			res.GetCurrentOrder500ApplicationJSONObject = out
+		}
 	}
 
 	return res, nil
@@ -287,27 +323,30 @@ func (s *Orders) GetCurrentOrder(ctx context.Context, request operations.GetCurr
 
 // GetOrder - Get order
 // Retrieves an order.
-func (s *Orders) GetOrder(ctx context.Context, request operations.GetOrderRequest) (*operations.GetOrderResponse, error) {
-	baseURL := s._serverURL
-	url := utils.GenerateURL(ctx, baseURL, "/orders/{number}", request.PathParams)
+func (s *orders) GetOrder(ctx context.Context, request operations.GetOrderRequest) (*operations.GetOrderResponse, error) {
+	baseURL := s.serverURL
+	url := utils.GenerateURL(ctx, baseURL, "/orders/{order_number}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.GetOrderResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -341,6 +380,16 @@ func (s *Orders) GetOrder(ctx context.Context, request operations.GetOrderReques
 
 			res.GetOrder404ApplicationJSONObject = out
 		}
+	case httpRes.StatusCode == 500:
+		switch {
+		case utils.MatchContentType(contentType, `application/json`):
+			var out *operations.GetOrder500ApplicationJSON
+			if err := utils.UnmarshalJsonFromResponseBody(httpRes.Body, &out); err != nil {
+				return nil, err
+			}
+
+			res.GetOrder500ApplicationJSONObject = out
+		}
 	}
 
 	return res, nil
@@ -348,8 +397,8 @@ func (s *Orders) GetOrder(ctx context.Context, request operations.GetOrderReques
 
 // ListCurrentUserOrders - List current user's orders.
 // Lists the orders that belong to the current user.
-func (s *Orders) ListCurrentUserOrders(ctx context.Context, request operations.ListCurrentUserOrdersRequest) (*operations.ListCurrentUserOrdersResponse, error) {
-	baseURL := s._serverURL
+func (s *orders) ListCurrentUserOrders(ctx context.Context, request operations.ListCurrentUserOrdersRequest) (*operations.ListCurrentUserOrdersResponse, error) {
+	baseURL := s.serverURL
 	url := strings.TrimSuffix(baseURL, "/") + "/orders/mine"
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -357,20 +406,25 @@ func (s *Orders) ListCurrentUserOrders(ctx context.Context, request operations.L
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	utils.PopulateQueryParams(ctx, req, request.QueryParams)
+	if err := utils.PopulateQueryParams(ctx, req, request.QueryParams); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.ListCurrentUserOrdersResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -394,6 +448,16 @@ func (s *Orders) ListCurrentUserOrders(ctx context.Context, request operations.L
 
 			res.ListCurrentUserOrders401ApplicationJSONObject = out
 		}
+	case httpRes.StatusCode == 500:
+		switch {
+		case utils.MatchContentType(contentType, `application/json`):
+			var out *operations.ListCurrentUserOrders500ApplicationJSON
+			if err := utils.UnmarshalJsonFromResponseBody(httpRes.Body, &out); err != nil {
+				return nil, err
+			}
+
+			res.ListCurrentUserOrders500ApplicationJSONObject = out
+		}
 	}
 
 	return res, nil
@@ -401,8 +465,8 @@ func (s *Orders) ListCurrentUserOrders(ctx context.Context, request operations.L
 
 // ListOrders - List orders
 // Lists all orders.
-func (s *Orders) ListOrders(ctx context.Context, request operations.ListOrdersRequest) (*operations.ListOrdersResponse, error) {
-	baseURL := s._serverURL
+func (s *orders) ListOrders(ctx context.Context, request operations.ListOrdersRequest) (*operations.ListOrdersResponse, error) {
+	baseURL := s.serverURL
 	url := strings.TrimSuffix(baseURL, "/") + "/orders"
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -410,20 +474,25 @@ func (s *Orders) ListOrders(ctx context.Context, request operations.ListOrdersRe
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	utils.PopulateQueryParams(ctx, req, request.QueryParams)
+	if err := utils.PopulateQueryParams(ctx, req, request.QueryParams); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.ListOrdersResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -454,9 +523,9 @@ func (s *Orders) ListOrders(ctx context.Context, request operations.ListOrdersRe
 
 // UpdateOrder - Update order
 // Updates an order.
-func (s *Orders) UpdateOrder(ctx context.Context, request operations.UpdateOrderRequest) (*operations.UpdateOrderResponse, error) {
-	baseURL := s._serverURL
-	url := utils.GenerateURL(ctx, baseURL, "/orders/{number}", request.PathParams)
+func (s *orders) UpdateOrder(ctx context.Context, request operations.UpdateOrderRequest) (*operations.UpdateOrderResponse, error) {
+	baseURL := s.serverURL
+	url := utils.GenerateURL(ctx, baseURL, "/orders/{order_number}", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
 	if err != nil {
@@ -473,18 +542,21 @@ func (s *Orders) UpdateOrder(ctx context.Context, request operations.UpdateOrder
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.UpdateOrderResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -527,6 +599,16 @@ func (s *Orders) UpdateOrder(ctx context.Context, request operations.UpdateOrder
 			}
 
 			res.UpdateOrder422ApplicationJSONObject = out
+		}
+	case httpRes.StatusCode == 500:
+		switch {
+		case utils.MatchContentType(contentType, `application/json`):
+			var out *operations.UpdateOrder500ApplicationJSON
+			if err := utils.UnmarshalJsonFromResponseBody(httpRes.Body, &out); err != nil {
+				return nil, err
+			}
+
+			res.UpdateOrder500ApplicationJSONObject = out
 		}
 	}
 

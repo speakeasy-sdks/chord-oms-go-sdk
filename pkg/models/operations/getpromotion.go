@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type GetPromotionPathParams struct {
@@ -9,15 +9,7 @@ type GetPromotionPathParams struct {
 }
 
 type GetPromotionSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type GetPromotion401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type GetPromotion404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type GetPromotionRequest struct {
@@ -25,9 +17,17 @@ type GetPromotionRequest struct {
 	Security   GetPromotionSecurity
 }
 
+type GetPromotion404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type GetPromotion401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type GetPromotionResponse struct {
 	ContentType                          string
-	StatusCode                           int64
+	StatusCode                           int
 	GetPromotion401ApplicationJSONObject *GetPromotion401ApplicationJSON
 	GetPromotion404ApplicationJSONObject *GetPromotion404ApplicationJSON
 	Promotion                            *shared.Promotion

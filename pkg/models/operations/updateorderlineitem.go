@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type UpdateOrderLineItemPathParams struct {
@@ -10,21 +10,8 @@ type UpdateOrderLineItemPathParams struct {
 }
 
 type UpdateOrderLineItemSecurity struct {
-	APIKey     *shared.SchemeAPIKey     `security:"scheme,type=apiKey,subtype=header"`
+	APIKey     *shared.SchemeAPIKey     `security:"scheme,type=http,subtype=bearer"`
 	OrderToken *shared.SchemeOrderToken `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type UpdateOrderLineItem401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type UpdateOrderLineItem404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type UpdateOrderLineItem422ApplicationJSON struct {
-	Error  *string                `json:"error,omitempty"`
-	Errors map[string]interface{} `json:"errors,omitempty"`
 }
 
 type UpdateOrderLineItemRequest struct {
@@ -33,9 +20,22 @@ type UpdateOrderLineItemRequest struct {
 	Security   UpdateOrderLineItemSecurity
 }
 
+type UpdateOrderLineItem422ApplicationJSON struct {
+	Error  *string                `json:"error,omitempty"`
+	Errors map[string]interface{} `json:"errors,omitempty"`
+}
+
+type UpdateOrderLineItem404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type UpdateOrderLineItem401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type UpdateOrderLineItemResponse struct {
 	ContentType                                 string
-	StatusCode                                  int64
+	StatusCode                                  int
 	LineItem                                    *shared.LineItem
 	UpdateOrderLineItem401ApplicationJSONObject *UpdateOrderLineItem401ApplicationJSON
 	UpdateOrderLineItem404ApplicationJSONObject *UpdateOrderLineItem404ApplicationJSON

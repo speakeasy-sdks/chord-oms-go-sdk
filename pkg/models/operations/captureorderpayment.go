@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type CaptureOrderPaymentPathParams struct {
@@ -10,20 +10,7 @@ type CaptureOrderPaymentPathParams struct {
 }
 
 type CaptureOrderPaymentSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type CaptureOrderPayment401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type CaptureOrderPayment404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type CaptureOrderPayment422ApplicationJSON struct {
-	Error  *string                `json:"error,omitempty"`
-	Errors map[string]interface{} `json:"errors,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type CaptureOrderPaymentRequest struct {
@@ -31,9 +18,22 @@ type CaptureOrderPaymentRequest struct {
 	Security   CaptureOrderPaymentSecurity
 }
 
+type CaptureOrderPayment422ApplicationJSON struct {
+	Error  *string                `json:"error,omitempty"`
+	Errors map[string]interface{} `json:"errors,omitempty"`
+}
+
+type CaptureOrderPayment404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type CaptureOrderPayment401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type CaptureOrderPaymentResponse struct {
 	ContentType                                 string
-	StatusCode                                  int64
+	StatusCode                                  int
 	CaptureOrderPayment401ApplicationJSONObject *CaptureOrderPayment401ApplicationJSON
 	CaptureOrderPayment404ApplicationJSONObject *CaptureOrderPayment404ApplicationJSON
 	CaptureOrderPayment422ApplicationJSONObject *CaptureOrderPayment422ApplicationJSON

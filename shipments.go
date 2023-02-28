@@ -3,37 +3,37 @@ package sdk
 import (
 	"context"
 	"fmt"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/operations"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/utils"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/operations"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/utils"
 	"net/http"
 	"strings"
 )
 
-type Shipments struct {
-	_defaultClient  HTTPClient
-	_securityClient HTTPClient
-	_serverURL      string
-	_language       string
-	_sdkVersion     string
-	_genVersion     string
+type shipments struct {
+	defaultClient  HTTPClient
+	securityClient HTTPClient
+	serverURL      string
+	language       string
+	sdkVersion     string
+	genVersion     string
 }
 
-func NewShipments(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *Shipments {
-	return &Shipments{
-		_defaultClient:  defaultClient,
-		_securityClient: securityClient,
-		_serverURL:      serverURL,
-		_language:       language,
-		_sdkVersion:     sdkVersion,
-		_genVersion:     genVersion,
+func newShipments(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *shipments {
+	return &shipments{
+		defaultClient:  defaultClient,
+		securityClient: securityClient,
+		serverURL:      serverURL,
+		language:       language,
+		sdkVersion:     sdkVersion,
+		genVersion:     genVersion,
 	}
 }
 
 // AddShipmentItem - Add shipment item
 // Adds an item to a shipment.
-func (s *Shipments) AddShipmentItem(ctx context.Context, request operations.AddShipmentItemRequest) (*operations.AddShipmentItemResponse, error) {
-	baseURL := s._serverURL
+func (s *shipments) AddShipmentItem(ctx context.Context, request operations.AddShipmentItemRequest) (*operations.AddShipmentItemResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/shipments/{shipment_number}/add", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -51,18 +51,21 @@ func (s *Shipments) AddShipmentItem(ctx context.Context, request operations.AddS
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.AddShipmentItemResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -113,8 +116,8 @@ func (s *Shipments) AddShipmentItem(ctx context.Context, request operations.AddS
 
 // CreateShipment - Create shipment
 // Creates a shipment.
-func (s *Shipments) CreateShipment(ctx context.Context, request operations.CreateShipmentRequest) (*operations.CreateShipmentResponse, error) {
-	baseURL := s._serverURL
+func (s *shipments) CreateShipment(ctx context.Context, request operations.CreateShipmentRequest) (*operations.CreateShipmentResponse, error) {
+	baseURL := s.serverURL
 	url := strings.TrimSuffix(baseURL, "/") + "/shipments"
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -132,18 +135,21 @@ func (s *Shipments) CreateShipment(ctx context.Context, request operations.Creat
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.CreateShipmentResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -184,8 +190,8 @@ func (s *Shipments) CreateShipment(ctx context.Context, request operations.Creat
 
 // ListShipmentEstimatedRates - List shipment estimated rates
 // Lists a shipment's estimated rates.
-func (s *Shipments) ListShipmentEstimatedRates(ctx context.Context, request operations.ListShipmentEstimatedRatesRequest) (*operations.ListShipmentEstimatedRatesResponse, error) {
-	baseURL := s._serverURL
+func (s *shipments) ListShipmentEstimatedRates(ctx context.Context, request operations.ListShipmentEstimatedRatesRequest) (*operations.ListShipmentEstimatedRatesResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/shipments/{shipment_number}/estimated_rates", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -193,18 +199,21 @@ func (s *Shipments) ListShipmentEstimatedRates(ctx context.Context, request oper
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.ListShipmentEstimatedRatesResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -245,8 +254,8 @@ func (s *Shipments) ListShipmentEstimatedRates(ctx context.Context, request oper
 
 // ListShipments - List shipments
 // Lists all shipments.
-func (s *Shipments) ListShipments(ctx context.Context, request operations.ListShipmentsRequest) (*operations.ListShipmentsResponse, error) {
-	baseURL := s._serverURL
+func (s *shipments) ListShipments(ctx context.Context, request operations.ListShipmentsRequest) (*operations.ListShipmentsResponse, error) {
+	baseURL := s.serverURL
 	url := strings.TrimSuffix(baseURL, "/") + "/shipments"
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -254,20 +263,25 @@ func (s *Shipments) ListShipments(ctx context.Context, request operations.ListSh
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	utils.PopulateQueryParams(ctx, req, request.QueryParams)
+	if err := utils.PopulateQueryParams(ctx, req, request.QueryParams); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.ListShipmentsResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -298,8 +312,8 @@ func (s *Shipments) ListShipments(ctx context.Context, request operations.ListSh
 
 // ListUserShipments - List user's shipments
 // Lists the current user's shipments.
-func (s *Shipments) ListUserShipments(ctx context.Context, request operations.ListUserShipmentsRequest) (*operations.ListUserShipmentsResponse, error) {
-	baseURL := s._serverURL
+func (s *shipments) ListUserShipments(ctx context.Context, request operations.ListUserShipmentsRequest) (*operations.ListUserShipmentsResponse, error) {
+	baseURL := s.serverURL
 	url := strings.TrimSuffix(baseURL, "/") + "/shipments/mine"
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -307,20 +321,25 @@ func (s *Shipments) ListUserShipments(ctx context.Context, request operations.Li
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	utils.PopulateQueryParams(ctx, req, request.QueryParams)
+	if err := utils.PopulateQueryParams(ctx, req, request.QueryParams); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.ListUserShipmentsResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -351,8 +370,8 @@ func (s *Shipments) ListUserShipments(ctx context.Context, request operations.Li
 
 // ReadyShipment - Ready shipment
 // Readies a shipment for processing.
-func (s *Shipments) ReadyShipment(ctx context.Context, request operations.ReadyShipmentRequest) (*operations.ReadyShipmentResponse, error) {
-	baseURL := s._serverURL
+func (s *shipments) ReadyShipment(ctx context.Context, request operations.ReadyShipmentRequest) (*operations.ReadyShipmentResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/shipments/{shipment_number}/ready", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "PUT", url, nil)
@@ -360,18 +379,21 @@ func (s *Shipments) ReadyShipment(ctx context.Context, request operations.ReadyS
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.ReadyShipmentResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -422,8 +444,8 @@ func (s *Shipments) ReadyShipment(ctx context.Context, request operations.ReadyS
 
 // RemoveShipmentID - Remove shipment item
 // Removes an item from a shipment.
-func (s *Shipments) RemoveShipmentID(ctx context.Context, request operations.RemoveShipmentIDRequest) (*operations.RemoveShipmentIDResponse, error) {
-	baseURL := s._serverURL
+func (s *shipments) RemoveShipmentID(ctx context.Context, request operations.RemoveShipmentIDRequest) (*operations.RemoveShipmentIDResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/shipments/{shipment_id}/remove", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -441,18 +463,21 @@ func (s *Shipments) RemoveShipmentID(ctx context.Context, request operations.Rem
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.RemoveShipmentIDResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -503,8 +528,8 @@ func (s *Shipments) RemoveShipmentID(ctx context.Context, request operations.Rem
 
 // SelectShipmentShippingMethod - Select shipment shipping method
 // Selects the shipping method for a shipment.
-func (s *Shipments) SelectShipmentShippingMethod(ctx context.Context, request operations.SelectShipmentShippingMethodRequest) (*operations.SelectShipmentShippingMethodResponse, error) {
-	baseURL := s._serverURL
+func (s *shipments) SelectShipmentShippingMethod(ctx context.Context, request operations.SelectShipmentShippingMethodRequest) (*operations.SelectShipmentShippingMethodResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/shipments/{shipment_number}/select_shipping_method", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -522,18 +547,21 @@ func (s *Shipments) SelectShipmentShippingMethod(ctx context.Context, request op
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.SelectShipmentShippingMethodResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -574,8 +602,8 @@ func (s *Shipments) SelectShipmentShippingMethod(ctx context.Context, request op
 
 // ShipShipment - Ship shipment
 // Ships a shipment.
-func (s *Shipments) ShipShipment(ctx context.Context, request operations.ShipShipmentRequest) (*operations.ShipShipmentResponse, error) {
-	baseURL := s._serverURL
+func (s *shipments) ShipShipment(ctx context.Context, request operations.ShipShipmentRequest) (*operations.ShipShipmentResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/shipments/{shipment_number}/ship", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -593,18 +621,21 @@ func (s *Shipments) ShipShipment(ctx context.Context, request operations.ShipShi
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.ShipShipmentResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -655,8 +686,8 @@ func (s *Shipments) ShipShipment(ctx context.Context, request operations.ShipShi
 
 // TransferShipmentItemToLocation - Transfer shipment item to location
 // Transfers a shipment's item to a different stock location.
-func (s *Shipments) TransferShipmentItemToLocation(ctx context.Context, request operations.TransferShipmentItemToLocationRequest) (*operations.TransferShipmentItemToLocationResponse, error) {
-	baseURL := s._serverURL
+func (s *shipments) TransferShipmentItemToLocation(ctx context.Context, request operations.TransferShipmentItemToLocationRequest) (*operations.TransferShipmentItemToLocationResponse, error) {
+	baseURL := s.serverURL
 	url := strings.TrimSuffix(baseURL, "/") + "/shipments/transfer_to_location"
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -674,18 +705,21 @@ func (s *Shipments) TransferShipmentItemToLocation(ctx context.Context, request 
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.TransferShipmentItemToLocationResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -726,8 +760,8 @@ func (s *Shipments) TransferShipmentItemToLocation(ctx context.Context, request 
 
 // TransferShipmentItemToShipment - Transfer shipment item to shipment
 // Transfer a shipment's item to another shipment.
-func (s *Shipments) TransferShipmentItemToShipment(ctx context.Context, request operations.TransferShipmentItemToShipmentRequest) (*operations.TransferShipmentItemToShipmentResponse, error) {
-	baseURL := s._serverURL
+func (s *shipments) TransferShipmentItemToShipment(ctx context.Context, request operations.TransferShipmentItemToShipmentRequest) (*operations.TransferShipmentItemToShipmentResponse, error) {
+	baseURL := s.serverURL
 	url := strings.TrimSuffix(baseURL, "/") + "/shipments/transfer_to_shipment"
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -745,18 +779,21 @@ func (s *Shipments) TransferShipmentItemToShipment(ctx context.Context, request 
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.TransferShipmentItemToShipmentResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -797,8 +834,8 @@ func (s *Shipments) TransferShipmentItemToShipment(ctx context.Context, request 
 
 // UpdateShipment - Update shipment
 // Updates a shipment.
-func (s *Shipments) UpdateShipment(ctx context.Context, request operations.UpdateShipmentRequest) (*operations.UpdateShipmentResponse, error) {
-	baseURL := s._serverURL
+func (s *shipments) UpdateShipment(ctx context.Context, request operations.UpdateShipmentRequest) (*operations.UpdateShipmentResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/shipments/{number}", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -816,18 +853,21 @@ func (s *Shipments) UpdateShipment(ctx context.Context, request operations.Updat
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.UpdateShipmentResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {

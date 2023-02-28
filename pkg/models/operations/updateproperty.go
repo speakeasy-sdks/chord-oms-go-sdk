@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type UpdatePropertyPathParams struct {
@@ -9,20 +9,7 @@ type UpdatePropertyPathParams struct {
 }
 
 type UpdatePropertySecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type UpdateProperty401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type UpdateProperty404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type UpdateProperty422ApplicationJSON struct {
-	Error  *string                `json:"error,omitempty"`
-	Errors map[string]interface{} `json:"errors,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type UpdatePropertyRequest struct {
@@ -31,9 +18,22 @@ type UpdatePropertyRequest struct {
 	Security   UpdatePropertySecurity
 }
 
+type UpdateProperty422ApplicationJSON struct {
+	Error  *string                `json:"error,omitempty"`
+	Errors map[string]interface{} `json:"errors,omitempty"`
+}
+
+type UpdateProperty404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type UpdateProperty401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type UpdatePropertyResponse struct {
 	ContentType                            string
-	StatusCode                             int64
+	StatusCode                             int
 	Property                               *shared.Property
 	UpdateProperty401ApplicationJSONObject *UpdateProperty401ApplicationJSON
 	UpdateProperty404ApplicationJSONObject *UpdateProperty404ApplicationJSON

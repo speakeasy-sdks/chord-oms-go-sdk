@@ -16,6 +16,8 @@ go get github.com/speakeasy-sdks/chord-oms-go-sdk
 package main
 
 import (
+    "context"
+    "log"
     "github.com/speakeasy-sdks/chord-oms-go-sdk"
     "github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
     "github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/operations"
@@ -27,14 +29,15 @@ func main() {
     req := operations.GetUserAddressBookRequest{
         Security: operations.GetUserAddressBookSecurity{
             APIKey: shared.SchemeAPIKey{
-                APIKey: "YOUR_API_KEY_HERE",
+                Authorization: "Bearer YOUR_BEARER_TOKEN_HERE",
             },
         },
         PathParams: operations.GetUserAddressBookPathParams{
-            UserID: "sit",
+            UserID: 548814,
         },
     }
-    
+
+    ctx := context.Background()
     res, err := s.AddressBooks.GetUserAddressBook(ctx, req)
     if err != nil {
         log.Fatal(err)
@@ -43,6 +46,7 @@ func main() {
     if res.AddressBook != nil {
         // handle response
     }
+}
 ```
 <!-- End SDK Example Usage -->
 
@@ -76,7 +80,8 @@ If you are already providing an API key, you don't need to also provide the orde
 <!-- Start SDK Available Operations -->
 ## SDK Available Operations
 
-### Address books
+
+### AddressBooks
 
 * `GetUserAddressBook` - Get user address book
 * `RemoveAddressFromUserAddressBook` - Remove address from user address book
@@ -111,18 +116,18 @@ If you are already providing an API key, you don't need to also provide the orde
 * `GetCountry` - Get country
 * `ListCountries` - List countries
 
-### Coupon codes
+### CouponCodes
 
 * `ApplyOrderCouponCode` - Apply order coupon code
 * `CreateOrderCouponCode` - Create order coupon code
 * `DeleteOrderCouponCode` - Delete order coupon code
 
-### Credit cards
+### CreditCards
 
 * `ListUserCreditCards` - List user credit cards
 * `UpdateCreditCard` - Update credit card
 
-### Gift Cards
+### GiftCards
 
 * `RedeemGiftCard` - Redeems a Gift Card
 
@@ -139,12 +144,12 @@ If you are already providing an API key, you don't need to also provide the orde
 * `UpdateProductImage` - Update product image
 * `UpdateVariantImage` - Update variant image
 
-### Inventory units
+### InventoryUnits
 
 * `GetInventoryUnit` - Get inventory unit
 * `UpdateInventoryUnit` - Update inventory unit
 
-### Line items
+### LineItems
 
 * `CreateCheckoutLineItem` - Create checkout line item
 * `CreateOrderLineItem` - Create order line item
@@ -154,7 +159,7 @@ If you are already providing an API key, you don't need to also provide the orde
 * `UpdateCheckoutLineItem` - Update checkout line item
 * `UpdateOrderLineItem` - Update order line item
 
-### Option types
+### OptionTypes
 
 * `CreateOptionType` - Create option type
 * `DeleteOptionType` - Delete option type
@@ -162,7 +167,7 @@ If you are already providing an API key, you don't need to also provide the orde
 * `ListOptionTypes` - List option types
 * `UpdateOptionType` - Update option type
 
-### Option values
+### OptionValues
 
 * `CreateOptionTypeValue` - Create option type value
 * `CreateOptionValue` - Create option value
@@ -207,7 +212,7 @@ If you are already providing an API key, you don't need to also provide the orde
 * `VoidCheckoutPayment` - Void checkout payment
 * `VoidOrderPayment` - Void order payment
 
-### Product properties
+### ProductProperties
 
 * `CreateProductProperty` - Create product property
 * `DeleteProductProperty` - Delete product property
@@ -237,7 +242,7 @@ If you are already providing an API key, you don't need to also provide the orde
 * `ListProperties` - List properties
 * `UpdateProperty` - Update property
 
-### Quick Checkout
+### QuickCheckout
 
 * `QuickCheckout` - Quick Checkout
 
@@ -245,7 +250,7 @@ If you are already providing an API key, you don't need to also provide the orde
 
 * `ListReturnAuthorizationRefunds` - List return authorization refunds
 
-### Return authorizations
+### ReturnAuthorizations
 
 * `CancelCheckoutReturnAuthorization` - Cancel checkout return authorization
 * `CancelOrderReturnAuthorization` - Cancel order return authorization
@@ -261,7 +266,7 @@ If you are already providing an API key, you don't need to also provide the orde
 * `UpdateCheckoutReturnAuthorization` - Update checkout return authorization
 * `UpdateOrderReturnAuthorization` - Update order return authorization
 
-### Return items
+### ReturnItems
 
 * `ListReturnAuthorizationReturnItems` - List return authorization return items
 
@@ -287,7 +292,7 @@ If you are already providing an API key, you don't need to also provide the orde
 * `ListCountryStates` - List country states
 * `ListStates` - List states
 
-### Stock items
+### StockItems
 
 * `CreateStockLocationItem` - Create stock location item
 * `DeleteStockItem` - Delete stock item
@@ -297,7 +302,7 @@ If you are already providing an API key, you don't need to also provide the orde
 * `UpdateStockItem` - Update stock item
 * `UpdateStockLocationItem` - Update stock location item
 
-### Stock locations
+### StockLocations
 
 * `CreateStockLocation` - Create stock location
 * `DeleteStockLocation` - Delete stock location
@@ -305,13 +310,13 @@ If you are already providing an API key, you don't need to also provide the orde
 * `ListStockLocations` - List stock location
 * `UpdateStockLocation` - Update stock location
 
-### Stock movements
+### StockMovements
 
 * `CreateStockLocationMovement` - Create stock location movement
 * `GetStockLocationMovement` - Get stock location movement
 * `ListStockLocationMovements` - List stock location movements
 
-### Store credit events
+### StoreCreditEvents
 
 * `ListCurrentUserStoreCreditEvents` - List current user's store credit events
 
@@ -355,8 +360,8 @@ If you are already providing an API key, you don't need to also provide the orde
 
 * `CreateUser` - Create user
 * `DeleteUser` - Delete user
+* `GetCurrentUser` - Get current user
 * `GetUser` - Get user
-* `GetUsersMe` - Get current user
 * `ListUsers` - List users
 * `UpdateUser` - Update user
 
@@ -381,7 +386,6 @@ If you are already providing an API key, you don't need to also provide the orde
 * `GetZone` - Get zone
 * `ListZones` - List zones
 * `UpdateZone` - Update zone
-
 <!-- End SDK Available Operations -->
 
 ### SDK Generated by [Speakeasy](https://docs.speakeasyapi.dev/docs/using-speakeasy/client-sdks)

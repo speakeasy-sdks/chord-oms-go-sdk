@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type DeleteStockLocationPathParams struct {
@@ -9,19 +9,7 @@ type DeleteStockLocationPathParams struct {
 }
 
 type DeleteStockLocationSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type DeleteStockLocation401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type DeleteStockLocation404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type DeleteStockLocation422ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type DeleteStockLocationRequest struct {
@@ -29,9 +17,21 @@ type DeleteStockLocationRequest struct {
 	Security   DeleteStockLocationSecurity
 }
 
+type DeleteStockLocation422ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type DeleteStockLocation404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type DeleteStockLocation401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type DeleteStockLocationResponse struct {
 	ContentType                                 string
-	StatusCode                                  int64
+	StatusCode                                  int
 	DeleteStockLocation401ApplicationJSONObject *DeleteStockLocation401ApplicationJSON
 	DeleteStockLocation404ApplicationJSONObject *DeleteStockLocation404ApplicationJSON
 	DeleteStockLocation422ApplicationJSONObject *DeleteStockLocation422ApplicationJSON

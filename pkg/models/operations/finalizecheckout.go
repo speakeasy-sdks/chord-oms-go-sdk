@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type FinalizeCheckoutPathParams struct {
@@ -14,21 +14,8 @@ type FinalizeCheckoutQueryParams struct {
 }
 
 type FinalizeCheckoutSecurity struct {
-	APIKey     *shared.SchemeAPIKey     `security:"scheme,type=apiKey,subtype=header"`
+	APIKey     *shared.SchemeAPIKey     `security:"scheme,type=http,subtype=bearer"`
 	OrderToken *shared.SchemeOrderToken `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type FinalizeCheckout401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type FinalizeCheckout404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type FinalizeCheckout422ApplicationJSON struct {
-	Error  *string                `json:"error,omitempty"`
-	Errors map[string]interface{} `json:"errors,omitempty"`
 }
 
 type FinalizeCheckoutRequest struct {
@@ -37,11 +24,24 @@ type FinalizeCheckoutRequest struct {
 	Security    FinalizeCheckoutSecurity
 }
 
+type FinalizeCheckout422ApplicationJSON struct {
+	Error  *string                `json:"error,omitempty"`
+	Errors map[string]interface{} `json:"errors,omitempty"`
+}
+
+type FinalizeCheckout404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type FinalizeCheckout401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type FinalizeCheckoutResponse struct {
 	ContentType                              string
-	StatusCode                               int64
+	OrderBig                                 *shared.OrderBig
+	StatusCode                               int
 	FinalizeCheckout401ApplicationJSONObject *FinalizeCheckout401ApplicationJSON
 	FinalizeCheckout404ApplicationJSONObject *FinalizeCheckout404ApplicationJSON
 	FinalizeCheckout422ApplicationJSONObject *FinalizeCheckout422ApplicationJSON
-	OrderBig                                 *shared.OrderBig
 }

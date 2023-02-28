@@ -1,20 +1,11 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type CreateOptionTypeSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type CreateOptionType401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type CreateOptionType422ApplicationJSON struct {
-	Error  *string                `json:"error,omitempty"`
-	Errors map[string]interface{} `json:"errors,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type CreateOptionTypeRequest struct {
@@ -22,9 +13,18 @@ type CreateOptionTypeRequest struct {
 	Security CreateOptionTypeSecurity
 }
 
+type CreateOptionType422ApplicationJSON struct {
+	Error  *string                `json:"error,omitempty"`
+	Errors map[string]interface{} `json:"errors,omitempty"`
+}
+
+type CreateOptionType401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type CreateOptionTypeResponse struct {
 	ContentType                              string
-	StatusCode                               int64
+	StatusCode                               int
 	CreateOptionType401ApplicationJSONObject *CreateOptionType401ApplicationJSON
 	CreateOptionType422ApplicationJSONObject *CreateOptionType422ApplicationJSON
 	OptionType                               *shared.OptionType

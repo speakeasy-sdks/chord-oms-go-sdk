@@ -1,11 +1,11 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type ListUserCreditCardsPathParams struct {
-	UserID string `pathParam:"style=simple,explode=false,name=user_id"`
+	UserID int64 `pathParam:"style=simple,explode=false,name=user_id"`
 }
 
 type ListUserCreditCardsQueryParams struct {
@@ -14,7 +14,21 @@ type ListUserCreditCardsQueryParams struct {
 }
 
 type ListUserCreditCardsSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
+}
+
+type ListUserCreditCardsRequest struct {
+	PathParams  ListUserCreditCardsPathParams
+	QueryParams ListUserCreditCardsQueryParams
+	Security    ListUserCreditCardsSecurity
+}
+
+type ListUserCreditCards404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type ListUserCreditCards401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
 }
 
 type ListUserCreditCardsPaginationData struct {
@@ -26,24 +40,10 @@ type ListUserCreditCardsPaginationData struct {
 	TotalCount  *int64              `json:"total_count,omitempty"`
 }
 
-type ListUserCreditCards401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type ListUserCreditCards404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type ListUserCreditCardsRequest struct {
-	PathParams  ListUserCreditCardsPathParams
-	QueryParams ListUserCreditCardsQueryParams
-	Security    ListUserCreditCardsSecurity
-}
-
 type ListUserCreditCardsResponse struct {
 	ContentType                                 string
 	PaginationData                              *ListUserCreditCardsPaginationData
-	StatusCode                                  int64
+	StatusCode                                  int
 	ListUserCreditCards401ApplicationJSONObject *ListUserCreditCards401ApplicationJSON
 	ListUserCreditCards404ApplicationJSONObject *ListUserCreditCards404ApplicationJSON
 }

@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type UpdateCheckoutAddressPathParams struct {
@@ -10,21 +10,8 @@ type UpdateCheckoutAddressPathParams struct {
 }
 
 type UpdateCheckoutAddressSecurity struct {
-	APIKey     *shared.SchemeAPIKey     `security:"scheme,type=apiKey,subtype=header"`
+	APIKey     *shared.SchemeAPIKey     `security:"scheme,type=http,subtype=bearer"`
 	OrderToken *shared.SchemeOrderToken `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type UpdateCheckoutAddress401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type UpdateCheckoutAddress404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type UpdateCheckoutAddress422ApplicationJSON struct {
-	Error  *string                `json:"error,omitempty"`
-	Errors map[string]interface{} `json:"errors,omitempty"`
 }
 
 type UpdateCheckoutAddressRequest struct {
@@ -33,9 +20,22 @@ type UpdateCheckoutAddressRequest struct {
 	Security   UpdateCheckoutAddressSecurity
 }
 
+type UpdateCheckoutAddress422ApplicationJSON struct {
+	Error  *string                `json:"error,omitempty"`
+	Errors map[string]interface{} `json:"errors,omitempty"`
+}
+
+type UpdateCheckoutAddress404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type UpdateCheckoutAddress401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type UpdateCheckoutAddressResponse struct {
 	ContentType                                   string
-	StatusCode                                    int64
+	StatusCode                                    int
 	Address                                       *shared.Address
 	UpdateCheckoutAddress401ApplicationJSONObject *UpdateCheckoutAddress401ApplicationJSON
 	UpdateCheckoutAddress404ApplicationJSONObject *UpdateCheckoutAddress404ApplicationJSON

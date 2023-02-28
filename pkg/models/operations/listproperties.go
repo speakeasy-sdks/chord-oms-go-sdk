@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type ListPropertiesQueryParams struct {
@@ -10,7 +10,16 @@ type ListPropertiesQueryParams struct {
 }
 
 type ListPropertiesSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
+}
+
+type ListPropertiesRequest struct {
+	QueryParams ListPropertiesQueryParams
+	Security    ListPropertiesSecurity
+}
+
+type ListProperties401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
 }
 
 type ListPropertiesPaginationData struct {
@@ -22,18 +31,9 @@ type ListPropertiesPaginationData struct {
 	TotalCount  *int64            `json:"total_count,omitempty"`
 }
 
-type ListProperties401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type ListPropertiesRequest struct {
-	QueryParams ListPropertiesQueryParams
-	Security    ListPropertiesSecurity
-}
-
 type ListPropertiesResponse struct {
 	ContentType                            string
 	PaginationData                         *ListPropertiesPaginationData
-	StatusCode                             int64
+	StatusCode                             int
 	ListProperties401ApplicationJSONObject *ListProperties401ApplicationJSON
 }

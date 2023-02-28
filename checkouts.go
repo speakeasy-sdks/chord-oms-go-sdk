@@ -3,36 +3,36 @@ package sdk
 import (
 	"context"
 	"fmt"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/operations"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/utils"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/operations"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/utils"
 	"net/http"
 )
 
-type Checkouts struct {
-	_defaultClient  HTTPClient
-	_securityClient HTTPClient
-	_serverURL      string
-	_language       string
-	_sdkVersion     string
-	_genVersion     string
+type checkouts struct {
+	defaultClient  HTTPClient
+	securityClient HTTPClient
+	serverURL      string
+	language       string
+	sdkVersion     string
+	genVersion     string
 }
 
-func NewCheckouts(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *Checkouts {
-	return &Checkouts{
-		_defaultClient:  defaultClient,
-		_securityClient: securityClient,
-		_serverURL:      serverURL,
-		_language:       language,
-		_sdkVersion:     sdkVersion,
-		_genVersion:     genVersion,
+func newCheckouts(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *checkouts {
+	return &checkouts{
+		defaultClient:  defaultClient,
+		securityClient: securityClient,
+		serverURL:      serverURL,
+		language:       language,
+		sdkVersion:     sdkVersion,
+		genVersion:     genVersion,
 	}
 }
 
 // AdvanceCheckout - Advance checkout
 // Advances a checkout to the furthest possible state.
-func (s *Checkouts) AdvanceCheckout(ctx context.Context, request operations.AdvanceCheckoutRequest) (*operations.AdvanceCheckoutResponse, error) {
-	baseURL := s._serverURL
+func (s *checkouts) AdvanceCheckout(ctx context.Context, request operations.AdvanceCheckoutRequest) (*operations.AdvanceCheckoutResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/checkouts/{checkout_id}/advance", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "PUT", url, nil)
@@ -40,18 +40,21 @@ func (s *Checkouts) AdvanceCheckout(ctx context.Context, request operations.Adva
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.AdvanceCheckoutResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -102,8 +105,8 @@ func (s *Checkouts) AdvanceCheckout(ctx context.Context, request operations.Adva
 
 // CompleteCheckout - Complete checkout
 // Completes a checkout.
-func (s *Checkouts) CompleteCheckout(ctx context.Context, request operations.CompleteCheckoutRequest) (*operations.CompleteCheckoutResponse, error) {
-	baseURL := s._serverURL
+func (s *checkouts) CompleteCheckout(ctx context.Context, request operations.CompleteCheckoutRequest) (*operations.CompleteCheckoutResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/checkouts/{checkout_id}/complete", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -121,18 +124,21 @@ func (s *Checkouts) CompleteCheckout(ctx context.Context, request operations.Com
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.CompleteCheckoutResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -183,8 +189,8 @@ func (s *Checkouts) CompleteCheckout(ctx context.Context, request operations.Com
 
 // FinalizeCheckout - Finalize the checkout
 // Finalize the checkout after a succesful payment.
-func (s *Checkouts) FinalizeCheckout(ctx context.Context, request operations.FinalizeCheckoutRequest) (*operations.FinalizeCheckoutResponse, error) {
-	baseURL := s._serverURL
+func (s *checkouts) FinalizeCheckout(ctx context.Context, request operations.FinalizeCheckoutRequest) (*operations.FinalizeCheckoutResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/checkouts/{checkout_id}/finalize", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "PUT", url, nil)
@@ -192,20 +198,25 @@ func (s *Checkouts) FinalizeCheckout(ctx context.Context, request operations.Fin
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	utils.PopulateQueryParams(ctx, req, request.QueryParams)
+	if err := utils.PopulateQueryParams(ctx, req, request.QueryParams); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.FinalizeCheckoutResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -256,8 +267,8 @@ func (s *Checkouts) FinalizeCheckout(ctx context.Context, request operations.Fin
 
 // TransitionCheckout - Transition checkout
 // Transitions a checkout to the next state.
-func (s *Checkouts) TransitionCheckout(ctx context.Context, request operations.TransitionCheckoutRequest) (*operations.TransitionCheckoutResponse, error) {
-	baseURL := s._serverURL
+func (s *checkouts) TransitionCheckout(ctx context.Context, request operations.TransitionCheckoutRequest) (*operations.TransitionCheckoutResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/checkouts/{checkout_id}/next", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -275,18 +286,21 @@ func (s *Checkouts) TransitionCheckout(ctx context.Context, request operations.T
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.TransitionCheckoutResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -339,8 +353,8 @@ func (s *Checkouts) TransitionCheckout(ctx context.Context, request operations.T
 // Updates a checkout.
 //
 // **Note:** In addition to the order update, this action always attempts to perform an order state machine transition which results in a `422` response if it cannot be transitioned.
-func (s *Checkouts) UpdateCheckout(ctx context.Context, request operations.UpdateCheckoutRequest) (*operations.UpdateCheckoutResponse, error) {
-	baseURL := s._serverURL
+func (s *checkouts) UpdateCheckout(ctx context.Context, request operations.UpdateCheckoutRequest) (*operations.UpdateCheckoutResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/checkouts/{id}", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -358,18 +372,21 @@ func (s *Checkouts) UpdateCheckout(ctx context.Context, request operations.Updat
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.UpdateCheckoutResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {

@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type UpdateProductVariantPathParams struct {
@@ -10,20 +10,7 @@ type UpdateProductVariantPathParams struct {
 }
 
 type UpdateProductVariantSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type UpdateProductVariant401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type UpdateProductVariant404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type UpdateProductVariant422ApplicationJSON struct {
-	Error  *string                `json:"error,omitempty"`
-	Errors map[string]interface{} `json:"errors,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type UpdateProductVariantRequest struct {
@@ -32,9 +19,22 @@ type UpdateProductVariantRequest struct {
 	Security   UpdateProductVariantSecurity
 }
 
+type UpdateProductVariant422ApplicationJSON struct {
+	Error  *string                `json:"error,omitempty"`
+	Errors map[string]interface{} `json:"errors,omitempty"`
+}
+
+type UpdateProductVariant404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type UpdateProductVariant401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type UpdateProductVariantResponse struct {
 	ContentType                                  string
-	StatusCode                                   int64
+	StatusCode                                   int
 	UpdateProductVariant401ApplicationJSONObject *UpdateProductVariant401ApplicationJSON
 	UpdateProductVariant404ApplicationJSONObject *UpdateProductVariant404ApplicationJSON
 	UpdateProductVariant422ApplicationJSONObject *UpdateProductVariant422ApplicationJSON

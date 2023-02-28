@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type GetPropertyPathParams struct {
@@ -9,15 +9,7 @@ type GetPropertyPathParams struct {
 }
 
 type GetPropertySecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type GetProperty401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type GetProperty404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type GetPropertyRequest struct {
@@ -25,9 +17,17 @@ type GetPropertyRequest struct {
 	Security   GetPropertySecurity
 }
 
+type GetProperty404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type GetProperty401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type GetPropertyResponse struct {
 	ContentType                         string
-	StatusCode                          int64
+	StatusCode                          int
 	GetProperty401ApplicationJSONObject *GetProperty401ApplicationJSON
 	GetProperty404ApplicationJSONObject *GetProperty404ApplicationJSON
 	Property                            *shared.Property

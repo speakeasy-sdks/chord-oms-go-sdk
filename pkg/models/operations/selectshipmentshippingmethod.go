@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type SelectShipmentShippingMethodPathParams struct {
@@ -13,16 +13,8 @@ type SelectShipmentShippingMethodRequestBody struct {
 }
 
 type SelectShipmentShippingMethodSecurity struct {
-	APIKey     *shared.SchemeAPIKey     `security:"scheme,type=apiKey,subtype=header"`
+	APIKey     *shared.SchemeAPIKey     `security:"scheme,type=http,subtype=bearer"`
 	OrderToken *shared.SchemeOrderToken `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type SelectShipmentShippingMethod401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type SelectShipmentShippingMethod404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
 }
 
 type SelectShipmentShippingMethodRequest struct {
@@ -31,9 +23,17 @@ type SelectShipmentShippingMethodRequest struct {
 	Security   SelectShipmentShippingMethodSecurity
 }
 
+type SelectShipmentShippingMethod404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type SelectShipmentShippingMethod401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type SelectShipmentShippingMethodResponse struct {
 	ContentType                                          string
-	StatusCode                                           int64
+	StatusCode                                           int
 	SelectShipmentShippingMethod401ApplicationJSONObject *SelectShipmentShippingMethod401ApplicationJSON
 	SelectShipmentShippingMethod404ApplicationJSONObject *SelectShipmentShippingMethod404ApplicationJSON
 	Shipment                                             *shared.Shipment

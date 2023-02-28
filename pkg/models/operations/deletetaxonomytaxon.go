@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type DeleteTaxonomyTaxonPathParams struct {
@@ -10,19 +10,7 @@ type DeleteTaxonomyTaxonPathParams struct {
 }
 
 type DeleteTaxonomyTaxonSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type DeleteTaxonomyTaxon401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type DeleteTaxonomyTaxon404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type DeleteTaxonomyTaxon422ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type DeleteTaxonomyTaxonRequest struct {
@@ -30,9 +18,21 @@ type DeleteTaxonomyTaxonRequest struct {
 	Security   DeleteTaxonomyTaxonSecurity
 }
 
+type DeleteTaxonomyTaxon422ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type DeleteTaxonomyTaxon404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type DeleteTaxonomyTaxon401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type DeleteTaxonomyTaxonResponse struct {
 	ContentType                                 string
-	StatusCode                                  int64
+	StatusCode                                  int
 	DeleteTaxonomyTaxon401ApplicationJSONObject *DeleteTaxonomyTaxon401ApplicationJSON
 	DeleteTaxonomyTaxon404ApplicationJSONObject *DeleteTaxonomyTaxon404ApplicationJSON
 	DeleteTaxonomyTaxon422ApplicationJSONObject *DeleteTaxonomyTaxon422ApplicationJSON

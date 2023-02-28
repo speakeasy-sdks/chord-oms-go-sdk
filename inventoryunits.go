@@ -3,36 +3,36 @@ package sdk
 import (
 	"context"
 	"fmt"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/operations"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/utils"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/operations"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/utils"
 	"net/http"
 )
 
-type InventoryUnits struct {
-	_defaultClient  HTTPClient
-	_securityClient HTTPClient
-	_serverURL      string
-	_language       string
-	_sdkVersion     string
-	_genVersion     string
+type inventoryUnits struct {
+	defaultClient  HTTPClient
+	securityClient HTTPClient
+	serverURL      string
+	language       string
+	sdkVersion     string
+	genVersion     string
 }
 
-func NewInventoryUnits(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *InventoryUnits {
-	return &InventoryUnits{
-		_defaultClient:  defaultClient,
-		_securityClient: securityClient,
-		_serverURL:      serverURL,
-		_language:       language,
-		_sdkVersion:     sdkVersion,
-		_genVersion:     genVersion,
+func newInventoryUnits(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *inventoryUnits {
+	return &inventoryUnits{
+		defaultClient:  defaultClient,
+		securityClient: securityClient,
+		serverURL:      serverURL,
+		language:       language,
+		sdkVersion:     sdkVersion,
+		genVersion:     genVersion,
 	}
 }
 
 // GetInventoryUnit - Get inventory unit
 // Retrieves an inventory unit.
-func (s *InventoryUnits) GetInventoryUnit(ctx context.Context, request operations.GetInventoryUnitRequest) (*operations.GetInventoryUnitResponse, error) {
-	baseURL := s._serverURL
+func (s *inventoryUnits) GetInventoryUnit(ctx context.Context, request operations.GetInventoryUnitRequest) (*operations.GetInventoryUnitResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/inventory_units/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -40,18 +40,21 @@ func (s *InventoryUnits) GetInventoryUnit(ctx context.Context, request operation
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.GetInventoryUnitResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -92,8 +95,8 @@ func (s *InventoryUnits) GetInventoryUnit(ctx context.Context, request operation
 
 // UpdateInventoryUnit - Update inventory unit
 // Updates an inventory unit.
-func (s *InventoryUnits) UpdateInventoryUnit(ctx context.Context, request operations.UpdateInventoryUnitRequest) (*operations.UpdateInventoryUnitResponse, error) {
-	baseURL := s._serverURL
+func (s *inventoryUnits) UpdateInventoryUnit(ctx context.Context, request operations.UpdateInventoryUnitRequest) (*operations.UpdateInventoryUnitResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/inventory_units/{id}", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -108,18 +111,21 @@ func (s *InventoryUnits) UpdateInventoryUnit(ctx context.Context, request operat
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.UpdateInventoryUnitResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {

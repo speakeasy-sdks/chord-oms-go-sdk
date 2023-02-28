@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type ListOrderPaymentsPathParams struct {
@@ -14,8 +14,22 @@ type ListOrderPaymentsQueryParams struct {
 }
 
 type ListOrderPaymentsSecurity struct {
-	APIKey     *shared.SchemeAPIKey     `security:"scheme,type=apiKey,subtype=header"`
+	APIKey     *shared.SchemeAPIKey     `security:"scheme,type=http,subtype=bearer"`
 	OrderToken *shared.SchemeOrderToken `security:"scheme,type=apiKey,subtype=header"`
+}
+
+type ListOrderPaymentsRequest struct {
+	PathParams  ListOrderPaymentsPathParams
+	QueryParams ListOrderPaymentsQueryParams
+	Security    ListOrderPaymentsSecurity
+}
+
+type ListOrderPayments404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type ListOrderPayments401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
 }
 
 type ListOrderPaymentsPaginationData struct {
@@ -27,24 +41,10 @@ type ListOrderPaymentsPaginationData struct {
 	TotalCount  *int64           `json:"total_count,omitempty"`
 }
 
-type ListOrderPayments401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type ListOrderPayments404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type ListOrderPaymentsRequest struct {
-	PathParams  ListOrderPaymentsPathParams
-	QueryParams ListOrderPaymentsQueryParams
-	Security    ListOrderPaymentsSecurity
-}
-
 type ListOrderPaymentsResponse struct {
 	ContentType                               string
 	PaginationData                            *ListOrderPaymentsPaginationData
-	StatusCode                                int64
+	StatusCode                                int
 	ListOrderPayments401ApplicationJSONObject *ListOrderPayments401ApplicationJSON
 	ListOrderPayments404ApplicationJSONObject *ListOrderPayments404ApplicationJSON
 }

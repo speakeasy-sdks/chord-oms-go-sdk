@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type CancelOrderPathParams struct {
@@ -9,21 +9,8 @@ type CancelOrderPathParams struct {
 }
 
 type CancelOrderSecurity struct {
-	APIKey     *shared.SchemeAPIKey     `security:"scheme,type=apiKey,subtype=header"`
+	APIKey     *shared.SchemeAPIKey     `security:"scheme,type=http,subtype=bearer"`
 	OrderToken *shared.SchemeOrderToken `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type CancelOrder401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type CancelOrder404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type CancelOrder422ApplicationJSON struct {
-	Error  *string                `json:"error,omitempty"`
-	Errors map[string]interface{} `json:"errors,omitempty"`
 }
 
 type CancelOrderRequest struct {
@@ -31,11 +18,24 @@ type CancelOrderRequest struct {
 	Security   CancelOrderSecurity
 }
 
+type CancelOrder422ApplicationJSON struct {
+	Error  *string                `json:"error,omitempty"`
+	Errors map[string]interface{} `json:"errors,omitempty"`
+}
+
+type CancelOrder404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type CancelOrder401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type CancelOrderResponse struct {
 	ContentType                         string
-	StatusCode                          int64
+	OrderBig                            *shared.OrderBig
+	StatusCode                          int
 	CancelOrder401ApplicationJSONObject *CancelOrder401ApplicationJSON
 	CancelOrder404ApplicationJSONObject *CancelOrder404ApplicationJSON
 	CancelOrder422ApplicationJSONObject *CancelOrder422ApplicationJSON
-	OrderBig                            *shared.OrderBig
 }

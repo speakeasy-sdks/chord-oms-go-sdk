@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type TransferShipmentItemToLocationRequestBody struct {
@@ -13,7 +13,21 @@ type TransferShipmentItemToLocationRequestBody struct {
 }
 
 type TransferShipmentItemToLocationSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
+}
+
+type TransferShipmentItemToLocationRequest struct {
+	Request  TransferShipmentItemToLocationRequestBody `request:"mediaType=application/json"`
+	Security TransferShipmentItemToLocationSecurity
+}
+
+type TransferShipmentItemToLocation422ApplicationJSON struct {
+	Error  *string                `json:"error,omitempty"`
+	Errors map[string]interface{} `json:"errors,omitempty"`
+}
+
+type TransferShipmentItemToLocation401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
 }
 
 type TransferShipmentItemToLocation200ApplicationJSON struct {
@@ -22,23 +36,9 @@ type TransferShipmentItemToLocation200ApplicationJSON struct {
 	TargetShipmentNumber *string `json:"target_shipment_number,omitempty"`
 }
 
-type TransferShipmentItemToLocation401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type TransferShipmentItemToLocation422ApplicationJSON struct {
-	Error  *string                `json:"error,omitempty"`
-	Errors map[string]interface{} `json:"errors,omitempty"`
-}
-
-type TransferShipmentItemToLocationRequest struct {
-	Request  TransferShipmentItemToLocationRequestBody `request:"mediaType=application/json"`
-	Security TransferShipmentItemToLocationSecurity
-}
-
 type TransferShipmentItemToLocationResponse struct {
 	ContentType                                            string
-	StatusCode                                             int64
+	StatusCode                                             int
 	TransferShipmentItemToLocation200ApplicationJSONObject *TransferShipmentItemToLocation200ApplicationJSON
 	TransferShipmentItemToLocation401ApplicationJSONObject *TransferShipmentItemToLocation401ApplicationJSON
 	TransferShipmentItemToLocation422ApplicationJSONObject *TransferShipmentItemToLocation422ApplicationJSON

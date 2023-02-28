@@ -3,37 +3,37 @@ package sdk
 import (
 	"context"
 	"fmt"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/operations"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/utils"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/operations"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/utils"
 	"net/http"
 	"strings"
 )
 
-type StockLocations struct {
-	_defaultClient  HTTPClient
-	_securityClient HTTPClient
-	_serverURL      string
-	_language       string
-	_sdkVersion     string
-	_genVersion     string
+type stockLocations struct {
+	defaultClient  HTTPClient
+	securityClient HTTPClient
+	serverURL      string
+	language       string
+	sdkVersion     string
+	genVersion     string
 }
 
-func NewStockLocations(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *StockLocations {
-	return &StockLocations{
-		_defaultClient:  defaultClient,
-		_securityClient: securityClient,
-		_serverURL:      serverURL,
-		_language:       language,
-		_sdkVersion:     sdkVersion,
-		_genVersion:     genVersion,
+func newStockLocations(defaultClient, securityClient HTTPClient, serverURL, language, sdkVersion, genVersion string) *stockLocations {
+	return &stockLocations{
+		defaultClient:  defaultClient,
+		securityClient: securityClient,
+		serverURL:      serverURL,
+		language:       language,
+		sdkVersion:     sdkVersion,
+		genVersion:     genVersion,
 	}
 }
 
 // CreateStockLocation - Create stock location
 // Creates a stock location.
-func (s *StockLocations) CreateStockLocation(ctx context.Context, request operations.CreateStockLocationRequest) (*operations.CreateStockLocationResponse, error) {
-	baseURL := s._serverURL
+func (s *stockLocations) CreateStockLocation(ctx context.Context, request operations.CreateStockLocationRequest) (*operations.CreateStockLocationResponse, error) {
+	baseURL := s.serverURL
 	url := strings.TrimSuffix(baseURL, "/") + "/stock_locations"
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -51,18 +51,21 @@ func (s *StockLocations) CreateStockLocation(ctx context.Context, request operat
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.CreateStockLocationResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -103,8 +106,8 @@ func (s *StockLocations) CreateStockLocation(ctx context.Context, request operat
 
 // DeleteStockLocation - Delete stock location
 // Deletes a stock location.
-func (s *StockLocations) DeleteStockLocation(ctx context.Context, request operations.DeleteStockLocationRequest) (*operations.DeleteStockLocationResponse, error) {
-	baseURL := s._serverURL
+func (s *stockLocations) DeleteStockLocation(ctx context.Context, request operations.DeleteStockLocationRequest) (*operations.DeleteStockLocationResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/stock_locations/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "DELETE", url, nil)
@@ -112,18 +115,21 @@ func (s *StockLocations) DeleteStockLocation(ctx context.Context, request operat
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.DeleteStockLocationResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -165,8 +171,8 @@ func (s *StockLocations) DeleteStockLocation(ctx context.Context, request operat
 
 // GetStockLocation - Get stock location
 // Get a stock location.
-func (s *StockLocations) GetStockLocation(ctx context.Context, request operations.GetStockLocationRequest) (*operations.GetStockLocationResponse, error) {
-	baseURL := s._serverURL
+func (s *stockLocations) GetStockLocation(ctx context.Context, request operations.GetStockLocationRequest) (*operations.GetStockLocationResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/stock_locations/{id}", request.PathParams)
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -174,18 +180,21 @@ func (s *StockLocations) GetStockLocation(ctx context.Context, request operation
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.GetStockLocationResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -226,8 +235,8 @@ func (s *StockLocations) GetStockLocation(ctx context.Context, request operation
 
 // ListStockLocations - List stock location
 // Lists the stock locations.
-func (s *StockLocations) ListStockLocations(ctx context.Context, request operations.ListStockLocationsRequest) (*operations.ListStockLocationsResponse, error) {
-	baseURL := s._serverURL
+func (s *stockLocations) ListStockLocations(ctx context.Context, request operations.ListStockLocationsRequest) (*operations.ListStockLocationsResponse, error) {
+	baseURL := s.serverURL
 	url := strings.TrimSuffix(baseURL, "/") + "/stock_locations"
 
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
@@ -235,20 +244,25 @@ func (s *StockLocations) ListStockLocations(ctx context.Context, request operati
 		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	utils.PopulateQueryParams(ctx, req, request.QueryParams)
+	if err := utils.PopulateQueryParams(ctx, req, request.QueryParams); err != nil {
+		return nil, fmt.Errorf("error populating query params: %w", err)
+	}
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.ListStockLocationsResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {
@@ -279,8 +293,8 @@ func (s *StockLocations) ListStockLocations(ctx context.Context, request operati
 
 // UpdateStockLocation - Update stock location
 // Updates a stock location.
-func (s *StockLocations) UpdateStockLocation(ctx context.Context, request operations.UpdateStockLocationRequest) (*operations.UpdateStockLocationResponse, error) {
-	baseURL := s._serverURL
+func (s *stockLocations) UpdateStockLocation(ctx context.Context, request operations.UpdateStockLocationRequest) (*operations.UpdateStockLocationResponse, error) {
+	baseURL := s.serverURL
 	url := utils.GenerateURL(ctx, baseURL, "/stock_locations/{id}", request.PathParams)
 
 	bodyReader, reqContentType, err := utils.SerializeRequestBody(ctx, request)
@@ -298,18 +312,21 @@ func (s *StockLocations) UpdateStockLocation(ctx context.Context, request operat
 
 	req.Header.Set("Content-Type", reqContentType)
 
-	client := utils.ConfigureSecurityClient(s._defaultClient, request.Security)
+	client := utils.ConfigureSecurityClient(s.defaultClient, request.Security)
 
 	httpRes, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("error sending request: %w", err)
+	}
+	if httpRes == nil {
+		return nil, fmt.Errorf("error sending request: no response")
 	}
 	defer httpRes.Body.Close()
 
 	contentType := httpRes.Header.Get("Content-Type")
 
 	res := &operations.UpdateStockLocationResponse{
-		StatusCode:  int64(httpRes.StatusCode),
+		StatusCode:  httpRes.StatusCode,
 		ContentType: contentType,
 	}
 	switch {

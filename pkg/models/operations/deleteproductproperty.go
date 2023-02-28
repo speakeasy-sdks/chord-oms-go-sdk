@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type DeleteProductPropertyPathParams struct {
@@ -10,19 +10,7 @@ type DeleteProductPropertyPathParams struct {
 }
 
 type DeleteProductPropertySecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type DeleteProductProperty401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type DeleteProductProperty404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type DeleteProductProperty422ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type DeleteProductPropertyRequest struct {
@@ -30,9 +18,21 @@ type DeleteProductPropertyRequest struct {
 	Security   DeleteProductPropertySecurity
 }
 
+type DeleteProductProperty422ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type DeleteProductProperty404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type DeleteProductProperty401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type DeleteProductPropertyResponse struct {
 	ContentType                                   string
-	StatusCode                                    int64
+	StatusCode                                    int
 	DeleteProductProperty401ApplicationJSONObject *DeleteProductProperty401ApplicationJSON
 	DeleteProductProperty404ApplicationJSONObject *DeleteProductProperty404ApplicationJSON
 	DeleteProductProperty422ApplicationJSONObject *DeleteProductProperty422ApplicationJSON

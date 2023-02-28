@@ -3,6 +3,8 @@
 package main
 
 import (
+    "context"
+    "log"
     "github.com/speakeasy-sdks/chord-oms-go-sdk"
     "github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
     "github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/operations"
@@ -14,14 +16,15 @@ func main() {
     req := operations.GetUserAddressBookRequest{
         Security: operations.GetUserAddressBookSecurity{
             APIKey: shared.SchemeAPIKey{
-                APIKey: "YOUR_API_KEY_HERE",
+                Authorization: "Bearer YOUR_BEARER_TOKEN_HERE",
             },
         },
         PathParams: operations.GetUserAddressBookPathParams{
-            UserID: "sit",
+            UserID: 548814,
         },
     }
-    
+
+    ctx := context.Background()
     res, err := s.AddressBooks.GetUserAddressBook(ctx, req)
     if err != nil {
         log.Fatal(err)
@@ -30,5 +33,6 @@ func main() {
     if res.AddressBook != nil {
         // handle response
     }
+}
 ```
 <!-- End SDK Example Usage -->

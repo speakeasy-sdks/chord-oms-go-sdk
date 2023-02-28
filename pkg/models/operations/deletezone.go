@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/speakeasy-sdks/chord-oms-go-sdk/pkg/models/shared"
+	"github.com/speakeasy-sdks/chord-oms-go-sdk/v2/pkg/models/shared"
 )
 
 type DeleteZonePathParams struct {
@@ -9,19 +9,7 @@ type DeleteZonePathParams struct {
 }
 
 type DeleteZoneSecurity struct {
-	APIKey shared.SchemeAPIKey `security:"scheme,type=apiKey,subtype=header"`
-}
-
-type DeleteZone401ApplicationJSON struct {
-	Message *string `json:"message,omitempty"`
-}
-
-type DeleteZone404ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
-}
-
-type DeleteZone422ApplicationJSON struct {
-	Error *string `json:"error,omitempty"`
+	APIKey shared.SchemeAPIKey `security:"scheme,type=http,subtype=bearer"`
 }
 
 type DeleteZoneRequest struct {
@@ -29,9 +17,21 @@ type DeleteZoneRequest struct {
 	Security   DeleteZoneSecurity
 }
 
+type DeleteZone422ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type DeleteZone404ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
+type DeleteZone401ApplicationJSON struct {
+	Error *string `json:"error,omitempty"`
+}
+
 type DeleteZoneResponse struct {
 	ContentType                        string
-	StatusCode                         int64
+	StatusCode                         int
 	DeleteZone401ApplicationJSONObject *DeleteZone401ApplicationJSON
 	DeleteZone404ApplicationJSONObject *DeleteZone404ApplicationJSON
 	DeleteZone422ApplicationJSONObject *DeleteZone422ApplicationJSON
